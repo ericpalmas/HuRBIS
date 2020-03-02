@@ -1,0 +1,31 @@
+{
+  "name": "hurbis",
+  "version": "1.0.0",
+  "description": "Human Resources Business Intelligence System",
+  "main": "index.js",
+  "scripts": {
+    "client-install": "cd client && npm install",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericpalmas/HuRBIS.git"
+  },
+  "author": "Eric Palmas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ericpalmas/HuRBIS/issues"
+  },
+  "homepage": "https://github.com/ericpalmas/HuRBIS#readme",
+  "dependencies": {
+    "concurrently": "^5.1.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
