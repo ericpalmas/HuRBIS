@@ -29,9 +29,9 @@ class AppNavbar extends Component {
     };
   }
 
-  static propTypes = {
-    auth: PropTypes.object.isRequired
-  };
+  // static propTypes = {
+  //   auth: PropTypes.object.isRequired
+  // };
 
   toggle = () => {
     this.setState({
