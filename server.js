@@ -1,18 +1,10 @@
-const express = require('express');
-
+const express = require("express");
+const bodyparser = require("body-parser");
+const CollaboratorRoutes = require("./routes/collaborators");
+const mysqlConnection = require("./config/connection");
 const app = express();
 
+app.use(bodyparser.json());
+app.use("/collaborators", CollaboratorRoutes);
 
-app.get('/api/customers', (req, res) => {
-  const customers = [
-    {id: 1, firstName: 'John', lastName: 'Doe'},
-    {id: 2, firstName: 'Brad', lastName: 'Traversy'},
-    {id: 3, firstName: 'Mary', lastName: 'Swanson'},
-  ];
-
-  res.json(customers);
-});
-
-const port = 5000;
-
-app.listen(port, () => `Server running on port ${port}`);
+app.listen(5000, () => `Server running on port 5000`);

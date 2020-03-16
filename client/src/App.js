@@ -1,18 +1,23 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Customers from './components/customers/customers';
+import React, { Component } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import AppNavbar from "./components/AppNavbar";
+import Scrumboard from "./components/Scrumboard";
+import { Provider } from "react-redux";
+import "./App.css";
+import Collaborators from "./components/Collaborators";
+import CollaboratorDetail from "./components/CollaboratorDetail";
 
 class App extends Component {
   render() {
     return (
+      //<Provider store={store}>
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">React Express Starter</h1>
-        </header>
-        <Customers />
+        <AppNavbar></AppNavbar>
+        {/* <Scrumboard /> */}
+        <Collaborators />
+        {/* <CollaboratorDetail></CollaboratorDetail> */}
       </div>
+      //</Provider>
     );
   }
 }
