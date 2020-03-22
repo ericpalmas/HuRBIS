@@ -6,7 +6,6 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -14,6 +13,7 @@ import {
   NavbarText,
   Container
 } from "reactstrap";
+import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -51,7 +51,7 @@ class AppNavbar extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-1 mr-5 mt-2 border-left" navbar>
                 <NavItem>
-                  <NavLink unset onClick={this.props.logout} href="#">
+                  <NavLink exact activeStyle={{ color: "grey" }} to="/">
                     Home
                   </NavLink>
                 </NavItem>
@@ -59,7 +59,12 @@ class AppNavbar extends Component {
 
               <Nav className="ml-1 mr-5 mt-2 border-left" navbar>
                 <NavItem>
-                  <NavLink onClick={this.props.logout} href="#">
+                  {" "}
+                  <NavLink
+                    exact
+                    activeStyle={{ color: "grey" }}
+                    to="/collaborators"
+                  >
                     Collaboratori
                   </NavLink>
                 </NavItem>

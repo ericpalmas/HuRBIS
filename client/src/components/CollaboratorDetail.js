@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import { Label, Table, Button } from "reactstrap";
+import { fetchSingleCollaborator } from "../actions/collaboratosActions";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
+import axios from "axios";
 
 const Corso = ({ corsi }) => (
   <Table>
@@ -25,7 +30,14 @@ const Corso = ({ corsi }) => (
 );
 
 export class CollaboratorDetail extends Component {
-  constructor(props) {
+  componentWillMount() {
+    this.props.fetchSingleCollaborator(this.props.match.params.id);
+    axios.get(`/collaborators/${this.props.match.params.id}`).then(response => {
+      console.log(response);
+    });
+  }
+
+  constructor(props, { match }) {
     super(props);
 
     this.state = {
@@ -74,8 +86,9 @@ export class CollaboratorDetail extends Component {
   }
 
   render() {
-    const name = this.state.name;
+    const { name } = this.state.name;
     const formazione = this.state.formazione;
+
     return (
       <div className="ml-5">
         <Label className="ml-5 mr-5">
@@ -112,4 +125,14 @@ export class CollaboratorDetail extends Component {
   }
 }
 
-export default CollaboratorDetail;
+CollaboratorDetail.propTypes = {
+  fetchSingleCollaborator: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  collaborator: state.collaborators
+});
+
+export default connect(mapStateToProps, {
+  fetchSingleCollaborator
+})(CollaboratorDetail);

@@ -4,13 +4,16 @@ const mysqlConnection = require("../config/connection");
 
 // Get all courses
 Router.get("/", (req, res) => {
-  mysqlConnection.query("SELECT * from courses", (err, rows, fields) => {
-    if (!err) {
-      res.send(rows);
-    } else {
-      console.log(err);
+  mysqlConnection.query(
+    "select *  from courses order by collaborator_id;",
+    (err, rows, fields) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
     }
-  });
+  );
 });
 
 // Get single course
