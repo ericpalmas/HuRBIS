@@ -89,7 +89,7 @@ Router.delete("/:id", (req, res) => {
 Router.get("/infos/:id", (req, res) => {
   mysqlConnection.query(
     `SELECT collaborator.id, collaborator.name, collaborator.surname,
-     group_concat(distinct courses.name separator ',') AS courses,
+     group_concat(distinct courses.id separator ',') AS courses,
      group_concat(distinct qualification.name separator ',') AS qualification
      from collaborator
      INNER JOIN courses ON courses.collaborator_id=collaborator.id

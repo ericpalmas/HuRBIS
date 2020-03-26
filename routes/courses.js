@@ -16,38 +16,6 @@ Router.get("/", (req, res) => {
   );
 });
 
-// Get single course
-Router.get("/:id", (req, res) => {
-  mysqlConnection.query(
-    `SELECT * FROM courses WHERE id = ${req.params.id}`,
-    (err, rows, fields) => {
-      if (!err) {
-        res.send(rows);
-      } else {
-        console.log(err);
-      }
-    }
-  );
-});
-
-// Add a course to the database
-Router.post("/", (req, res) => {
-  const newCollaborator = {
-    id: req.body.id,
-    name: req.body.name,
-    surname: req.body.surname
-  };
-  const sqlInstruction = "INSERT INTO courses SET ?";
-  const query = mysqlConnection.query(
-    sqlInstruction,
-    newCollaborator,
-    (err, result, rows) => {
-      if (err) throw err;
-      console.log(result);
-    }
-  );
-});
-
 //aggiungi un corso ad un collaboratore
 Router.post("/addCourse", (req, res) => {
   const newCourse = req.body;
@@ -61,7 +29,7 @@ Router.post("/addCourse", (req, res) => {
   });
 });
 
-// Delete a collaborator from the dabase
+// // Delete a collaborator from the dabase
 Router.delete("/:id", (req, res) => {
   mysqlConnection.query(
     `DELETE FROM courses WHERE id = ${req.params.id}`,
@@ -75,22 +43,19 @@ Router.delete("/:id", (req, res) => {
   );
 });
 
-// Corsi già svolti da un collaboratore
+// Corsi di un collaboratore
 Router.get("/:id", (req, res) => {
   mysqlConnection.query(
-    `SELECT * FROM courses WHERE id = ${req.params.id}`,
+    `select * from courses WHERE collaborator_id = ${req.params.id}`,
     (err, rows, fields) => {
       if (!err) {
         res.send(rows);
+        console.log(rows);
       } else {
         console.log(err);
       }
     }
   );
 });
-
-// Corsi in svolgimento da un collaboratore
-
-// Corsi ancora da svolgere da un collaboratore
 
 module.exports = Router;

@@ -26,12 +26,20 @@ const Corso = ({ corsi }) => (
   </Table>
 );
 
+// function elaborateData(str) {
+//   const res = str.split(",");
+//   const uniqueNames = Array.from(new Set(res));
+//   console.log(uniqueNames);
+//   return uniqueNames;
+// }
+
 class CollaboratorDetail extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      collaborator: {}
+      collaborator: {},
+      courses: {}
     };
 
     axios
@@ -39,10 +47,15 @@ class CollaboratorDetail extends Component {
       .then(res => {
         this.setState({ collaborator: res.data[0] });
       });
+
+    axios.get(`/courses/${this.props.match.params.id}`).then(res => {
+      this.setState({ courses: res.data });
+    });
   }
 
   render() {
-    console.log(this.state.collaborator);
+    console.log(this.state.collaborator.courses);
+    console.log(this.state.courses);
     return (
       <div className="ml-5">
         <Label className="ml-5 mr-5">

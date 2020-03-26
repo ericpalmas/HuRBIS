@@ -1,6 +1,7 @@
 import React, { Component, Fragment, useState } from "react";
 import { Button, Form, FormGroup, Input, Table } from "reactstrap";
 import { connect } from "react-redux";
+
 import { fetchCollaborators } from "../actions/collaboratosActions";
 import { fetchQualifications } from "../actions/qualificationsActions";
 import { fetchCourses } from "../actions/coursesActions";
