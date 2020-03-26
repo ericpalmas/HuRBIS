@@ -6,11 +6,6 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText,
   Container
 } from "reactstrap";
 import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";

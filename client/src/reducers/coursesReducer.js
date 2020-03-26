@@ -1,4 +1,4 @@
-import { FETCH_COURSES } from "../actions/types";
+import { FETCH_COURSES, ADD_COURSE } from "../actions/types";
 
 const initialState = {
   courses: []
@@ -12,6 +12,11 @@ export default function(state = initialState, action) {
         // ...state ritorna lo stato corrente, dopo aver fatto la get dei dati rimettiamo loading a false
         ...state,
         courses: action.payload
+      };
+    case ADD_COURSE:
+      return {
+        ...state,
+        courses: [action.payload, ...state.courses]
       };
     default:
       return state;

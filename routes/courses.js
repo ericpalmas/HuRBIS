@@ -48,6 +48,19 @@ Router.post("/", (req, res) => {
   );
 });
 
+//aggiungi un corso ad un collaboratore
+Router.post("/addCourse", (req, res) => {
+  const newCourse = req.body;
+  const sql =
+    `INSERT INTO courses(name, certification_date, expiration_date, obbligatory, collaborator_id) VALUES` +
+    ` ('${newCourse.name}', '${newCourse.certificationDate}', '${newCourse.expirationDate}', ${newCourse.obbligatory}, ${newCourse.collaborator_id})`;
+
+  mysqlConnection.query(sql, newCourse, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+});
+
 // Delete a collaborator from the dabase
 Router.delete("/:id", (req, res) => {
   mysqlConnection.query(

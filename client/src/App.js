@@ -8,7 +8,8 @@ import "./App.css";
 import Collaborators from "./components/Collaborators";
 import CollaboratorDetail from "./components/CollaboratorDetail";
 import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
-import Route from "react-router-dom/Route";
+// import Route from "react-router-dom/Route";
+const Route = require("react-router-dom").Route;
 
 // const User = ({ match }) => {
 //   return <h1> Welcome {match.params.id} </h1>;

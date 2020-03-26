@@ -3,9 +3,14 @@ const bodyparser = require("body-parser");
 const CollaboratorRoutes = require("./routes/collaborators");
 const QualificationsRoutes = require("./routes/qualifications");
 const CoursesRoutes = require("./routes/courses");
+
+// const PersonalCollaboratorData = require("./routes/collaboratorsPersonalData");
+
 const app = express();
 
 app.use(bodyparser.json());
+// app.use("/collaboratorsPersonalData", PersonalCollaboratorData);
+
 app.use("/collaborators", CollaboratorRoutes);
 app.use("/qualifications", QualificationsRoutes);
 app.use("/courses", CoursesRoutes);

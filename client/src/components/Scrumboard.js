@@ -1,16 +1,6 @@
 import React, { Component, Fragment } from "react";
 
-import {
-  Card,
-  Button,
-  CardImg,
-  CardTitle,
-  CardText,
-  CardGroup,
-  CardSubtitle,
-  CardBody,
-  CardHeader
-} from "reactstrap";
+import { Card, CardGroup, CardBody, CardHeader } from "reactstrap";
 
 const card = (
   <Fragment>

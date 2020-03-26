@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-import { Label, Table, Button } from "reactstrap";
-import { fetchSingleCollaborator } from "../actions/collaboratosActions";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
+import { Label, Table, Button, Container } from "reactstrap";
 import axios from "axios";
+import AddCourseModal from "./AddCourseModal";
 
 const Corso = ({ corsi }) => (
   <Table>
@@ -29,110 +26,61 @@ const Corso = ({ corsi }) => (
   </Table>
 );
 
-export class CollaboratorDetail extends Component {
-  componentWillMount() {
-    this.props.fetchSingleCollaborator(this.props.match.params.id);
-    axios.get(`/collaborators/${this.props.match.params.id}`).then(response => {
-      console.log(response);
-    });
-  }
-
-  constructor(props, { match }) {
+class CollaboratorDetail extends Component {
+  constructor(props) {
     super(props);
 
     this.state = {
-      name: "Mario Rossi",
-      formazione: "Paramedico",
-      corsiSvolti: [
-        {
-          id: "2f3rweraf",
-          nomeCorso: "Corso 1",
-          dataInizio: "01/02/2019",
-          dataScadenza: "01/12/2020",
-          descrizione: "Descrizione del corso"
-        },
-        {
-          id: "t4gf3rtgf",
-          nomeCorso: "Corso 2",
-          dataInizio: "07/04/2019",
-          dataScadenza: "01/04/2020",
-          descrizione: "Descrizione del corso"
-        },
-        {
-          id: "rfergrf",
-          nomeCorso: "Corso 3",
-          dataInizio: "05/11/2019",
-          dataScadenza: "01/01/2020",
-          descrizione: "Descrizione del corso"
-        }
-      ],
-      corsiInCorso: [
-        {
-          id: "ferwgfergf3",
-          nomeCorso: "Corso 1",
-          dataInizio: "01/02/2019",
-          dataScadenza: "01/02/2020",
-          descrizione: "Descrizione del corso"
-        }
-      ],
-      corsiDaSvolgere: [
-        {
-          id: "32r24rf43",
-          nomeCorso: "Corso 1",
-          descrizione: "Descrizione del corso"
-        }
-      ]
+      collaborator: {}
     };
+
+    axios
+      .get(`/collaborators/infos/${this.props.match.params.id}`)
+      .then(res => {
+        this.setState({ collaborator: res.data[0] });
+      });
   }
 
   render() {
-    const { name } = this.state.name;
-    const formazione = this.state.formazione;
-
+    console.log(this.state.collaborator);
     return (
       <div className="ml-5">
         <Label className="ml-5 mr-5">
           <h6> Nome collaboratore: </h6>
-          {name}
+          {this.state.collaborator.name} {this.state.collaborator.surname}
         </Label>
         <Label className="ml-5 mr-5">
           <h6> Formazione: </h6>
-          {formazione}
+          {this.state.collaborator.qualification}
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi svolti: </h6>
           <br></br>
-          <Corso corsi={this.state.corsiSvolti} />
+          {/* <Corso corsi={this.state.corsiSvolti} /> */}
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi in svolgimento: </h6>
           <br></br>
-          <Corso corsi={this.state.corsiInCorso} />
+          {/* <Corso corsi={this.state.corsiInCorso} /> */}
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi da svolgere: </h6>
           <br></br>
-          <Corso corsi={this.state.corsiDaSvolgere} />
+          {/* <Corso corsi={this.state.corsiDaSvolgere} /> */}
         </Label>
         <br></br>
-        <Button className="ml-5 mt-5 mb-5 mr-2"> Aggiungi corso </Button>
+        <AddCourseModal
+          collaborator_id={this.props.match.params.id}
+          className="ml-5 mt-5 mb-5 mr-2"
+        />
+        {/* <Button className="ml-5 mt-5 mb-5 mr-2"> Aggiungi corso </Button> */}
         <Button className="ml-5 mt-5 mb-5 mr-2"> Rimuovi corso </Button>
       </div>
     );
   }
 }
 
-CollaboratorDetail.propTypes = {
-  fetchSingleCollaborator: PropTypes.func.isRequired
-};
-
-const mapStateToProps = state => ({
-  collaborator: state.collaborators
-});
-
-export default connect(mapStateToProps, {
-  fetchSingleCollaborator
-})(CollaboratorDetail);
+export default CollaboratorDetail;
