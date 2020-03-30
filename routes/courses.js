@@ -50,7 +50,6 @@ Router.get("/:id", (req, res) => {
     (err, rows, fields) => {
       if (!err) {
         res.send(rows);
-        console.log(rows);
       } else {
         console.log(err);
       }

@@ -1,45 +1,75 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Label, Table, Button, Container } from "reactstrap";
 import axios from "axios";
 import AddCourseModal from "./AddCourseModal";
+import RemoveCourseModal from "./RemoveCourseModal";
 
-const Corso = ({ corsi }) => (
+const Corso = ({ corsi, elem }) => (
   <Table>
     <thead>
       <tr>
         <th>Nome</th>
-        <th>Data inizio corso</th>
-        <th>Data fine corso </th>
-        <th>Descrizione</th>
+        <th>Data inizio licenza</th>
+        <th>Data di scadenza della certificazione </th>
       </tr>
     </thead>
     {corsi.map(corso => (
       <tbody key={corso.id}>
         <tr id="collaboratorTableItem">
-          <td>{corso.nomeCorso}</td>
-          <td>{corso.dataInizio}</td>
-          <td>{corso.dataScadenza}</td>
-          <td>{corso.descrizione}</td>
+          <td>{!!corso.name ? corso.name : "whatever you want"}</td>
+          <td>
+            {!!corso.certification_date
+              ? corso.certification_date.substr(0, 10)
+              : "    //"}
+          </td>
+
+          <td>
+            {!!corso.expiration_date
+              ? corso.expiration_date.substr(0, 10)
+              : "    //"}
+          </td>
+          <td>
+            {/* {elem.state.remove ? (
+              <Button
+                className="remove-btn ml-0 mr-0 mt-0"
+                color="danger"
+                size="sm"
+                onClick={this.showModal}
+                // onClick={this.onDeleteClick.bind(this, _id)}
+              >
+                &times;
+              </Button>
+            ) : null} */}
+
+            {elem.state.remove ? (
+              <RemoveCourseModal
+                collaborator_id={elem.props.match.params.id}
+                className="remove-btn ml-1 mr-1 mt-1"
+                color="danger"
+                size="sm"
+              >
+                ciao &times;
+              </RemoveCourseModal>
+            ) : null}
+          </td>
         </tr>
       </tbody>
     ))}
   </Table>
 );
 
-// function elaborateData(str) {
-//   const res = str.split(",");
-//   const uniqueNames = Array.from(new Set(res));
-//   console.log(uniqueNames);
-//   return uniqueNames;
-// }
-
 class CollaboratorDetail extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      remove: false,
       collaborator: {},
-      courses: {}
+      courses: [],
+      corsiSvolti: [],
+      corsiDaSvolgere: [],
+      corsiInCorso: [],
+      show: false
     };
 
     axios
@@ -53,9 +83,63 @@ class CollaboratorDetail extends Component {
     });
   }
 
+  showModal = () => {
+    this.setState({ show: true });
+  };
+
+  hideModal = () => {
+    this.setState({ show: false });
+  };
+
+  removeElements = () => {
+    this.setState({
+      remove: !this.state.remove
+    });
+  };
+
+  filterArray = courses => {
+    var currentdate = new Date();
+    var now = Date.parse(
+      currentdate.getFullYear() +
+        "-" +
+        (currentdate.getMonth() + 1) +
+        "-" +
+        currentdate.getDate()
+    );
+
+    for (let i = 0; i < courses.length; i++) {
+      if (courses[i].expiration_date === null) {
+        this.state.corsiDaSvolgere.push(courses[i]);
+      } else {
+        var str1 = courses[i].expiration_date.substr(0, 10);
+        var expiration_date = Date.parse(str1);
+
+        var str2 = courses[i].certification_date.substr(0, 10);
+        var certification_date = Date.parse(str2);
+
+        if (certification_date <= now && expiration_date >= now)
+          this.state.corsiInCorso.push(courses[i]);
+        else this.state.corsiSvolti.push(courses[i]);
+      }
+    }
+
+    return courses;
+  };
+
   render() {
-    console.log(this.state.collaborator.courses);
-    console.log(this.state.courses);
+    let deleteDuplicates = this.state.courses.filter(
+      (ele, ind) =>
+        ind === this.state.courses.findIndex(elem => elem.name === ele.name)
+    );
+
+    console.log(deleteDuplicates);
+    this.filterArray(deleteDuplicates);
+    console.log("Corsi svolti");
+    console.log(this.state.corsiSvolti);
+    console.log("Corsi in corso");
+    console.log(this.state.corsiInCorso);
+    console.log("Corsi da svolgere");
+    console.log(this.state.corsiDaSvolgere);
     return (
       <div className="ml-5">
         <Label className="ml-5 mr-5">
@@ -70,27 +154,40 @@ class CollaboratorDetail extends Component {
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi svolti: </h6>
           <br></br>
-          {/* <Corso corsi={this.state.corsiSvolti} /> */}
+
+          {/* {corsoo props={this.state.corsiSvolti}} */}
+
+          <Corso corsi={this.state.corsiSvolti} elem={this} />
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi in svolgimento: </h6>
           <br></br>
-          {/* <Corso corsi={this.state.corsiInCorso} /> */}
+          {/* <corsoo corsi={this.state.corsiInCorso} /> */}
+          <Corso corsi={this.state.corsiInCorso} elem={this} />
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi da svolgere: </h6>
           <br></br>
-          {/* <Corso corsi={this.state.corsiDaSvolgere} /> */}
+          {/* <corsoo corsi={this.state.corsiDaSvolgere} /> */}
+
+          <Corso corsi={this.state.corsiDaSvolgere} elem={this} />
         </Label>
         <br></br>
-        <AddCourseModal
-          collaborator_id={this.props.match.params.id}
+        <div id="addCourseButton">
+          <AddCourseModal
+            collaborator_id={this.props.match.params.id}
+            className="ml-5 mt-5 mb-5 mr-2 float-left"
+          />
+        </div>
+        <Button
           className="ml-5 mt-5 mb-5 mr-2"
-        />
-        {/* <Button className="ml-5 mt-5 mb-5 mr-2"> Aggiungi corso </Button> */}
-        <Button className="ml-5 mt-5 mb-5 mr-2"> Rimuovi corso </Button>
+          id="removeModal"
+          onClick={this.removeElements}
+        >
+          Rimuovi corso
+        </Button>
       </div>
     );
   }

@@ -27,8 +27,6 @@ import {
   Input
 } from "reactstrap";
 
-//const {v4:uuidv4} = require('uuid');
-
 class AddCourseModal extends Component {
   state = {
     modal: false,
@@ -38,10 +36,6 @@ class AddCourseModal extends Component {
     obbligatory: false,
     collaborator_id: this.props.collaborator_id
   };
-
-  //   static propTypes = {
-  //     isAuthenticated: PropTypes.bool
-  //   };
 
   toggle = () => {
     this.setState({
@@ -73,7 +67,6 @@ class AddCourseModal extends Component {
     e.preventDefault();
 
     const newItem = {
-      //id: uuidv4(),
       name: this.state.name,
       certificationDate: this.state.certificationDate,
       expirationDate: this.state.expirationDate,
@@ -82,7 +75,6 @@ class AddCourseModal extends Component {
     };
 
     console.log(newItem);
-    //Add item via addItem action
     this.props.addCourse(newItem);
     //Close modal
     this.toggle();
@@ -116,7 +108,6 @@ class AddCourseModal extends Component {
                 </Label>
                 <Input
                   type="date"
-                  // name="name"
                   id="item"
                   onChange={this.onChangeCertificationDate}
                 ></Input>
@@ -125,7 +116,6 @@ class AddCourseModal extends Component {
                 </Label>
                 <Input
                   type="date"
-                  // name="name"
                   id="item"
                   onChange={this.onChangeExpirationDate}
                 ></Input>
@@ -147,4 +137,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { addCourse })(AddCourseModal);
-// export default AddCourseModal;
