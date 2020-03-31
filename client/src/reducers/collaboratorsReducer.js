@@ -1,9 +1,11 @@
 import { FETCH_COLLABORATORS } from "../actions/types";
 import { FETCH_SINGLE_COLLABORATOR } from "../actions/types";
+import { FETCH_COLLABORATORS_INFOS } from "../actions/types";
 
 const initialState = {
   collaborator: {},
-  collaborators: []
+  collaborators: [],
+  collaboratorsInfos: []
 };
 
 export default function(state = initialState, action) {
@@ -19,10 +21,15 @@ export default function(state = initialState, action) {
       return {
         ...state,
         collaborator: state.collaborators.filter(
-          collab => collab.id !== action.payload
+          collaborator => collaborator._id !== action.payload
         )
-        // collaborator: [action.payload, ...state.collaborators]
       };
+    case FETCH_COLLABORATORS_INFOS:
+      return {
+        ...state,
+        collaboratorsInfos: action.payload
+      };
+
     default:
       return state;
   }

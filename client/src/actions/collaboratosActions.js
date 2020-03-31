@@ -17,8 +17,7 @@ export const fetchCollaborators = () => dispatch => {
 };
 
 export const fetchSingleCollaborator = id => dispatch => {
-  console.log("dentro al singolo fetch ");
-  axios.get(`/collaborators/${id}`).then(res =>
+  axios.get(`/collaborators/infos/${id}`).then(res =>
     dispatch({
       type: FETCH_SINGLE_COLLABORATOR,
       payload: id

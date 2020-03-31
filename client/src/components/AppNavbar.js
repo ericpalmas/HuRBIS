@@ -12,9 +12,7 @@ import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-//import LoginModal from "./auth/LoginModal";
-//import RegisterModal from "./auth/RegisterModal";
-//import Logout from "./auth/Logout";
+//  const logo = require("../logo.PNG");
 
 class AppNavbar extends Component {
   constructor(props) {
@@ -23,10 +21,6 @@ class AppNavbar extends Component {
       isOpen: false
     };
   }
-
-  // static propTypes = {
-  //   auth: PropTypes.object.isRequired
-  // };
 
   toggle = () => {
     this.setState({
@@ -39,25 +33,32 @@ class AppNavbar extends Component {
       <div>
         <Navbar light expand="sm" className="mb-5" id="navbar">
           <Container className="ml-1">
-            <NavbarBrand href="/">
-              {/* <img src={logo} style={{ width: 90 }} /> */}
+            <NavbarBrand href="/collaborators">
+              {/* <NavbarBrand href="/"> */}
+              <img style={{ width: 90 }} src={require("../Logo.PNG")} />
             </NavbarBrand>
             <NavbarToggler onClick={this.toggle}></NavbarToggler>
             <Collapse isOpen={this.state.isOpen} navbar>
-              <Nav className="ml-1 mr-5 mt-2 border-left" navbar>
+              {/* <Nav className="ml-2 mr-5 mt-2 pl-2 border-left" navbar>
                 <NavItem>
-                  <NavLink exact activeStyle={{ color: "grey" }} to="/">
+                  <NavLink
+                    exact
+                    style={{ color: "grey" }}
+                    activeStyle={{ color: "DodgerBlue" }}
+                    to="/"
+                  >
                     Home
                   </NavLink>
                 </NavItem>
-              </Nav>
+              </Nav> */}
 
-              <Nav className="ml-1 mr-5 mt-2 border-left" navbar>
+              <Nav className="ml-2 mr-5 mt-2 pl-2 border-left" navbar>
                 <NavItem>
                   {" "}
                   <NavLink
                     exact
-                    activeStyle={{ color: "grey" }}
+                    style={{ color: "grey" }}
+                    activeStyle={{ color: "DodgerBlue" }}
                     to="/collaborators"
                   >
                     Collaboratori

@@ -1,7 +1,7 @@
 import React, { Component, Fragment, useState } from "react";
 import { Button, Form, FormGroup, Input, Table } from "reactstrap";
 import { connect } from "react-redux";
-
+import { fetchCollaboratorsInfos } from "../actions/collaboratosInfosActions";
 import { fetchCollaborators } from "../actions/collaboratosActions";
 import { fetchQualifications } from "../actions/qualificationsActions";
 import { fetchCourses } from "../actions/coursesActions";
@@ -13,6 +13,7 @@ class Collaborators extends Component {
     this.props.fetchCollaborators();
     this.props.fetchQualifications();
     this.props.fetchCourses();
+    this.props.fetchCollaboratorsInfos();
   }
 
   initArray = array => {
@@ -21,17 +22,13 @@ class Collaborators extends Component {
     }
   };
 
+  handleClick = () => {
+    Router.transitionTo("/collaborators");
+  };
+
   createListOfQualifications = (array, qualifications) => {
     let prevId = 0;
-
     for (let i = 0; i < qualifications.length; i++) {
-      // console.log(
-      //   prevId +
-      //     " " +
-      //     qualifications[i].collaborator_id +
-      //     " " +
-      //     qualifications[i].name
-      // );
       if (prevId === qualifications[i].collaborator_id) {
         array[prevId] += qualifications[i].name + " ";
       } else {
@@ -45,9 +42,10 @@ class Collaborators extends Component {
   render() {
     const collaborators = this.props.collaborators;
     const qualifications = this.props.qualifications;
+    const collaboratorsInfos = this.props.collaboratorsInfos;
     const courses = this.props.courses;
-    let prevQualification = 0;
-    let prevCourse = 0;
+
+    console.log(collaboratorsInfos);
 
     var formattedQualifications = new Array(collaborators.length).fill("");
     {
@@ -73,64 +71,34 @@ class Collaborators extends Component {
           </FormGroup>
         </Form>
 
-        <table>
-          <td>
-            <div id="collaboratorTable1" class="col-xs-6">
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Nome</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {collaborators.map(({ id, name, surname }) => (
-                      <tr key={id} id="collaboratorTableItem1">
-                        <td id="riga">
-                          <NavLink
-                            exact
-                            activeStyle={{ color: "grey" }}
-                            to={"/collaborators/" + id}
-                          >
-                            {name} {surname}
-                          </NavLink>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </td>
-          <td>
-            <div id="collaboratorTable" class="col-xs-6">
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Qualifica</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {formattedQualifications.map(value => (
-                      <tr>
-                        <td id="riga">
-                          <NavLink
-                            exact
-                            activeStyle={{ color: "grey" }}
-                            to="/collaborators/:id"
-                          >
-                            {value}
-                          </NavLink>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </td>
-        </table>
+        <Table hover id="collaboratorsTable">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Qualifica</th>
+              <th>Corsi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {collaboratorsInfos.map(
+              ({ id, name, surname, qualification, courses }) => (
+                <tr>
+                  <td>
+                    <Link to={"/collaborators/" + id}>
+                      {name} {surname}
+                    </Link>
+                  </td>
+                  <td>
+                    <Link to={"/collaborators/" + id}>{qualification}</Link>
+                  </td>
+                  <td>
+                    <Link to={"/collaborators/" + id}>{courses}</Link>
+                  </td>
+                </tr>
+              )
+            )}
+          </tbody>
+        </Table>
       </div>
     );
   }
@@ -139,10 +107,12 @@ class Collaborators extends Component {
 Collaborators.propTypes = {
   fetchCollaborators: PropTypes.func.isRequired,
   fetchQualifications: PropTypes.func.isRequired,
-  fetchCourses: PropTypes.func.isRequired
+  fetchCourses: PropTypes.func.isRequired,
+  fetchCollaboratorsInfos: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
+  collaboratorsInfos: state.collaboratorsInfos.collaboratorsInfos,
   collaborators: state.collaborators.collaborators,
   qualifications: state.qualifications.qualifications,
   courses: state.courses.courses
@@ -151,5 +121,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   fetchCollaborators,
   fetchQualifications,
-  fetchCourses
+  fetchCourses,
+  fetchCollaboratorsInfos
 })(Collaborators);

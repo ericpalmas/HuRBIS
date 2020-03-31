@@ -1,13 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { deleteCourse } from "../actions/coursesActions";
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 class RemoveCourseModal extends Component {
-  state = {
-    modal: false
+  static propTypes = {
+    courses: PropTypes.object.isRequired
   };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      modal: false
+    };
+  }
 
   toggle = () => {
     this.setState({
@@ -15,32 +23,34 @@ class RemoveCourseModal extends Component {
     });
   };
 
-  onSubmit = e => {
-    e.preventDefault();
-
-    // const newItem = {
-    //   name: this.state.name,
-    //   certificationDate: this.state.certificationDate,
-    //   expirationDate: this.state.expirationDate,
-    //   obbligatory: this.state.obbligatory,
-    //   collaborator_id: this.state.collaborator_id
-    // };
-
-    // console.log(newItem);
-    // this.props.addCourse(newItem);
-    // //Close modal
+  onDeleteClick = id => {
+    this.props.deleteCourse(id);
     this.toggle();
   };
 
   render() {
     return (
       <div>
-        <Button color="danger" onClick={this.toggle}></Button>
+        <Button
+          className="remove-btn ml-1 mr-1 mt-1"
+          color="danger"
+          size="sm"
+          onClick={this.toggle}
+        >
+          &times;
+        </Button>
         <Modal isOpen={this.state.modal} fade={false} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>Rimozione di un corso</ModalHeader>
-          <ModalBody>Sei sicuro di voler rimuovere questo corso?</ModalBody>
+          <ModalHeader toggle={this.toggle}>
+            Rimozione corso di formazione
+          </ModalHeader>
+          <ModalBody>
+            Sei sicuro di voler rimuovere {this.props.course.name}?
+          </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.onSubmit}>
+            <Button
+              color="primary"
+              onClick={this.onDeleteClick.bind(this, this.props.course.id)}
+            >
               Continua
             </Button>{" "}
             <Button color="secondary" onClick={this.toggle}>
@@ -53,4 +63,8 @@ class RemoveCourseModal extends Component {
   }
 }
 
-export default RemoveCourseModal;
+const mapStateToProps = state => ({
+  courses: state.courses
+});
+
+export default connect(mapStateToProps, { deleteCourse })(RemoveCourseModal);

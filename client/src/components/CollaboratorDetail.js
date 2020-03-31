@@ -20,36 +20,22 @@ const Corso = ({ corsi, elem }) => (
           <td>
             {!!corso.certification_date
               ? corso.certification_date.substr(0, 10)
-              : "    //"}
+              : "      //"}
           </td>
 
           <td>
             {!!corso.expiration_date
               ? corso.expiration_date.substr(0, 10)
-              : "    //"}
+              : "      //"}
           </td>
           <td>
-            {/* {elem.state.remove ? (
-              <Button
-                className="remove-btn ml-0 mr-0 mt-0"
-                color="danger"
-                size="sm"
-                onClick={this.showModal}
-                // onClick={this.onDeleteClick.bind(this, _id)}
-              >
-                &times;
-              </Button>
-            ) : null} */}
-
             {elem.state.remove ? (
               <RemoveCourseModal
-                collaborator_id={elem.props.match.params.id}
+                course={corso}
                 className="remove-btn ml-1 mr-1 mt-1"
                 color="danger"
                 size="sm"
-              >
-                ciao &times;
-              </RemoveCourseModal>
+              ></RemoveCourseModal>
             ) : null}
           </td>
         </tr>
@@ -106,7 +92,9 @@ class CollaboratorDetail extends Component {
         "-" +
         currentdate.getDate()
     );
-
+    this.state.corsiDaSvolgere = [];
+    this.state.corsiInCorso = [];
+    this.state.corsiSvolti = [];
     for (let i = 0; i < courses.length; i++) {
       if (courses[i].expiration_date === null) {
         this.state.corsiDaSvolgere.push(courses[i]);
@@ -122,24 +110,26 @@ class CollaboratorDetail extends Component {
         else this.state.corsiSvolti.push(courses[i]);
       }
     }
-
     return courses;
   };
 
-  render() {
+  update = () => {
     let deleteDuplicates = this.state.courses.filter(
       (ele, ind) =>
         ind === this.state.courses.findIndex(elem => elem.name === ele.name)
     );
-
-    console.log(deleteDuplicates);
     this.filterArray(deleteDuplicates);
+  };
+
+  render() {
+    this.update();
     console.log("Corsi svolti");
     console.log(this.state.corsiSvolti);
     console.log("Corsi in corso");
     console.log(this.state.corsiInCorso);
     console.log("Corsi da svolgere");
     console.log(this.state.corsiDaSvolgere);
+
     return (
       <div className="ml-5">
         <Label className="ml-5 mr-5">
@@ -154,24 +144,18 @@ class CollaboratorDetail extends Component {
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi svolti: </h6>
           <br></br>
-
-          {/* {corsoo props={this.state.corsiSvolti}} */}
-
           <Corso corsi={this.state.corsiSvolti} elem={this} />
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi in svolgimento: </h6>
           <br></br>
-          {/* <corsoo corsi={this.state.corsiInCorso} /> */}
           <Corso corsi={this.state.corsiInCorso} elem={this} />
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi da svolgere: </h6>
           <br></br>
-          {/* <corsoo corsi={this.state.corsiDaSvolgere} /> */}
-
           <Corso corsi={this.state.corsiDaSvolgere} elem={this} />
         </Label>
         <br></br>

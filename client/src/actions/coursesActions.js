@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_COURSES, ADD_COURSE } from "./types";
+import { FETCH_COURSES, ADD_COURSE, DELETE_COURSE } from "./types";
 
 // Facciamo un dispatch al reducers delle informazioni
 export const fetchCourses = () => dispatch => {
@@ -20,6 +20,18 @@ export const addCourse = course => dispatch => {
     dispatch({
       type: ADD_COURSE,
       payload: res.data
+    })
+  );
+  // .catch(err =>
+  //   dispatch(returnErrors(err.response.data, err.response.status))
+  // );
+};
+
+export const deleteCourse = id => dispatch => {
+  axios.delete(`/courses/${id}`).then(res =>
+    dispatch({
+      type: DELETE_COURSE,
+      payload: id
     })
   );
   // .catch(err =>

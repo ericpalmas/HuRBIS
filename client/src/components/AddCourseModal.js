@@ -17,6 +17,7 @@ import {
   DropdownItem,
   NavbarText,
   Container,
+  Alert,
   Button,
   ModalHeader,
   ModalBody,
@@ -34,7 +35,8 @@ class AddCourseModal extends Component {
     certificationDate: "",
     expirationDate: "",
     obbligatory: false,
-    collaborator_id: this.props.collaborator_id
+    collaborator_id: this.props.collaborator_id,
+    msg: null
   };
 
   toggle = () => {
@@ -93,6 +95,9 @@ class AddCourseModal extends Component {
             Aggiungi corso di formazione{" "}
           </ModalHeader>
           <ModalBody>
+            {this.state.msg ? (
+              <Alert color="danger">{this.state.msg}</Alert>
+            ) : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
                 <Label for="item">Nome corso</Label>
