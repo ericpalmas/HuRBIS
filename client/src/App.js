@@ -28,18 +28,19 @@ class App extends Component {
               }}
             />
 
-            {/* <Route
+            <Route
               path="/"
               exact
               strict
               render={() => {
                 return (
                   <div>
-                    <Scrumboard />
+                    <Collaborators></Collaborators>
+                    {/* <Scrumboard /> */}
                   </div>
                 );
               }}
-            /> */}
+            />
 
             <Route
               path="/collaborators"
