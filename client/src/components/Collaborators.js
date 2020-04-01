@@ -1,5 +1,16 @@
 import React, { Component, Fragment, useState } from "react";
-import { Button, Form, FormGroup, Input, Table } from "reactstrap";
+import {
+  Button,
+  Form,
+  FormGroup,
+  Input,
+  Table,
+  ButtonDropdown,
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle
+} from "reactstrap";
+
 import { connect } from "react-redux";
 import { fetchCollaboratorsInfos } from "../actions/collaboratosInfosActions";
 import { fetchCollaborators } from "../actions/collaboratosActions";
@@ -9,6 +20,20 @@ import PropTypes from "prop-types";
 import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
 
 class Collaborators extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      courses: [],
+      corsiSvolti: [],
+      corsiDaSvolgere: [],
+      corsiInCorso: [],
+      dropdownButton: false
+    };
+
+    this.setState({ courses: this.props.collaboratorsInfos.courses });
+  }
+
   componentWillMount() {
     this.props.fetchCollaborators();
     this.props.fetchQualifications();
@@ -26,36 +51,27 @@ class Collaborators extends Component {
     Router.transitionTo("/collaborators");
   };
 
-  createListOfQualifications = (array, qualifications) => {
-    let prevId = 0;
-    for (let i = 0; i < qualifications.length; i++) {
-      if (prevId === qualifications[i].collaborator_id) {
-        array[prevId] += qualifications[i].name + " ";
-      } else {
-        prevId++;
-        array[prevId] += qualifications[i].name + " ";
-      }
-    }
-    return array;
+  // createListOfQualifications = (array, qualifications) => {
+  //   let prevId = 0;
+  //   for (let i = 0; i < qualifications.length; i++) {
+  //     if (prevId === qualifications[i].collaborator_id) {
+  //       array[prevId] += qualifications[i].name + " ";
+  //     } else {
+  //       prevId++;
+  //       array[prevId] += qualifications[i].name + " ";
+  //     }
+  //   }
+  //   return array;
+  // };
+
+  toggle = () => {
+    this.setState({
+      dropdownButton: !this.state.dropdownButton
+    });
   };
 
   render() {
-    const collaborators = this.props.collaborators;
-    const qualifications = this.props.qualifications;
     const collaboratorsInfos = this.props.collaboratorsInfos;
-    const courses = this.props.courses;
-
-    console.log(collaboratorsInfos);
-
-    var formattedQualifications = new Array(collaborators.length).fill("");
-    {
-      this.createListOfQualifications(formattedQualifications, qualifications);
-    }
-
-    var formattedCourses = new Array(collaborators.length).fill("");
-    {
-      this.createListOfQualifications(formattedCourses, courses);
-    }
 
     return (
       <div>
@@ -68,6 +84,21 @@ class Collaborators extends Component {
               id="exampleSearch"
               placeholder=""
             />
+
+            <ButtonDropdown
+              isOpen={this.state.dropdownButton}
+              toggle={this.toggle}
+              className="ml-3"
+            >
+              <DropdownToggle caret> Ordina per </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem> Scadenza licenza: crescente </DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem> Scadenza licenza: decrescente</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem> Ordine alfabetico </DropdownItem>
+              </DropdownMenu>
+            </ButtonDropdown>
           </FormGroup>
         </Form>
 

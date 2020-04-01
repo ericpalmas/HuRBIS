@@ -5,10 +5,9 @@ const risnovaConnection = require("../config/risnovaConnection");
 
 // Get all collaborators infos
 Router.get("/", (req, res) => {
-  console.log("sono quaaaaaaaaaaa");
   mysqlConnection.query(
     "SELECT collaborator.id, collaborator.name, collaborator.surname," +
-      " group_concat(distinct courses.id separator ',') AS courses," +
+      " group_concat(distinct courses.name separator ',') AS courses," +
       " group_concat(distinct qualification.name separator ',') AS qualification" +
       " from collaborator" +
       " INNER JOIN courses ON courses.collaborator_id=collaborator.id" +

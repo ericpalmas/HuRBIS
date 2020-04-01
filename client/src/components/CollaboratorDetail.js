@@ -4,6 +4,8 @@ import axios from "axios";
 import AddCourseModal from "./AddCourseModal";
 import RemoveCourseModal from "./RemoveCourseModal";
 
+import EditCourseModal from "./EditCourseModal";
+
 const Corso = ({ corsi, elem }) => (
   <Table>
     <thead>
@@ -142,12 +144,6 @@ class CollaboratorDetail extends Component {
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
-          <h6> Corsi svolti: </h6>
-          <br></br>
-          <Corso corsi={this.state.corsiSvolti} elem={this} />
-        </Label>
-        <br></br>
-        <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi in svolgimento: </h6>
           <br></br>
           <Corso corsi={this.state.corsiInCorso} elem={this} />
@@ -157,6 +153,12 @@ class CollaboratorDetail extends Component {
           <h6> Corsi da svolgere: </h6>
           <br></br>
           <Corso corsi={this.state.corsiDaSvolgere} elem={this} />
+        </Label>
+        <br></br>
+        <Label className="ml-5 mr-5 mt-5">
+          <h6> Corsi svolti: </h6>
+          <br></br>
+          <Corso corsi={this.state.corsiSvolti} elem={this} />
         </Label>
         <br></br>
         <div id="addCourseButton">
