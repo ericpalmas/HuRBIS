@@ -25,8 +25,13 @@
     "body-parser": "^1.19.0",
     "concurrently": "^5.1.0",
     "express": "^4.17.1",
+    "final-form": "^4.19.1",
+    "final-form-arrays": "^3.0.2",
     "mssql": "^6.2.0",
     "mysql": "^2.18.1",
+    "react-final-form": "^6.4.0",
+    "react-final-form-arrays": "^3.1.1",
+    "redux-form": "^8.3.2",
     "tedious": "^8.2.0"
   },
   "devDependencies": {

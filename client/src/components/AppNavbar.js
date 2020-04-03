@@ -12,7 +12,6 @@ import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-//  const logo = require("../logo.PNG");
 
 class AppNavbar extends Component {
   constructor(props) {
@@ -39,19 +38,6 @@ class AppNavbar extends Component {
             </NavbarBrand>
             <NavbarToggler onClick={this.toggle}></NavbarToggler>
             <Collapse isOpen={this.state.isOpen} navbar>
-              {/* <Nav className="ml-2 mr-5 mt-2 pl-2 border-left" navbar>
-                <NavItem>
-                  <NavLink
-                    exact
-                    style={{ color: "grey" }}
-                    activeStyle={{ color: "DodgerBlue" }}
-                    to="/"
-                  >
-                    Home
-                  </NavLink>
-                </NavItem>
-              </Nav> */}
-
               <Nav className="ml-2 mr-5 mt-2 pl-2 border-left" navbar>
                 <NavItem>
                   {" "}
@@ -62,6 +48,60 @@ class AppNavbar extends Component {
                     to="/collaborators"
                   >
                     Collaboratori
+                  </NavLink>
+                </NavItem>
+              </Nav>
+
+              <Nav className="ml-2 mr-5 mt-2 pl-2 border-left" navbar>
+                <NavItem>
+                  {" "}
+                  <NavLink
+                    exact
+                    style={{ color: "grey" }}
+                    activeStyle={{ color: "DodgerBlue" }}
+                    to="/qualifications"
+                  >
+                    Qualifiche
+                  </NavLink>
+                </NavItem>
+              </Nav>
+
+              <Nav className="ml-2 mr-5 mt-2 pl-2 border-left" navbar>
+                <NavItem>
+                  {" "}
+                  <NavLink
+                    exact
+                    style={{ color: "grey" }}
+                    activeStyle={{ color: "DodgerBlue" }}
+                    to="/courses"
+                  >
+                    Corsi
+                  </NavLink>
+                </NavItem>
+              </Nav>
+              <Nav className="ml-2 mr-5 mt-2 pl-2 border-left" navbar>
+                <NavItem>
+                  {" "}
+                  <NavLink
+                    exact
+                    style={{ color: "grey" }}
+                    activeStyle={{ color: "DodgerBlue" }}
+                    to="/summary"
+                  >
+                    Riepilogo
+                  </NavLink>
+                </NavItem>
+              </Nav>
+              <Nav className="ml-2 mr-5 mt-2 pl-2 border-left" navbar>
+                <NavItem>
+                  {" "}
+                  <NavLink
+                    exact
+                    style={{ color: "grey" }}
+                    activeStyle={{ color: "DodgerBlue" }}
+                    to="/calendar"
+                  >
+                    Calendario
                   </NavLink>
                 </NavItem>
               </Nav>

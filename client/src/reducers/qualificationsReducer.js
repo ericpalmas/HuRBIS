@@ -1,18 +1,25 @@
-import { FETCH_QUALIFICATIONS } from "../actions/types";
+import {
+  FETCH_QUALIFICATIONS
+  //FETCH_QUALIFICATIONS_INFOS
+} from "../actions/types";
 
 const initialState = {
   qualifications: []
+  // qualificationsInformations: []
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
     case FETCH_QUALIFICATIONS:
-      console.log("reducer");
       return {
-        // ...state ritorna lo stato corrente, dopo aver fatto la get dei dati rimettiamo loading a false
         ...state,
         qualifications: action.payload
       };
+    // case FETCH_QUALIFICATIONS_INFOS:
+    //   return {
+    //     ...state,
+    //     qualificationsInformations: action.payload
+    //   };
     default:
       return state;
   }

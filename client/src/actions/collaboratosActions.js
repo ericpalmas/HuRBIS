@@ -3,8 +3,6 @@ import { FETCH_COLLABORATORS, FETCH_SINGLE_COLLABORATOR } from "./types";
 
 // Facciamo un dispatch al reducers delle informazioni
 export const fetchCollaborators = () => dispatch => {
-  console.log("dentro al multiplo ");
-
   axios.get("/collaborators").then(res =>
     dispatch({
       type: FETCH_COLLABORATORS,

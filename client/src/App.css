@@ -84,3 +84,13 @@
   float: left;
   display: block;
 }
+
+#ArrayField {
+  width: 23rem;
+  display: inline-block;
+}
+
+#addRemoveButton {
+  background-color: transparent;
+  border-color: transparent;
+}

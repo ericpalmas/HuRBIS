@@ -3,7 +3,6 @@ import { Label, Table, Button, Container } from "reactstrap";
 import axios from "axios";
 import AddCourseModal from "./AddCourseModal";
 import RemoveCourseModal from "./RemoveCourseModal";
-
 import EditCourseModal from "./EditCourseModal";
 
 const Corso = ({ corsi, elem }) => (

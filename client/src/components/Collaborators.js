@@ -51,19 +51,6 @@ class Collaborators extends Component {
     Router.transitionTo("/collaborators");
   };
 
-  // createListOfQualifications = (array, qualifications) => {
-  //   let prevId = 0;
-  //   for (let i = 0; i < qualifications.length; i++) {
-  //     if (prevId === qualifications[i].collaborator_id) {
-  //       array[prevId] += qualifications[i].name + " ";
-  //     } else {
-  //       prevId++;
-  //       array[prevId] += qualifications[i].name + " ";
-  //     }
-  //   }
-  //   return array;
-  // };
-
   toggle = () => {
     this.setState({
       dropdownButton: !this.state.dropdownButton

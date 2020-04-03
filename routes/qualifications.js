@@ -16,4 +16,27 @@ Router.get("/", (req, res) => {
   );
 });
 
+// Get all qualifications
+Router.get("/informations", (req, res) => {
+  mysqlConnection.query(
+    `SELECT qualification.id, qualification.name,
+     group_concat(distinct collaborator.name separator ',' ) AS nome,
+     group_concat(distinct collaborator.surname separator ',' ) AS cognome,
+     group_concat(distinct courses.name separator ',' ) AS courses
+     from qualification
+     INNER JOIN collaborator ON collaborator.id = qualification.collaborator_id
+     INNER JOIN courses ON courses.collaborator_id = qualification.collaborator_id
+     group by qualification.id`,
+
+    (err, rows, fields) => {
+      if (!err) {
+        res.send(rows);
+        console.log(rows);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+});
+
 module.exports = Router;
