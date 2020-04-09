@@ -8,14 +8,14 @@ import {
   ButtonDropdown,
   DropdownMenu,
   DropdownItem,
-  DropdownToggle
+  DropdownToggle,
 } from "reactstrap";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { fetchQualificationsInformations } from "../actions/qualificationsActions";
 import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
-import AddQualificationModal from "./AddQualificationModal";
+import AddQualificationModal from "./modals/AddQualificationModal";
 
 class Qualifications extends Component {
   constructor(props) {
@@ -23,20 +23,20 @@ class Qualifications extends Component {
 
     this.state = {
       qualificationsInformations: [],
-      dropdownButton: false
+      dropdownButton: false,
     };
   }
 
   componentDidMount() {
     this.props.fetchQualificationsInformations();
     this.setState({
-      qualificationsInformations: this.props.qualificationsInfos
+      qualificationsInformations: this.props.qualificationsInfos,
     });
   }
 
   toggle = () => {
     this.setState({
-      dropdownButton: !this.state.dropdownButton
+      dropdownButton: !this.state.dropdownButton,
     });
   };
 
@@ -82,22 +82,22 @@ class Qualifications extends Component {
             </tr>
           </thead>
           <tbody>
-            {qualifications.map(({ id, name, nome, cognome, courses }) => (
-              <tr>
-                <td>
-                  <Link>{name}</Link>
-                </td>
-                <td>
-                  <Link>
-                    {nome} {cognome}
-                  </Link>
-                </td>
-                <td>
-                  {/* <Link to={"/collaborators/" + id}> {courses}</Link> */}
-                  <Link> {courses}</Link>
-                </td>
-              </tr>
-            ))}
+            {qualifications.map(
+              ({ id, name, collaborator, necessary_courses }) => (
+                <tr>
+                  <td id="tableColumnInfo">
+                    <Link>{name}</Link>
+                  </td>
+                  <td id="tableColumnInfo">
+                    <Link>{collaborator}</Link>
+                  </td>
+                  <td id="tableColumnCourses">
+                    {/* <Link to={"/collaborators/" + id}> {courses}</Link> */}
+                    <Link> {necessary_courses}</Link>
+                  </td>
+                </tr>
+              )
+            )}
           </tbody>
         </Table>
         <div id="addCourseButton">
@@ -111,7 +111,7 @@ class Qualifications extends Component {
           id="removeModal"
           // onClick={this.removeElements}
         >
-          Rimuovi corso
+          Rimuovi qualifica
         </Button>
       </div>
     );
@@ -119,13 +119,13 @@ class Qualifications extends Component {
 }
 
 Qualifications.propTypes = {
-  fetchQualificationsInformations: PropTypes.func.isRequired
+  fetchQualificationsInformations: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  qualificationsInfos: state.qualificationsInfos.qualificationsInfos
+const mapStateToProps = (state) => ({
+  qualificationsInfos: state.qualificationsInfos.qualificationsInfos,
 });
 
 export default connect(mapStateToProps, {
-  fetchQualificationsInformations
+  fetchQualificationsInformations,
 })(Qualifications);

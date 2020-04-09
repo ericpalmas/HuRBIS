@@ -8,17 +8,17 @@ import {
   ButtonDropdown,
   DropdownMenu,
   DropdownItem,
-  DropdownToggle
+  DropdownToggle,
 } from "reactstrap";
 
 import { connect } from "react-redux";
 import { fetchCollaboratorsInfos } from "../actions/collaboratosInfosActions";
 import { fetchCollaborators } from "../actions/collaboratosActions";
 import { fetchQualifications } from "../actions/qualificationsActions";
-import { fetchCourses } from "../actions/coursesActions";
+// import { fetchCourses } from "../actions/coursesActions";
 import PropTypes from "prop-types";
 import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
-
+import AddQualificationModal from "./modals/AddQualificationModal";
 class Collaborators extends Component {
   constructor(props) {
     super(props);
@@ -28,7 +28,7 @@ class Collaborators extends Component {
       corsiSvolti: [],
       corsiDaSvolgere: [],
       corsiInCorso: [],
-      dropdownButton: false
+      dropdownButton: false,
     };
 
     this.setState({ courses: this.props.collaboratorsInfos.courses });
@@ -37,28 +37,26 @@ class Collaborators extends Component {
   componentWillMount() {
     this.props.fetchCollaborators();
     this.props.fetchQualifications();
-    this.props.fetchCourses();
+    // this.props.fetchCourses();
     this.props.fetchCollaboratorsInfos();
   }
 
-  initArray = array => {
+  initArray = (array) => {
     for (let i = 0; i < array.size; i++) {
       array[i] = "";
     }
   };
 
-  handleClick = () => {
-    Router.transitionTo("/collaborators");
-  };
-
   toggle = () => {
     this.setState({
-      dropdownButton: !this.state.dropdownButton
+      dropdownButton: !this.state.dropdownButton,
     });
   };
 
   render() {
     const collaboratorsInfos = this.props.collaboratorsInfos;
+    console.log("infos");
+    console.log(collaboratorsInfos);
 
     return (
       <div>
@@ -93,30 +91,57 @@ class Collaborators extends Component {
           <thead>
             <tr>
               <th>Nome</th>
+              <th>Data di nascita</th>
               <th>Qualifica</th>
               <th>Corsi</th>
             </tr>
           </thead>
           <tbody>
             {collaboratorsInfos.map(
-              ({ id, name, surname, qualification, courses }) => (
+              ({
+                id,
+                name,
+                surname,
+                qualification,
+                necessary_courses,
+                extra_courses,
+                yearOfBirth,
+              }) => (
                 <tr>
-                  <td>
+                  <td id="tableColumnInfo">
                     <Link to={"/collaborators/" + id}>
                       {name} {surname}
                     </Link>
                   </td>
-                  <td>
+                  <td id="tableColumnBirthDate">
+                    <Link to={"/collaborators/" + id}>
+                      {!!yearOfBirth ? yearOfBirth : "      //"}
+                    </Link>
+                  </td>
+                  <td id="tableColumnInfo">
                     <Link to={"/collaborators/" + id}>{qualification}</Link>
                   </td>
-                  <td>
-                    <Link to={"/collaborators/" + id}>{courses}</Link>
+                  <td id="tableColumnCourses">
+                    <Link to={"/collaborators/" + id}>{extra_courses}</Link>
                   </td>
                 </tr>
               )
             )}
           </tbody>
         </Table>
+        <div id="addCourseButton">
+          <AddQualificationModal
+            // collaborator_id={this.props.match.params.id}
+            className="ml-5 mt-5 mb-5 mr-2 float-left"
+          />
+        </div>
+        <Button
+          className="ml-5 mt-5 mb-5 mr-2"
+          id="removeModal"
+          // onClick={this.removeElements}
+        >
+          Rimuovi collbaboratore
+        </Button>
       </div>
     );
   }
@@ -125,20 +150,20 @@ class Collaborators extends Component {
 Collaborators.propTypes = {
   fetchCollaborators: PropTypes.func.isRequired,
   fetchQualifications: PropTypes.func.isRequired,
-  fetchCourses: PropTypes.func.isRequired,
-  fetchCollaboratorsInfos: PropTypes.func.isRequired
+  // fetchCourses: PropTypes.func.isRequired,
+  fetchCollaboratorsInfos: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   collaboratorsInfos: state.collaboratorsInfos.collaboratorsInfos,
   collaborators: state.collaborators.collaborators,
   qualifications: state.qualifications.qualifications,
-  courses: state.courses.courses
+  // courses: state.courses.courses,
 });
 
 export default connect(mapStateToProps, {
   fetchCollaborators,
   fetchQualifications,
-  fetchCourses,
-  fetchCollaboratorsInfos
+  // fetchCourses,
+  fetchCollaboratorsInfos,
 })(Collaborators);

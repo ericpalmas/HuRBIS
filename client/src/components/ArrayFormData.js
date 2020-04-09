@@ -1,4 +1,7 @@
 import React, { useState, Fragment } from "react";
+import { connect } from "react-redux";
+import { addCourse } from "../actions/coursesActions";
+import PropTypes from "prop-types";
 
 import {
   Alert,
@@ -11,38 +14,64 @@ import {
   Input,
   Form,
   ListGroup,
-  ListGroupItem
+  ListGroupItem,
 } from "reactstrap";
 
 const ArrayFormData = () => {
-  const [inputFields, setInputFields] = useState([{ firstName: "" }]);
+  const [inputFields, setInputFields] = useState([{ corso: "" }]);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     console.log("inputFields", inputFields);
   };
 
   const handleInputChange = (index, event) => {
     const values = [...inputFields];
-    values[index].firstName = event.target.value;
+    values[index].corso = event.target.value;
     setInputFields(values);
   };
 
   const handleAddFields = () => {
     const values = [...inputFields];
-    values.push({ firstName: "" });
+    values.push({ corso: "" });
     setInputFields(values);
   };
 
-  const handleRemoveFields = index => {
+  // const handleRemoveFields = index => {
+  //   const values = [...inputFields];
+  //   values.splice(index, 1);
+  //   setInputFields(values);
+  // };
+
+  const handleRemoveLastFields = () => {
     const values = [...inputFields];
-    values.splice(index, 1);
+    values.splice(inputFields.length - 1, 1);
     setInputFields(values);
   };
-
   return (
     <>
       <Form onSubmit={handleSubmit}>
+        <Label inline for="item">
+          Corsi necessari
+        </Label>
+        <Button
+          id="addRemoveButton"
+          className="btn btn-link"
+          type="button"
+          onClick={() => handleRemoveLastFields()}
+          inline
+        >
+          -
+        </Button>
+        <Button
+          id="addRemoveButton"
+          className="btn btn-link"
+          type="button"
+          onClick={() => handleAddFields()}
+          inline
+        >
+          +
+        </Button>
         <FormGroup>
           {inputFields.map((inputField, index) => (
             <Fragment key={`${inputField}~${index}`}>
@@ -50,45 +79,28 @@ const ArrayFormData = () => {
                 type="text"
                 name="name"
                 id="ArrayField"
-                className="box box--small"
+                className="box box--small mb-2"
                 placeholder="Nome del corso"
-                onChange={event => handleInputChange(index, event)}
+                onChange={(event) => handleInputChange(index, event)}
                 inline
               ></Input>
-              <Button
-                id="addRemoveButton"
-                className="btn btn-link"
-                type="button"
-                onClick={() => handleRemoveFields(index)}
-                inline
-              >
-                -
-              </Button>
-              <Button
-                id="addRemoveButton"
-                className="btn btn-link"
-                type="button"
-                onClick={() => handleAddFields()}
-                inline
-              >
-                +
-              </Button>
             </Fragment>
           ))}
         </FormGroup>
 
-        <div className="submit-button">
-          <button
-            className="btn btn-primary mr-2"
-            type="submit"
-            onSubmit={handleSubmit}
-          >
-            Save
-          </button>
-        </div>
+        <Button onSubmit={handleSubmit} style={{ marginTop: "2rem" }} block>
+          {" "}
+          Aggiungi qualifica
+        </Button>
       </Form>
     </>
   );
 };
 
 export default ArrayFormData;
+
+// const mapStateToProps = state => ({
+//   course: state.course
+// });
+
+// export default connect(mapStateToProps, { addCourse })(AddQualificationModal);

@@ -33,7 +33,7 @@ Router.post("/", (req, res) => {
   const newCollaborator = {
     id: req.body.id,
     name: req.body.name,
-    surname: req.body.surname
+    surname: req.body.surname,
   };
   const sqlInstruction = "INSERT INTO collaborator SET ?";
   const query = mysqlConnection.query(
@@ -89,12 +89,13 @@ Router.delete("/:id", (req, res) => {
 Router.get("/infos/:id", (req, res) => {
   mysqlConnection.query(
     `SELECT collaborator.id, collaborator.name, collaborator.surname,
-     group_concat(distinct courses.id separator ',') AS courses,
-     group_concat(distinct qualification.name separator ',') AS qualification
-     from collaborator
-     INNER JOIN courses ON courses.collaborator_id=collaborator.id
-     INNER JOIN qualification ON qualification.collaborator_id=collaborator.id
-     WHERE collaborator.id = ${req.params.id} GROUP BY collaborator.id`,
+    group_concat(distinct necessary_courses.id separator ',') AS courses,
+    group_concat(distinct qualification.name separator ',') AS qualification
+    from collaborator
+    LEFT OUTER JOIN qualification ON qualification.collaborator_id=collaborator.id
+    LEFT OUTER JOIN necessary_courses ON necessary_courses.qualification_id = qualification.id
+    WHERE collaborator.id = ${req.params.id}
+    GROUP BY collaborator.id`,
     (err, rows, fields) => {
       if (!err) {
         res.send(rows);

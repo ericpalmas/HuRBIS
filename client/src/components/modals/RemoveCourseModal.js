@@ -1,30 +1,30 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { deleteCourse } from "../actions/coursesActions";
+// import { deleteCourse } from "../actions/coursesActions";
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 class RemoveCourseModal extends Component {
   static propTypes = {
-    courses: PropTypes.object.isRequired
+    courses: PropTypes.object.isRequired,
   };
   constructor(props) {
     super(props);
 
     this.state = {
-      modal: false
+      modal: false,
     };
   }
 
   toggle = () => {
     this.setState({
-      modal: !this.state.modal
+      modal: !this.state.modal,
     });
   };
 
-  onDeleteClick = id => {
-    this.props.deleteCourse(id);
+  onDeleteClick = (id) => {
+    // this.props.deleteCourse(id);
     this.toggle();
   };
 
@@ -63,8 +63,10 @@ class RemoveCourseModal extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  courses: state.courses
-});
+// const mapStateToProps = state => ({
+//   courses: state.courses
+// });
 
-export default connect(mapStateToProps, { deleteCourse })(RemoveCourseModal);
+export default connect()(RemoveCourseModal);
+//mapStateToProps
+// { deleteCourse }

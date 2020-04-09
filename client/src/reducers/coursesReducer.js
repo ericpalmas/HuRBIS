@@ -1,29 +1,39 @@
-import { FETCH_COURSES, ADD_COURSE, DELETE_COURSE } from "../actions/types";
+import {
+  FETCH_COURSES,
+  ADD_COURSE,
+  DELETE_COURSE,
+  FETCH_COURSES_INFOS,
+} from "../actions/types";
 
 const initialState = {
-  courses: []
+  courses: [],
+  coursesInfos: [],
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case FETCH_COURSES:
-      console.log("courses reducer");
       return {
-        // ...state ritorna lo stato corrente, dopo aver fatto la get dei dati rimettiamo loading a false
         ...state,
-        courses: action.payload
+        courses: action.payload,
       };
     case DELETE_COURSE:
       return {
         ...state,
-        courses: state.courses.filter(course => course._id !== action.payload)
+        courses: state.courses.filter(
+          (course) => course._id !== action.payload
+        ),
       };
     case ADD_COURSE:
       return {
         ...state,
-        courses: [action.payload, ...state.courses]
+        courses: [action.payload, ...state.courses],
       };
-
+    case FETCH_COURSES_INFOS:
+      return {
+        ...state,
+        coursesInfos: action.payload,
+      };
     default:
       return state;
   }

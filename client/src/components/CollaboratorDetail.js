@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from "react";
 import { Label, Table, Button, Container } from "reactstrap";
 import axios from "axios";
-import AddCourseModal from "./AddCourseModal";
-import RemoveCourseModal from "./RemoveCourseModal";
-import EditCourseModal from "./EditCourseModal";
+import AddCourseModal from "./modals/AddCourseModal";
+import RemoveCourseModal from "./modals/RemoveCourseModal";
+import EditCourseModal from "./modals/EditCourseModal";
 
 const Corso = ({ corsi, elem }) => (
   <Table>
@@ -14,7 +14,7 @@ const Corso = ({ corsi, elem }) => (
         <th>Data di scadenza della certificazione </th>
       </tr>
     </thead>
-    {corsi.map(corso => (
+    {corsi.map((corso) => (
       <tbody key={corso.id}>
         <tr id="collaboratorTableItem">
           <td>{!!corso.name ? corso.name : "whatever you want"}</td>
@@ -50,24 +50,39 @@ class CollaboratorDetail extends Component {
     super(props);
 
     this.state = {
+      currentCourses: [],
+      necessaryCourses: [],
+      historyCourses: [],
       remove: false,
       collaborator: {},
       courses: [],
       corsiSvolti: [],
       corsiDaSvolgere: [],
       corsiInCorso: [],
-      show: false
+      show: false,
     };
 
     axios
       .get(`/collaborators/infos/${this.props.match.params.id}`)
-      .then(res => {
+      .then((res) => {
         this.setState({ collaborator: res.data[0] });
       });
 
-    axios.get(`/courses/${this.props.match.params.id}`).then(res => {
+    axios.get(`/courses/${this.props.match.params.id}`).then((res) => {
       this.setState({ courses: res.data });
     });
+
+    axios.get(`/courses/current/${this.props.match.params.id}`).then((res) => {
+      this.setState({ currentCourses: res.data });
+    });
+    axios.get(`/courses/history/${this.props.match.params.id}`).then((res) => {
+      this.setState({ historyCourses: res.data });
+    });
+    axios
+      .get(`/courses/necessary/${this.props.match.params.id}`)
+      .then((res) => {
+        this.setState({ necessaryCourses: res.data });
+      });
   }
 
   showModal = () => {
@@ -80,11 +95,11 @@ class CollaboratorDetail extends Component {
 
   removeElements = () => {
     this.setState({
-      remove: !this.state.remove
+      remove: !this.state.remove,
     });
   };
 
-  filterArray = courses => {
+  filterArray = (courses) => {
     var currentdate = new Date();
     var now = Date.parse(
       currentdate.getFullYear() +
@@ -117,19 +132,21 @@ class CollaboratorDetail extends Component {
   update = () => {
     let deleteDuplicates = this.state.courses.filter(
       (ele, ind) =>
-        ind === this.state.courses.findIndex(elem => elem.name === ele.name)
+        ind === this.state.courses.findIndex((elem) => elem.name === ele.name)
     );
     this.filterArray(deleteDuplicates);
   };
 
   render() {
     this.update();
-    console.log("Corsi svolti");
-    console.log(this.state.corsiSvolti);
-    console.log("Corsi in corso");
-    console.log(this.state.corsiInCorso);
-    console.log("Corsi da svolgere");
-    console.log(this.state.corsiDaSvolgere);
+    console.log(this.state.currentCourses);
+    // console.log(this.state.collaborator);
+    // console.log("Corsi svolti");
+    // console.log(this.state.corsiSvolti);
+    // console.log("Corsi in corso");
+    // console.log(this.state.corsiInCorso);
+    // console.log("Corsi da svolgere");
+    // console.log(this.state.corsiDaSvolgere);
 
     return (
       <div className="ml-5">

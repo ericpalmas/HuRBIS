@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import { connect } from "react-redux";
-import { addCourse } from "../actions/coursesActions";
+import { addCourse } from "../../actions/coursesActions";
 import PropTypes from "prop-types";
 
 import {
@@ -14,27 +14,27 @@ import {
   Input,
   Form,
   ListGroup,
-  ListGroupItem
+  ListGroupItem,
 } from "reactstrap";
-import ArrayFormData from "./ArrayFormData";
+import ArrayFormData from "../ArrayFormData";
 
 class AddQualificationModal extends Component {
   state = {
     modal: false,
     msg: null,
     listOfCourses: [],
-    coursesNumber: 0
+    coursesNumber: 0,
   };
 
   toggle = () => {
     this.setState({
-      modal: !this.state.modal
+      modal: !this.state.modal,
     });
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
     if (e.target.value !== null) {
     }
@@ -44,7 +44,7 @@ class AddQualificationModal extends Component {
     this.state.listOfCourses.push(" ");
   }
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
 
     // const newItem = {
@@ -88,14 +88,7 @@ class AddQualificationModal extends Component {
                   placeholder="Nome del corso"
                   onChange={this.onChange}
                 ></Input>
-                <Label for="item">Corsi necessari</Label>
-
                 <ArrayFormData></ArrayFormData>
-
-                <Button style={{ marginTop: "2rem" }} block>
-                  {" "}
-                  Aggiungi qualifica
-                </Button>
               </FormGroup>
             </Form>
           </ModalBody>

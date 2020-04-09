@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { addCourse } from "../actions/coursesActions";
+// import { addCourse } from "../actions/coursesActions";
 import PropTypes from "prop-types";
 
 import {
@@ -25,7 +25,7 @@ import {
   Label,
   Modal,
   Form,
-  Input
+  Input,
 } from "reactstrap";
 
 class AddCourseModal extends Component {
@@ -36,36 +36,36 @@ class AddCourseModal extends Component {
     expirationDate: "",
     obbligatory: false,
     collaborator_id: this.props.collaborator_id,
-    msg: null
+    msg: null,
   };
 
   toggle = () => {
     this.setState({
-      modal: !this.state.modal
+      modal: !this.state.modal,
     });
   };
 
-  onChange = e => {
+  onChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  onChangeCertificationDate = e => {
+  onChangeCertificationDate = (e) => {
     const date = e.target.value;
     this.setState({
-      certificationDate: date
+      certificationDate: date,
     });
   };
 
-  onChangeExpirationDate = e => {
+  onChangeExpirationDate = (e) => {
     const date = e.target.value;
     this.setState({
-      expirationDate: date
+      expirationDate: date,
     });
   };
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault();
 
     const newItem = {
@@ -73,11 +73,11 @@ class AddCourseModal extends Component {
       certificationDate: this.state.certificationDate,
       expirationDate: this.state.expirationDate,
       obbligatory: this.state.obbligatory,
-      collaborator_id: this.state.collaborator_id
+      collaborator_id: this.state.collaborator_id,
     };
 
     console.log(newItem);
-    this.props.addCourse(newItem);
+    // this.props.addCourse(newItem);
     //Close modal
     this.toggle();
   };
@@ -137,8 +137,10 @@ class AddCourseModal extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  course: state.course
-});
+// const mapStateToProps = state => ({
+//   course: state.course
+// });
 
-export default connect(mapStateToProps, { addCourse })(AddCourseModal);
+export default connect()(AddCourseModal);
+// mapStateToProps
+// { addCourse }

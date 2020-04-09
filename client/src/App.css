@@ -47,7 +47,7 @@
 
 #collaboratorsTable {
   margin: 4rem 2rem 2rem 4rem;
-  width: 70rem;
+  width: 90rem;
 }
 
 #collaboratorTableItem:hover {
@@ -93,4 +93,14 @@
 #addRemoveButton {
   background-color: transparent;
   border-color: transparent;
+}
+
+#tableColumnInfo {
+  width: 1rem;
+}
+#tableColumnBirthDate {
+  width: 0.5rem;
+}
+#tableColumnCourses {
+  width: 3rem;
 }

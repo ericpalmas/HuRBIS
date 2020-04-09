@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AppNavbar from "./components/AppNavbar";
-import Scrumboard from "./components/Scrumboard";
 import { Provider } from "react-redux";
 import store from "./store";
 import "./App.css";
@@ -11,7 +10,7 @@ import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
 import Qualifications from "./components/Qualifications";
 import Courses from "./components/Courses";
 import Summary from "./components/Summary";
-import Calendar from "./components/Calendar";
+import SummaryCalendar from "./components/SummaryCalendar";
 const Route = require("react-router-dom").Route;
 
 class App extends Component {
@@ -40,7 +39,6 @@ class App extends Component {
                 return (
                   <div>
                     <Collaborators></Collaborators>
-                    {/* <Scrumboard /> */}
                   </div>
                 );
               }}
@@ -92,7 +90,7 @@ class App extends Component {
               render={() => {
                 return (
                   <div>
-                    <Calendar></Calendar>
+                    <SummaryCalendar></SummaryCalendar>
                   </div>
                 );
               }}
