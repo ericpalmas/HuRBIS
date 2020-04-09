@@ -12,5 +12,6 @@ export default combineReducers({
   courses: coursesReducer,
   collaboratorsInfos: collaboratorsInfosReducer,
   qualificationsInfos: qualificationsInfosReducer,
+
   // coursesInfos: coursesInfosReducer,
 });

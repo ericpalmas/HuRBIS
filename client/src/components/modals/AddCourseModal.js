@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import { addCourse } from "../actions/coursesActions";
+import { addCourse } from "../../actions/coursesActions";
+import { addCourseToHistory } from "../../actions/coursesActions";
+import { addCourseToNecessary } from "../../actions/coursesActions";
 import PropTypes from "prop-types";
 
 import {
@@ -76,8 +78,26 @@ class AddCourseModal extends Component {
       collaborator_id: this.state.collaborator_id,
     };
 
+    console.log("nuovo corso");
     console.log(newItem);
-    // this.props.addCourse(newItem);
+
+    var currentdate = new Date();
+    var now = Date.parse(
+      currentdate.getFullYear() +
+        "-" +
+        (currentdate.getMonth() + 1) +
+        "-" +
+        currentdate.getDate()
+    );
+
+    var expiration_date = Date.parse(newItem.expirationDate);
+    var certification_date = Date.parse(newItem.certificationDate);
+
+    if (certification_date <= now && expiration_date >= now)
+      this.props.addCourse(newItem);
+    else if (now > expiration_date) this.props.addCourseToHistory(newItem);
+    else if (now < certification_date) this.props.addCourseToNecessary(newItem);
+
     //Close modal
     this.toggle();
   };
@@ -137,10 +157,12 @@ class AddCourseModal extends Component {
   }
 }
 
-// const mapStateToProps = state => ({
-//   course: state.course
-// });
+const mapStateToProps = (state) => ({
+  course: state.course,
+});
 
-export default connect()(AddCourseModal);
-// mapStateToProps
-// { addCourse }
+export default connect(mapStateToProps, {
+  addCourse,
+  addCourseToHistory,
+  addCourseToNecessary,
+})(AddCourseModal);

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-// import { deleteCourse } from "../actions/coursesActions";
+import { deleteCourse } from "../../actions/coursesActions";
+import { deleteCourseFromHistory } from "../../actions/coursesActions";
+import { deleteCourseFromNecessary } from "../../actions/coursesActions";
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
@@ -24,11 +26,34 @@ class RemoveCourseModal extends Component {
   };
 
   onDeleteClick = (id) => {
+    var currentdate = new Date();
+    var now = Date.parse(
+      currentdate.getFullYear() +
+        "-" +
+        (currentdate.getMonth() + 1) +
+        "-" +
+        currentdate.getDate()
+    );
+
+    console.log("ID:::");
+    console.log(id);
+    var expiration_date = Date.parse(this.props.course.expiration_date);
+    var certification_date = Date.parse(this.props.course.certification_date);
+
+    if (id !== undefined) {
+      if (certification_date <= now && expiration_date >= now)
+        this.props.deleteCourse(id);
+      else if (now > expiration_date) this.props.deleteCourseFromHistory(id);
+      else if (now < certification_date)
+        this.props.deleteCourseFromNecessary(id);
+    }
+
     // this.props.deleteCourse(id);
     this.toggle();
   };
 
   render() {
+    console.log(this.props.course.id);
     return (
       <div>
         <Button
@@ -63,10 +88,12 @@ class RemoveCourseModal extends Component {
   }
 }
 
-// const mapStateToProps = state => ({
-//   courses: state.courses
-// });
+const mapStateToProps = (state) => ({
+  courses: state.courses,
+});
 
-export default connect()(RemoveCourseModal);
-//mapStateToProps
-// { deleteCourse }
+export default connect(mapStateToProps, {
+  deleteCourse,
+  deleteCourseFromHistory,
+  deleteCourseFromNecessary,
+})(RemoveCourseModal);

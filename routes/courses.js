@@ -17,31 +17,31 @@ const mysqlConnection = require("../config/connection");
 // });
 
 // //aggiungi un corso ad un collaboratore
-// Router.post("/addCourse", (req, res) => {
-//   const newCourse = req.body;
-//   const sql =
-//     `INSERT INTO courses(name, certification_date, expiration_date, obbligatory, collaborator_id) VALUES` +
-//     ` ('${newCourse.name}', '${newCourse.certificationDate}', '${newCourse.expirationDate}', ${newCourse.obbligatory}, ${newCourse.collaborator_id})`;
+Router.post("/addCourse", (req, res) => {
+  const newCourse = req.body;
+  const sql =
+    `INSERT INTO extra_courses(name, certification_date, expiration_date, obbligatory, collaborator_id) VALUES` +
+    ` ('${newCourse.name}', '${newCourse.certificationDate}', '${newCourse.expirationDate}', ${newCourse.obbligatory}, ${newCourse.collaborator_id})`;
 
-//   mysqlConnection.query(sql, newCourse, (err, result) => {
-//     if (err) throw err;
-//     console.log(result);
-//   });
-// });
+  mysqlConnection.query(sql, newCourse, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+});
 
 // // // Delete a collaborator from the dabase
-// Router.delete("/:id", (req, res) => {
-//   mysqlConnection.query(
-//     `DELETE FROM courses WHERE id = ${req.params.id}`,
-//     (err, rows, fields) => {
-//       if (!err) {
-//         res.send(rows);
-//       } else {
-//         console.log(err);
-//       }
-//     }
-//   );
-// });
+Router.delete("/:id", (req, res) => {
+  mysqlConnection.query(
+    `DELETE FROM extra_courses WHERE id = ${req.params.id}`,
+    (err, rows, fields) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+});
 
 // // // Get all courses
 // Router.get("/informations", (req, res) => {
@@ -110,8 +110,9 @@ Router.get("/current/:id", (req, res) => {
 
 Router.get("/necessary/:id", (req, res) => {
   mysqlConnection.query(
-    `SELECT * FROM training_courses.extra_courses
-    where collaborator_id = ${req.params.id}`,
+    `SELECT necessary_courses.id, necessary_courses.name, necessary_courses.certification_date, necessary_courses.expiration_date FROM necessary_courses
+    INNER JOIN qualification ON qualification.id=necessary_courses.qualification_id
+    where qualification.collaborator_id = ${req.params.id}`,
     (err, rows, fields) => {
       if (!err) {
         res.send(rows);
