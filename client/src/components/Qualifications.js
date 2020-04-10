@@ -13,7 +13,7 @@ import {
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { fetchQualificationsInformations } from "../actions/qualificationsActions";
+import { fetchQualificationsInfos } from "../actions/qualificationsActions";
 import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
 import AddQualificationModal from "./modals/AddQualificationModal";
 
@@ -28,7 +28,7 @@ class Qualifications extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchQualificationsInformations();
+    this.props.fetchQualificationsInfos();
     this.setState({
       qualificationsInformations: this.props.qualificationsInfos,
     });
@@ -119,13 +119,13 @@ class Qualifications extends Component {
 }
 
 Qualifications.propTypes = {
-  fetchQualificationsInformations: PropTypes.func.isRequired,
+  fetchQualificationsInfos: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  qualificationsInfos: state.qualificationsInfos.qualificationsInfos,
+  qualificationsInfos: state.qualifications.qualifications,
 });
 
 export default connect(mapStateToProps, {
-  fetchQualificationsInformations,
+  fetchQualificationsInfos,
 })(Qualifications);

@@ -14,7 +14,7 @@ import {
 import { connect } from "react-redux";
 import { fetchCollaboratorsInfos } from "../actions/collaboratosInfosActions";
 import { fetchCollaborators } from "../actions/collaboratosActions";
-import { fetchQualifications } from "../actions/qualificationsActions";
+// import { fetchQualifications } from "../actions/qualificationsActions";
 // import { fetchCourses } from "../actions/coursesActions";
 import PropTypes from "prop-types";
 import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
@@ -36,7 +36,7 @@ class Collaborators extends Component {
 
   componentWillMount() {
     this.props.fetchCollaborators();
-    this.props.fetchQualifications();
+    // this.props.fetchQualifications();
     // this.props.fetchCourses();
     this.props.fetchCollaboratorsInfos();
   }
@@ -149,7 +149,7 @@ class Collaborators extends Component {
 
 Collaborators.propTypes = {
   fetchCollaborators: PropTypes.func.isRequired,
-  fetchQualifications: PropTypes.func.isRequired,
+  // fetchQualifications: PropTypes.func.isRequired,
   // fetchCourses: PropTypes.func.isRequired,
   fetchCollaboratorsInfos: PropTypes.func.isRequired,
 };
@@ -157,13 +157,12 @@ Collaborators.propTypes = {
 const mapStateToProps = (state) => ({
   collaboratorsInfos: state.collaboratorsInfos.collaboratorsInfos,
   collaborators: state.collaborators.collaborators,
-  qualifications: state.qualifications.qualifications,
+  // qualifications: state.qualifications.qualifications,
   // courses: state.courses.courses,
 });
 
 export default connect(mapStateToProps, {
   fetchCollaborators,
-  fetchQualifications,
-  // fetchCourses,
+  // fetchQualifications,
   fetchCollaboratorsInfos,
 })(Collaborators);

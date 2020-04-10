@@ -4,6 +4,11 @@ import axios from "axios";
 import AddCourseModal from "./modals/AddCourseModal";
 import RemoveCourseModal from "./modals/RemoveCourseModal";
 import EditCourseModal from "./modals/EditCourseModal";
+import AddQualificationToCollaboratorModal from "./modals/AddQualificationToCollaboratorModal";
+import RemoveQualificationFromCollaborator from "./modals/RemoveQualificationFromCollaborator";
+// import { fetchQualificationsInfos } from "./../actions/qualificationsActions";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 const Corso = ({ corsi, elem }) => (
   <Table>
@@ -50,6 +55,7 @@ class CollaboratorDetail extends Component {
     super(props);
 
     this.state = {
+      qualificationsInformations: [],
       currentCourses: [],
       necessaryCourses: [],
       historyCourses: [],
@@ -99,6 +105,19 @@ class CollaboratorDetail extends Component {
     });
   };
 
+  // componentWillUpdate() {
+  //   this.props.fetchQualificationsInfos();
+  //   console.log("update");
+  //   console.log(this.props.qualificationsInfos);
+  // }
+
+  // componentDidMount() {
+  //   this.props.fetchQualificationsInformations();
+  //   this.setState({
+  //     qualificationsInformations: this.props.qualificationsInfos,
+  //   });
+  // }
+
   // filterArray = (courses) => {
   //   var currentdate = new Date();
   //   var now = Date.parse(
@@ -139,7 +158,7 @@ class CollaboratorDetail extends Component {
 
   render() {
     // this.update();
-    console.log(this.state.necessaryCourses);
+
     // console.log(this.state.collaborator);
     // console.log("Corsi svolti");
     // console.log(this.state.corsiSvolti);
@@ -162,21 +181,18 @@ class CollaboratorDetail extends Component {
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi in svolgimento: </h6>
           <br></br>
-          {/* <Corso corsi={this.state.corsiInCorso} elem={this} /> */}
           <Corso corsi={this.state.currentCourses} elem={this} />
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi da svolgere: </h6>
           <br></br>
-          {/* <Corso corsi={this.state.corsiDaSvolgere} elem={this} /> */}
           <Corso corsi={this.state.necessaryCourses} elem={this} />
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi svolti: </h6>
           <br></br>
-          {/* <Corso corsi={this.state.corsiSvolti} elem={this} /> */}
           <Corso corsi={this.state.historyCourses} elem={this} />
         </Label>
         <br></br>
@@ -186,16 +202,38 @@ class CollaboratorDetail extends Component {
             className="ml-5 mt-5 mb-5 mr-2 float-left"
           />
         </div>
+        <AddQualificationToCollaboratorModal
+          id="addCourseButton"
+          className="ml-5 mt-5 mb-5 mr-2 float-left"
+          collaborator_id={this.props.match.params.id}
+        ></AddQualificationToCollaboratorModal>
         <Button
-          className="ml-5 mt-5 mb-5 mr-2"
+          className="ml-5 mt-5 mb-5 mr-2 float-left"
           id="removeModal"
           onClick={this.removeElements}
         >
           Rimuovi corso
         </Button>
+        <RemoveQualificationFromCollaborator
+          collaborator_id={this.props.match.params.id}
+
+          // qualifications={this.state.qualificationsInformations}
+        ></RemoveQualificationFromCollaborator>
       </div>
     );
   }
 }
 
 export default CollaboratorDetail;
+
+// CollaboratorDetail.propTypes = {
+//   fetchQualificationsInfos: PropTypes.func.isRequired,
+// };
+
+// const mapStateToProps = (state) => ({
+//   qualificationsInfos: state.qualifications.qualifications,
+// });
+
+// export default connect(mapStateToProps, {
+//   fetchQualificationsInfos,
+// })(CollaboratorDetail);
