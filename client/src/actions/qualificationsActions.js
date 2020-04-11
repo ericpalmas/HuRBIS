@@ -3,6 +3,7 @@ import {
   FETCH_QUALIFICATIONS,
   FETCH_QUALIFICATIONS_OF_COLLABORATOR,
   ADD_QUALIFICATION_TO_COLLABORATOR,
+  REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
 } from "./types";
 
 export const fetchQualificationsInfos = () => (dispatch) => {
@@ -34,4 +35,16 @@ export const addQualificationToCollaborator = (qualification) => (dispatch) => {
         payload: res.data,
       })
     );
+};
+
+export const removeQualificationsFromCollaborator = (listOfId) => (
+  dispatch
+) => {
+  console.log("removeQualificationsFromCollaborator");
+  axios.post("/qualifications/removeQualifications", listOfId).then((res) =>
+    dispatch({
+      type: REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
+      payload: res.data,
+    })
+  );
 };

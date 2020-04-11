@@ -23,7 +23,7 @@ Router.get("/", (req, res) => {
   );
 });
 
-// //aggiungi un corso ad un collaboratore
+//aggiungi i corsi necessari di una qualifica
 Router.post("/addQualification", (req, res) => {
   ////////////aggiungere ciclo for per aggiungere i corsi necessari
   const newCourse = req.body;
@@ -43,7 +43,7 @@ Router.post("/addQualification", (req, res) => {
   });
 });
 
-// //aggiungi un corso ad un collaboratore
+// //aggiungi una qualifica ad un collaboratore
 Router.post("/addQualificationToCollaborator", (req, res) => {
   const newQualification = req.body;
 
@@ -52,6 +52,25 @@ Router.post("/addQualificationToCollaborator", (req, res) => {
   ("${newQualification.name}", ${newQualification.collaborator_id})`;
 
   mysqlConnection.query(sql, newQualification, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+});
+
+Router.post("/removeQualifications", (req, res) => {
+  console.log("sono nella query");
+  const listOfId = req.body;
+
+  var sql =
+    "UPDATE qualification SET qualification.collaborator_id = NULL WHERE qualification.id IN (";
+  listOfId.forEach(myFunction);
+  function myFunction(value, index, array) {
+    sql += value;
+    if (index !== listOfId.length - 1) sql += ",";
+  }
+  sql += ")";
+
+  mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
     console.log(result);
   });

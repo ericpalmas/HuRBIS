@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchQualificationsInfos } from "../../actions/qualificationsActions";
 import { fetchQualificationsOfCollaborator } from "../../actions/qualificationsActions";
+import { removeQualificationsFromCollaborator } from "../../actions/qualificationsActions";
 
 import PropTypes from "prop-types";
 
@@ -25,6 +26,7 @@ class RemoveQualificationFromCollaborator extends Component {
     qualificationsInformations: null,
     collaborator_id: this.props.collaborator_id,
     msg: null,
+    listOfId: [],
   };
 
   // componentDidMount() {
@@ -49,6 +51,7 @@ class RemoveQualificationFromCollaborator extends Component {
 
   onClickAndFetch = () => {
     this.props.fetchQualificationsInfos();
+    this.state.listOfId = [];
     this.setState({
       qualificationsInformations: this.props.qualificationsInfos,
     });
@@ -57,13 +60,25 @@ class RemoveQualificationFromCollaborator extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    //Close modal
+    console.log(this.state.listOfId);
+    const item = this.state.listOfId;
+    this.props.removeQualificationsFromCollaborator(item);
+
     this.toggle();
   };
 
   componentWillMount() {
     this.props.fetchQualificationsOfCollaborator(this.props.collaborator_id);
   }
+
+  filterCompleted = (checked, id) => {
+    if (checked === true) {
+      this.state.listOfId.push(id);
+    } else {
+      var index = this.state.listOfId.indexOf(id);
+      this.state.listOfId.splice(index, 1);
+    }
+  };
 
   render() {
     return (
@@ -86,11 +101,17 @@ class RemoveQualificationFromCollaborator extends Component {
                 <div>
                   {this.props.qualificationOfCollaborator.map(
                     ({ id, name, collaborator, necessary_courses }) => (
-                      <CustomInput
-                        type="checkbox"
-                        id="exampleCustomCheckbox2"
-                        label={name}
-                      />
+                      <FormGroup check>
+                        <Input
+                          onChange={(e) =>
+                            this.filterCompleted(e.target.checked, id)
+                          }
+                          type="checkbox"
+                          name="check"
+                          id="exampleCheck"
+                        />
+                        <Label for="exampleCheck">{name}</Label>
+                      </FormGroup>
                     )
                   )}
                 </div>
@@ -126,4 +147,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   fetchQualificationsInfos,
   fetchQualificationsOfCollaborator,
+  removeQualificationsFromCollaborator,
 })(RemoveQualificationFromCollaborator);
