@@ -3,6 +3,7 @@ import {
   FETCH_QUALIFICATIONS_OF_COLLABORATOR,
   ADD_QUALIFICATION_TO_COLLABORATOR,
   REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
+  ADD_QUALIFICATION,
 } from "../actions/types";
 
 const initialState = {
@@ -10,6 +11,7 @@ const initialState = {
   collaboratorQualifications: [],
   qualifications_added: [],
   qualificationsDeleted: [],
+  newQualification: {},
 };
 
 export default function (state = initialState, action) {
@@ -32,10 +34,15 @@ export default function (state = initialState, action) {
         qualifications_added: [action.payload, ...state.qualifications_added],
       };
     case REMOVE_QUALIFICATIONS_FROM_COLLABORATOR:
-      console.log("REMOVE_QUALIFICATIONS_FROM_COLLABORATOR");
       return {
         ...state,
         qualificationsDeleted: [action.payload, ...state.qualificationsDeleted],
+      };
+    case ADD_QUALIFICATION:
+      console.log("ADD_QUALIFICATION");
+      return {
+        ...state,
+        newQualification: [action.payload, ...state.newQualification],
       };
 
     default:

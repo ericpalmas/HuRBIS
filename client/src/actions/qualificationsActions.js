@@ -4,6 +4,7 @@ import {
   FETCH_QUALIFICATIONS_OF_COLLABORATOR,
   ADD_QUALIFICATION_TO_COLLABORATOR,
   REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
+  ADD_QUALIFICATION,
 } from "./types";
 
 export const fetchQualificationsInfos = () => (dispatch) => {
@@ -44,6 +45,17 @@ export const removeQualificationsFromCollaborator = (listOfId) => (
   axios.post("/qualifications/removeQualifications", listOfId).then((res) =>
     dispatch({
       type: REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
+      payload: res.data,
+    })
+  );
+};
+
+export const addNewQualification = (qualification) => (dispatch) => {
+  console.log("addNewQualification");
+  console.log(qualification);
+  axios.post("/qualifications/addQualification", qualification).then((res) =>
+    dispatch({
+      type: ADD_QUALIFICATION,
       payload: res.data,
     })
   );

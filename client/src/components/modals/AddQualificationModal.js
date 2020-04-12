@@ -79,15 +79,6 @@ class AddQualificationModal extends Component {
             ) : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-                <Label for="item">Nome qualifica</Label>
-                <Input
-                  type="text"
-                  name="name"
-                  id="item"
-                  className="mb-2"
-                  placeholder="Nome del corso"
-                  onChange={this.onChange}
-                ></Input>
                 <ArrayFormData></ArrayFormData>
               </FormGroup>
             </Form>

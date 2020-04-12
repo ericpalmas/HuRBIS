@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from "react";
 import { connect } from "react-redux";
 import { addCourse } from "../actions/coursesActions";
+import { addNewQualification } from "../actions/qualificationsActions";
 import PropTypes from "prop-types";
 
 import {
@@ -17,12 +18,22 @@ import {
   ListGroupItem,
 } from "reactstrap";
 
-const ArrayFormData = () => {
+const ArrayFormData = (props) => {
+  //const [inputFields, setInputFields] = useState([{ corso: "" }]);
   const [inputFields, setInputFields] = useState([{ corso: "" }]);
+  //const [qualificationName, setQualificationName] = useState({ name: "" });
+  const [inputVal, setInputVal] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("inputFields", inputFields);
+    console.log("qualificationName", inputVal);
+    const newQualification = {
+      name: inputVal,
+      listOfId: inputFields,
+    };
+
+    props.addNewQualification(newQualification);
   };
 
   const handleInputChange = (index, event) => {
@@ -51,6 +62,18 @@ const ArrayFormData = () => {
   return (
     <>
       <Form onSubmit={handleSubmit}>
+        <Label for="item">Nome qualifica</Label>
+        <Input
+          type="text"
+          name="name"
+          id="item"
+          className="mb-2"
+          placeholder="Nome del corso"
+          // onChange={(event) => changeName(event)}
+
+          value={inputVal}
+          onChange={(event) => setInputVal(event.target.value)}
+        ></Input>
         <Label inline for="item">
           Corsi necessari
         </Label>
@@ -97,10 +120,6 @@ const ArrayFormData = () => {
   );
 };
 
-export default ArrayFormData;
+const mapStateToProps = (state) => ({});
 
-// const mapStateToProps = state => ({
-//   course: state.course
-// });
-
-// export default connect(mapStateToProps, { addCourse })(AddQualificationModal);
+export default connect(mapStateToProps, { addNewQualification })(ArrayFormData);

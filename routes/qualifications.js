@@ -26,18 +26,35 @@ Router.get("/", (req, res) => {
 //aggiungi i corsi necessari di una qualifica
 Router.post("/addQualification", (req, res) => {
   ////////////aggiungere ciclo for per aggiungere i corsi necessari
-  const newCourse = req.body;
-  const sql = `BEGIN;
-    INSERT INTO qualification (name) VALUES('nome della qualifica');
+
+  ///////////////////
+  const newQualification = req.body;
+  console.log(newQualification);
+  console.log(newQualification.name);
+  console.log(newQualification.listOfId[0].corso);
+  console.log(newQualification.listOfId[1].corso);
+  // const sql = `BEGIN;
+  //   INSERT INTO qualification (name) VALUES('nome della qualifica');
+  //   INSERT INTO necessary_courses (qualification_id, name) VALUES`;
+
+  // for (let i = 0; i < req.body.lenght; i++) {
+  //   sql += `(LAST_INSERT_ID(),'${req.body[i].name}')`;
+  // }
+  // sql += `;COMMIT;`;
+
+  var sql = `BEGIN;
+    INSERT INTO qualification (name) VALUES('${newQualification.name}');
     INSERT INTO necessary_courses (qualification_id, name) VALUES`;
-
-  for (let i = 0; i < req.body.lenght; i++) {
-    sql += `(LAST_INSERT_ID(),'${req.body[i].name}')`;
+  newQualification.listOfId.forEach(myFunction);
+  function myFunction(value, index, array) {
+    sql += `(LAST_INSERT_ID(),'${value.corso}')`;
+    if (index !== newQualification.listOfId.length - 1) sql += ",";
   }
-
   sql += `;COMMIT;`;
 
-  mysqlConnection.query(sql, newCourse, (err, result) => {
+  console.log(sql);
+
+  mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
     console.log(result);
   });
