@@ -5,6 +5,8 @@ import {
   ADD_QUALIFICATION_TO_COLLABORATOR,
   REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
   ADD_QUALIFICATION,
+  DELETE_QUALIFICATION,
+  FETCH_COLLABORATORID_BY_QUALIFICATIONID,
 } from "./types";
 
 export const fetchQualificationsInfos = () => (dispatch) => {
@@ -19,8 +21,6 @@ export const fetchQualificationsInfos = () => (dispatch) => {
 // Get qualification
 export const fetchQualificationsOfCollaborator = (id) => async (dispatch) => {
   const res = await axios.get(`/qualifications/${id}`);
-
-  //   console.log(res);
   dispatch({
     type: FETCH_QUALIFICATIONS_OF_COLLABORATOR,
     payload: res.data,
@@ -59,4 +59,19 @@ export const addNewQualification = (qualification) => (dispatch) => {
       payload: res.data,
     })
   );
+};
+
+export const removeQualification = (listOfQualifications) => (dispatch) => {
+  console.log("removeQualificationsAndCourses");
+  axios
+    .post(
+      `/qualifications/removeQualificationsAndCourses`,
+      listOfQualifications
+    )
+    .then((res) =>
+      dispatch({
+        type: DELETE_QUALIFICATION,
+        payload: res.data,
+      })
+    );
 };

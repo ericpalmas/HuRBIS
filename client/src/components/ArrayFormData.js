@@ -2,6 +2,7 @@ import React, { useState, Fragment } from "react";
 import { connect } from "react-redux";
 import { addCourse } from "../actions/coursesActions";
 import { addNewQualification } from "../actions/qualificationsActions";
+
 import PropTypes from "prop-types";
 
 import {
@@ -14,13 +15,14 @@ import {
   Modal,
   Input,
   Form,
+  CustomInput,
   ListGroup,
   ListGroupItem,
 } from "reactstrap";
 
 const ArrayFormData = (props) => {
   //const [inputFields, setInputFields] = useState([{ corso: "" }]);
-  const [inputFields, setInputFields] = useState([{ corso: "" }]);
+  const [inputFields, setInputFields] = useState([{ corso: "1" }]);
   //const [qualificationName, setQualificationName] = useState({ name: "" });
   const [inputVal, setInputVal] = useState("");
 
@@ -28,6 +30,7 @@ const ArrayFormData = (props) => {
     e.preventDefault();
     console.log("inputFields", inputFields);
     console.log("qualificationName", inputVal);
+
     const newQualification = {
       name: inputVal,
       listOfId: inputFields,
@@ -37,6 +40,7 @@ const ArrayFormData = (props) => {
   };
 
   const handleInputChange = (index, event) => {
+    console.log(index);
     const values = [...inputFields];
     values[index].corso = event.target.value;
     setInputFields(values);
@@ -44,7 +48,7 @@ const ArrayFormData = (props) => {
 
   const handleAddFields = () => {
     const values = [...inputFields];
-    values.push({ corso: "" });
+    values.push({ corso: "1" });
     setInputFields(values);
   };
 
@@ -59,6 +63,7 @@ const ArrayFormData = (props) => {
     values.splice(inputFields.length - 1, 1);
     setInputFields(values);
   };
+
   return (
     <>
       <Form onSubmit={handleSubmit}>
@@ -98,7 +103,20 @@ const ArrayFormData = (props) => {
         <FormGroup>
           {inputFields.map((inputField, index) => (
             <Fragment key={`${inputField}~${index}`}>
-              <Input
+              <CustomInput
+                type="select"
+                id="exampleCustomSelect"
+                name="customSelect"
+                placeholder="Nome del corso"
+                //onChange={this.onQualificationSelect}
+                onChange={(event) => handleInputChange(index, event)}
+                //value={this.state.value}
+              >
+                {props.courses.map(({ id, name }) => (
+                  <option value={id}>{name}</option>
+                ))}
+              </CustomInput>
+              {/* <Input
                 type="text"
                 name="name"
                 id="ArrayField"
@@ -106,10 +124,24 @@ const ArrayFormData = (props) => {
                 placeholder="Nome del corso"
                 onChange={(event) => handleInputChange(index, event)}
                 inline
-              ></Input>
+              ></Input> */}
             </Fragment>
           ))}
         </FormGroup>
+
+        {/* <CustomInput
+          type="select"
+          id="exampleCustomSelect"
+          name="customSelect"
+          placeholder="Nome del corso"
+          //onChange={this.onQualificationSelect}
+          //onChange={(event) => handleInputChange(this.value, event)}
+          //value={this.state.value}
+        >
+          {props.courses.map(({ id, name }) => (
+            <option value={id}>{name}</option>
+          ))}
+        </CustomInput> */}
 
         <Button onSubmit={handleSubmit} style={{ marginTop: "2rem" }} block>
           {" "}
@@ -120,6 +152,7 @@ const ArrayFormData = (props) => {
   );
 };
 
+ArrayFormData.propTypes = {};
 const mapStateToProps = (state) => ({});
 
 export default connect(mapStateToProps, { addNewQualification })(ArrayFormData);

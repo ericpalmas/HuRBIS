@@ -6,11 +6,12 @@ import RemoveCourseModal from "./modals/RemoveCourseModal";
 import EditCourseModal from "./modals/EditCourseModal";
 import AddQualificationToCollaboratorModal from "./modals/AddQualificationToCollaboratorModal";
 import RemoveQualificationFromCollaborator from "./modals/RemoveQualificationFromCollaborator";
-// import { fetchQualificationsInfos } from "./../actions/qualificationsActions";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { fetchCoursesOfCollaborator } from "../actions/coursesActions";
+import { fetchCollaboratorInfos } from "../actions/collaboratosActions";
 
-const Corso = ({ corsi, elem }) => (
+const Corso = ({ corsi, elem, collaborator_id }) => (
   <Table>
     <thead>
       <tr>
@@ -38,10 +39,21 @@ const Corso = ({ corsi, elem }) => (
             {elem.state.remove ? (
               <RemoveCourseModal
                 course={corso}
+                collaborator_id={collaborator_id}
                 className="remove-btn ml-1 mr-1 mt-1"
                 color="danger"
                 size="sm"
               ></RemoveCourseModal>
+            ) : null}
+
+            {elem.state.modify ? (
+              <EditCourseModal
+                course={corso}
+                collaborator_id={collaborator_id}
+                className="remove-btn ml-1 mr-1 mt-1"
+                color="danger"
+                size="sm"
+              ></EditCourseModal>
             ) : null}
           </td>
         </tr>
@@ -55,11 +67,8 @@ class CollaboratorDetail extends Component {
     super(props);
 
     this.state = {
-      qualificationsInformations: [],
-      currentCourses: [],
-      necessaryCourses: [],
-      historyCourses: [],
       remove: false,
+      modify: false,
       collaborator: {},
       courses: [],
       corsiSvolti: [],
@@ -73,22 +82,9 @@ class CollaboratorDetail extends Component {
       .then((res) => {
         this.setState({ collaborator: res.data[0] });
       });
-
-    // axios.get(`/courses/${this.props.match.params.id}`).then((res) => {
-    //   this.setState({ courses: res.data });
-    // });
-
-    axios.get(`/courses/current/${this.props.match.params.id}`).then((res) => {
-      this.setState({ currentCourses: res.data });
+    axios.get(`/courses/${this.props.match.params.id}`).then((res) => {
+      this.setState({ courses: res.data });
     });
-    axios.get(`/courses/history/${this.props.match.params.id}`).then((res) => {
-      this.setState({ historyCourses: res.data });
-    });
-    axios
-      .get(`/courses/necessary/${this.props.match.params.id}`)
-      .then((res) => {
-        this.setState({ necessaryCourses: res.data });
-      });
   }
 
   showModal = () => {
@@ -102,71 +98,54 @@ class CollaboratorDetail extends Component {
   removeElements = () => {
     this.setState({
       remove: !this.state.remove,
+      modify: false,
     });
   };
 
-  // componentWillUpdate() {
-  //   this.props.fetchQualificationsInfos();
-  //   console.log("update");
-  //   console.log(this.props.qualificationsInfos);
-  // }
+  modifyElements = () => {
+    this.setState({
+      modify: !this.state.modify,
+      remove: false,
+    });
+  };
 
-  // componentDidMount() {
-  //   this.props.fetchQualificationsInformations();
-  //   this.setState({
-  //     qualificationsInformations: this.props.qualificationsInfos,
-  //   });
-  // }
+  filterArray = (courses) => {
+    var currentdate = new Date();
+    var now = Date.parse(
+      currentdate.getFullYear() +
+        "-" +
+        (currentdate.getMonth() + 1) +
+        "-" +
+        currentdate.getDate()
+    );
+    this.state.corsiDaSvolgere = [];
+    this.state.corsiInCorso = [];
+    this.state.corsiSvolti = [];
+    for (let i = 0; i < courses.length; i++) {
+      if (
+        courses[i].expiration_date === null ||
+        courses[i].certification_date === null
+      ) {
+        this.state.corsiDaSvolgere.push(courses[i]);
+      } else {
+        var str1 = courses[i].expiration_date.substr(0, 10);
+        var expiration_date = Date.parse(str1);
 
-  // filterArray = (courses) => {
-  //   var currentdate = new Date();
-  //   var now = Date.parse(
-  //     currentdate.getFullYear() +
-  //       "-" +
-  //       (currentdate.getMonth() + 1) +
-  //       "-" +
-  //       currentdate.getDate()
-  //   );
-  //   this.state.corsiDaSvolgere = [];
-  //   this.state.corsiInCorso = [];
-  //   this.state.corsiSvolti = [];
-  //   for (let i = 0; i < courses.length; i++) {
-  //     if (courses[i].expiration_date === null) {
-  //       this.state.corsiDaSvolgere.push(courses[i]);
-  //     } else {
-  //       var str1 = courses[i].expiration_date.substr(0, 10);
-  //       var expiration_date = Date.parse(str1);
+        var str2 = courses[i].certification_date.substr(0, 10);
+        var certification_date = Date.parse(str2);
 
-  //       var str2 = courses[i].certification_date.substr(0, 10);
-  //       var certification_date = Date.parse(str2);
-
-  //       if (certification_date <= now && expiration_date >= now)
-  //         this.state.corsiInCorso.push(courses[i]);
-  //       else this.state.corsiSvolti.push(courses[i]);
-  //     }
-  //   }
-  //   return courses;
-  // };
-
-  // update = () => {
-  //   let deleteDuplicates = this.state.courses.filter(
-  //     (ele, ind) =>
-  //       ind === this.state.courses.findIndex((elem) => elem.name === ele.name)
-  //   );
-  //   this.filterArray(deleteDuplicates);
-  // };
+        if (certification_date <= now && expiration_date >= now)
+          this.state.corsiInCorso.push(courses[i]);
+        else if (now > expiration_date) this.state.corsiSvolti.push(courses[i]);
+        else if (now < certification_date)
+          this.state.corsiDaSvolgere.push(courses[i]);
+      }
+    }
+    return courses;
+  };
 
   render() {
-    // this.update();
-
-    // console.log(this.state.collaborator);
-    // console.log("Corsi svolti");
-    // console.log(this.state.corsiSvolti);
-    // console.log("Corsi in corso");
-    // console.log(this.state.corsiInCorso);
-    // console.log("Corsi da svolgere");
-    // console.log(this.state.corsiDaSvolgere);
-
+    this.filterArray(this.state.courses);
     return (
       <div className="ml-5">
         <Label className="ml-5 mr-5">
@@ -181,59 +160,85 @@ class CollaboratorDetail extends Component {
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi in svolgimento: </h6>
           <br></br>
-          <Corso corsi={this.state.currentCourses} elem={this} />
+          <Corso
+            corsi={this.state.corsiInCorso}
+            elem={this}
+            collaborator_id={this.props.match.params.id}
+          />
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi da svolgere: </h6>
           <br></br>
-          <Corso corsi={this.state.necessaryCourses} elem={this} />
+          <Corso
+            corsi={this.state.corsiDaSvolgere}
+            elem={this}
+            collaborator_id={this.props.match.params.id}
+          />
         </Label>
         <br></br>
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi svolti: </h6>
           <br></br>
-          <Corso corsi={this.state.historyCourses} elem={this} />
+          <Corso
+            corsi={this.state.corsiSvolti}
+            elem={this}
+            collaborator_id={this.props.match.params.id}
+          />
         </Label>
         <br></br>
         <div id="addCourseButton">
           <AddCourseModal
+            id="removeModal"
             collaborator_id={this.props.match.params.id}
             className="ml-5 mt-5 mb-5 mr-2 float-left"
           />
         </div>
-        <AddQualificationToCollaboratorModal
-          id="addCourseButton"
-          className="ml-5 mt-5 mb-5 mr-2 float-left"
-          collaborator_id={this.props.match.params.id}
-        ></AddQualificationToCollaboratorModal>
-        <Button
-          className="ml-5 mt-5 mb-5 mr-2 float-left"
-          id="removeModal"
-          onClick={this.removeElements}
-        >
-          Rimuovi corso
-        </Button>
-        <RemoveQualificationFromCollaborator
-          collaborator_id={this.props.match.params.id}
-
-          // qualifications={this.state.qualificationsInformations}
-        ></RemoveQualificationFromCollaborator>
+        <div id="addCourseButton">
+          <AddQualificationToCollaboratorModal
+            id="removeModal"
+            className="ml-5 mt-5 mb-5 mr-2 float-left"
+            collaborator_id={this.props.match.params.id}
+          ></AddQualificationToCollaboratorModal>
+        </div>
+        <div id="addCourseButton">
+          <Button
+            className="ml-5 mt-5 mb-5 mr-2 float-left"
+            id="removeModal"
+            onClick={this.removeElements}
+          >
+            Rimuovi corso
+          </Button>
+        </div>
+        <div id="addCourseButton">
+          <Button
+            className="ml-5 mt-5 mb-5 mr-2 float-left"
+            onClick={this.modifyElements}
+          >
+            Modifica corso
+          </Button>
+        </div>
+        <div id="addCourseButton">
+          <RemoveQualificationFromCollaborator
+            collaborator_id={this.props.match.params.id}
+          ></RemoveQualificationFromCollaborator>
+        </div>
       </div>
     );
   }
 }
 
-export default CollaboratorDetail;
+CollaboratorDetail.propTypes = {
+  fetchCollaboratorInfos: PropTypes.func.isRequired,
+  fetchCoursesOfCollaborator: PropTypes.func.isRequired,
+};
 
-// CollaboratorDetail.propTypes = {
-//   fetchQualificationsInfos: PropTypes.func.isRequired,
-// };
+const mapStateToProps = (state) => ({
+  collaboratorInfos: state.collaborators.collaboratorInfos,
+  coursesOfCollaborator: state.courses.coursesOfCollaborator,
+});
 
-// const mapStateToProps = (state) => ({
-//   qualificationsInfos: state.qualifications.qualifications,
-// });
-
-// export default connect(mapStateToProps, {
-//   fetchQualificationsInfos,
-// })(CollaboratorDetail);
+export default connect(mapStateToProps, {
+  fetchCollaboratorInfos,
+  fetchCoursesOfCollaborator,
+})(CollaboratorDetail);

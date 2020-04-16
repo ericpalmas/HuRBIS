@@ -4,6 +4,8 @@ import {
   ADD_QUALIFICATION_TO_COLLABORATOR,
   REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
   ADD_QUALIFICATION,
+  DELETE_QUALIFICATION,
+  FETCH_COLLABORATORID_BY_QUALIFICATIONID,
 } from "../actions/types";
 
 const initialState = {
@@ -12,6 +14,8 @@ const initialState = {
   qualifications_added: [],
   qualificationsDeleted: [],
   newQualification: {},
+  deletedQualifications: [],
+  collaboratorId: {},
 };
 
 export default function (state = initialState, action) {
@@ -39,10 +43,14 @@ export default function (state = initialState, action) {
         qualificationsDeleted: [action.payload, ...state.qualificationsDeleted],
       };
     case ADD_QUALIFICATION:
-      console.log("ADD_QUALIFICATION");
       return {
         ...state,
         newQualification: [action.payload, ...state.newQualification],
+      };
+    case DELETE_QUALIFICATION:
+      return {
+        ...state,
+        deletedQualifications: [action.payload, ...state.deletedQualifications],
       };
 
     default:

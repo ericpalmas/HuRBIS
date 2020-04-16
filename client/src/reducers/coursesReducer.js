@@ -7,6 +7,19 @@ import {
   ADD_COURSE_TO_NECESSARY,
   DELETE_COURSE_FROM_HISTORY,
   DELETE_COURSE_FROM_NECESSARY,
+  MODIFY_CURRENT_COURSE,
+  MODIFY_FROM_CURRENT_TO_HISTORY,
+  MODIFY_FROM_CURRENT_TO_NECESSARY,
+  MODIFY_HISTORY_COURSE,
+  MODIFY_FROM_HISTORY_TO_CURRENT,
+  MODIFY_FROM_HISTORY_TO_NECESSARY,
+  MODIFY_NECESSARY_COURSE,
+  MODIFY_FROM_NECESSARY_TO_CURRENT,
+  MODIFY_FROM_NECESSARY_TO_HISTORY,
+
+  /////////////////
+  FETCH_COLLABORATOR_INFOS,
+  FETCH_COURSES_OF_COLLABORATOR,
 } from "../actions/types";
 
 const initialState = {
@@ -14,6 +27,17 @@ const initialState = {
   historyCourses: [],
   necessaryCourses: [],
   coursesInfos: [],
+  currentModifiedCourses: [],
+  modifiedFromCurrentToHistory: [],
+  modifiedFromCurrentToNecessary: [],
+  historyModifiedCourses: [],
+  modifiedFromHistoryToCurrent: [],
+  modifiedFromHistoryToNecessary: [],
+  necessaryModifiedCourses: [],
+  modifiedFromNecessaryToCurrent: [],
+  modifiedFromNecessaryToHistory: [],
+
+  coursesOfCollaborator: [],
 };
 
 export default function (state = initialState, action) {
@@ -26,9 +50,7 @@ export default function (state = initialState, action) {
     case DELETE_COURSE:
       return {
         ...state,
-        courses: state.courses.filter(
-          (course) => course._id !== action.payload
-        ),
+        courses: [action.payload, ...state.courses],
       };
     case DELETE_COURSE_FROM_HISTORY:
       return {
@@ -63,6 +85,83 @@ export default function (state = initialState, action) {
       return {
         ...state,
         necessaryCourses: [action.payload, ...state.necessaryCourses],
+      };
+    case MODIFY_CURRENT_COURSE:
+      return {
+        ...state,
+        currentModifiedCourses: [
+          action.payload,
+          ...state.currentModifiedCourses,
+        ],
+      };
+    case MODIFY_FROM_CURRENT_TO_HISTORY:
+      return {
+        ...state,
+        modifiedFromCurrentToHistory: [
+          action.payload,
+          ...state.modifiedFromCurrentToHistory,
+        ],
+      };
+    case MODIFY_FROM_CURRENT_TO_NECESSARY:
+      return {
+        ...state,
+        modifiedFromCurrentToNecessary: [
+          action.payload,
+          ...state.modifiedFromCurrentToNecessary,
+        ],
+      };
+    case MODIFY_HISTORY_COURSE:
+      return {
+        ...state,
+        historyModifiedCourses: [
+          action.payload,
+          ...state.historyModifiedCourses,
+        ],
+      };
+    case MODIFY_FROM_HISTORY_TO_CURRENT:
+      return {
+        ...state,
+        modifiedFromHistoryToCurrent: [
+          action.payload,
+          ...state.modifiedFromHistoryToCurrent,
+        ],
+      };
+    case MODIFY_FROM_HISTORY_TO_NECESSARY:
+      return {
+        ...state,
+        modifiedFromHistoryToNecessary: [
+          action.payload,
+          ...state.modifiedFromHistoryToNecessary,
+        ],
+      };
+    case MODIFY_NECESSARY_COURSE:
+      return {
+        ...state,
+        necessaryModifiedCourses: [
+          action.payload,
+          ...state.necessaryModifiedCourses,
+        ],
+      };
+    case MODIFY_FROM_NECESSARY_TO_CURRENT:
+      return {
+        ...state,
+        modifiedFromNecessaryToCurrent: [
+          action.payload,
+          ...state.modifiedFromNecessaryToCurrent,
+        ],
+      };
+    case MODIFY_FROM_NECESSARY_TO_HISTORY:
+      return {
+        ...state,
+        modifiedFromNecessaryToHistory: [
+          action.payload,
+          ...state.modifiedFromNecessaryToHistory,
+        ],
+      };
+    case FETCH_COURSES_OF_COLLABORATOR:
+      return {
+        ...state,
+        coursesOfCollaborator: action.payload,
       };
     default:
       return state;

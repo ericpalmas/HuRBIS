@@ -23,7 +23,7 @@ class AddQualificationToCollaboratorModal extends Component {
   state = {
     modal: false,
     name: "",
-    qualificationSelected: "",
+    qualification_id: "1",
     obbligatory: false,
     collaborator_id: this.props.collaborator_id,
     msg: null,
@@ -43,15 +43,13 @@ class AddQualificationToCollaboratorModal extends Component {
 
   onClickAndFetch = () => {
     this.props.fetchQualificationsInfos();
-    // console.log(this.props.qualificationsInfos);
-
     this.toggle();
   };
 
   onQualificationSelect = (event) => {
     console.log(event);
     this.setState({
-      qualificationSelected: event.target.value,
+      qualification_id: event.target.value,
     });
   };
 
@@ -59,9 +57,13 @@ class AddQualificationToCollaboratorModal extends Component {
     e.preventDefault();
 
     const newItem = {
-      name: this.state.qualificationSelected,
+      qualification_id: this.state.qualification_id,
       collaborator_id: this.props.collaborator_id,
     };
+
+    ///////////////////
+    //aggiungere un controllo per verificare che il collaboratore non abbia già quella qualifica
+    ///////////////
 
     this.props.addQualificationToCollaborator(newItem);
 
@@ -94,7 +96,7 @@ class AddQualificationToCollaboratorModal extends Component {
                 >
                   {this.props.qualificationsInfos.map(
                     ({ id, name, collaborator, necessary_courses }) => (
-                      <option>{name}</option>
+                      <option value={id}>{name}</option>
                     )
                   )}
                 </CustomInput>

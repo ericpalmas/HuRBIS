@@ -8,12 +8,12 @@ Router.get("/", (req, res) => {
   mysqlConnection.query(
     `SELECT collaborator.id, collaborator.name, collaborator.surname, collaborator.yearOfBirth,
     group_concat(distinct qualification.name separator ', ') AS qualification,
-    group_concat(distinct extra_courses.name separator ', ') AS extra_courses,
-    group_concat(distinct necessary_courses.name separator ',') AS necessary_courses
+    group_concat(distinct courses.name separator ', ') AS courses
     from collaborator
-    LEFT OUTER JOIN extra_courses ON extra_courses.collaborator_id=collaborator.id
-    LEFT OUTER JOIN qualification ON qualification.collaborator_id=collaborator.id 
-    LEFT OUTER JOIN necessary_courses ON necessary_courses.qualification_id=qualification.id
+    LEFT OUTER JOIN collaborator_has_courses ON collaborator_has_courses.collaborator_id = collaborator.id
+    LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
+    LEFT OUTER JOIN qualification_has_collaborator ON qualification_has_collaborator.collaborator_id = collaborator.id
+    LEFT OUTER JOIN qualification ON qualification.id = qualification_has_collaborator.qualification_id
     group by collaborator.id`,
 
     (err, rows, fields) => {

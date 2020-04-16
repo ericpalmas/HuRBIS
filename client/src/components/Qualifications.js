@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import { fetchQualificationsInfos } from "../actions/qualificationsActions";
 import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
 import AddQualificationModal from "./modals/AddQualificationModal";
-
+import RemoveQualificationModal from "./modals/RemoveQualificationModal";
 class Qualifications extends Component {
   constructor(props) {
     super(props);
@@ -29,9 +29,9 @@ class Qualifications extends Component {
 
   componentDidMount() {
     this.props.fetchQualificationsInfos();
-    this.setState({
-      qualificationsInformations: this.props.qualificationsInfos,
-    });
+    // this.setState({
+    //   qualificationsInformations: this.props.qualificationsInfos,
+    // });
   }
 
   toggle = () => {
@@ -42,7 +42,7 @@ class Qualifications extends Component {
 
   render() {
     console.log("Qualifiche");
-    const qualifications = this.state.qualificationsInformations;
+    const qualifications = this.props.qualificationsInfos;
     console.log(qualifications);
     return (
       <div>
@@ -82,22 +82,19 @@ class Qualifications extends Component {
             </tr>
           </thead>
           <tbody>
-            {qualifications.map(
-              ({ id, name, collaborator, necessary_courses }) => (
-                <tr>
-                  <td id="tableColumnInfo">
-                    <Link>{name}</Link>
-                  </td>
-                  <td id="tableColumnInfo">
-                    <Link>{collaborator}</Link>
-                  </td>
-                  <td id="tableColumnCourses">
-                    {/* <Link to={"/collaborators/" + id}> {courses}</Link> */}
-                    <Link> {necessary_courses}</Link>
-                  </td>
-                </tr>
-              )
-            )}
+            {qualifications.map(({ id, name, collaborator, courses }) => (
+              <tr>
+                <td id="tableColumnInfo">
+                  <Link>{name}</Link>
+                </td>
+                <td id="tableColumnInfo">
+                  <Link>{collaborator}</Link>
+                </td>
+                <td id="tableColumnCourses">
+                  <Link> {courses}</Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
         <div id="addCourseButton">
@@ -106,13 +103,11 @@ class Qualifications extends Component {
             className="ml-5 mt-5 mb-5 mr-2 float-left"
           />
         </div>
-        <Button
+        <RemoveQualificationModal
           className="ml-5 mt-5 mb-5 mr-2"
           id="removeModal"
-          // onClick={this.removeElements}
-        >
-          Rimuovi qualifica
-        </Button>
+          qualifications={this.state.qualificationsInformations}
+        ></RemoveQualificationModal>
       </div>
     );
   }

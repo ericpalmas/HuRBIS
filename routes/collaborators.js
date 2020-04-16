@@ -30,20 +30,16 @@ Router.get("/:id", (req, res) => {
 
 // Add a collaborator to the database
 Router.post("/", (req, res) => {
-  const newCollaborator = {
-    id: req.body.id,
-    name: req.body.name,
-    surname: req.body.surname,
-  };
-  const sqlInstruction = "INSERT INTO collaborator SET ?";
-  const query = mysqlConnection.query(
-    sqlInstruction,
-    newCollaborator,
-    (err, result, rows) => {
-      if (err) throw err;
-      console.log(result);
-    }
-  );
+  const newCollaborator = req.body;
+  console.log(newCollaborator);
+  const sql =
+    `INSERT INTO collaborator(name, surname, yearOfBirth) VALUES` +
+    `('${newCollaborator.name}', '${newCollaborator.surname}', '${newCollaborator.yearOfBirth}')`;
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
 });
 
 // Delete a collaborator from the dabase
@@ -87,18 +83,20 @@ Router.delete("/:id", (req, res) => {
 
 // Get infos of one collaborator
 Router.get("/infos/:id", (req, res) => {
+  console.log("sono quaaaaaaaa");
+  console.log(req.params.id);
   mysqlConnection.query(
     `SELECT collaborator.id, collaborator.name, collaborator.surname,
-    group_concat(distinct necessary_courses.id separator ',') AS courses,
     group_concat(distinct qualification.name separator ',') AS qualification
     from collaborator
-    LEFT OUTER JOIN qualification ON qualification.collaborator_id=collaborator.id
-    LEFT OUTER JOIN necessary_courses ON necessary_courses.qualification_id = qualification.id
+    LEFT OUTER JOIN qualification_has_collaborator ON qualification_has_collaborator.collaborator_id = collaborator.id
+    LEFT OUTER JOIN qualification ON qualification_has_collaborator.qualification_id = qualification.id
     WHERE collaborator.id = ${req.params.id}
     GROUP BY collaborator.id`,
     (err, rows, fields) => {
       if (!err) {
         res.send(rows);
+        console.log(rows);
       } else {
         console.log(err);
       }

@@ -29,10 +29,6 @@ class Courses extends Component {
 
   componentDidMount() {
     this.props.fetchCoursesInformations();
-
-    this.setState({
-      coursesInformations: this.props.coursesInfos,
-    });
   }
 
   toggle = () => {
@@ -42,7 +38,7 @@ class Courses extends Component {
   };
 
   render() {
-    const courses = this.state.coursesInformations;
+    const courses = this.props.coursesInfos;
     console.log(courses);
     return (
       <div>
@@ -77,24 +73,32 @@ class Courses extends Component {
           <thead>
             <tr>
               <th>Nome</th>
+              <th>Costo unitario</th>
               <th>Collaboratori</th>
+              <th>Qualifiche</th>
             </tr>
           </thead>
           <tbody>
-            {courses.map(({ id, name, collaborator, collabId }) => (
+            {courses.map(({ id, name, cost, collaborator, qualification }) => (
               <tr>
                 <td>
                   <Link>{name}</Link>
                 </td>
                 <td>
+                  <Link>{cost}</Link>
+                </td>
+                <td>
                   <Link>{collaborator}</Link>
+                </td>
+                <td>
+                  <Link>{qualification}</Link>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
 
-        {/* <div id="addCourseButton">
+        <div id="addCourseButton">
           <AddQualificationModal
             // collaborator_id={this.props.match.params.id}
             className="ml-5 mt-5 mb-5 mr-2 float-left"
@@ -106,7 +110,7 @@ class Courses extends Component {
           // onClick={this.removeElements}
         >
           Rimuovi corso
-        </Button> */}
+        </Button>
       </div>
     );
   }

@@ -1,24 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addCourse } from "../../actions/coursesActions";
-import { addCourseToHistory } from "../../actions/coursesActions";
-import { addCourseToNecessary } from "../../actions/coursesActions";
+import { fetchCourses } from "../../actions/coursesActions";
 import PropTypes from "prop-types";
 
 import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText,
-  Container,
+  CustomInput,
   Alert,
   Button,
   ModalHeader,
@@ -36,11 +23,15 @@ class AddCourseModal extends Component {
     name: "",
     certificationDate: "",
     expirationDate: "",
-    obbligatory: false,
+    instructor: false,
     collaborator_id: this.props.collaborator_id,
+    course_id: "1",
     msg: null,
   };
 
+  componentDidMount() {
+    this.props.fetchCourses();
+  }
   toggle = () => {
     this.setState({
       modal: !this.state.modal,
@@ -67,42 +58,39 @@ class AddCourseModal extends Component {
     });
   };
 
+  onQualificationSelect = (event) => {
+    console.log(event);
+    this.setState({
+      course_id: event.target.value,
+    });
+  };
+
   onSubmit = (e) => {
     e.preventDefault();
 
     const newItem = {
-      name: this.state.name,
+      course_id: this.state.course_id,
+      collaborator_id: this.state.collaborator_id,
       certificationDate: this.state.certificationDate,
       expirationDate: this.state.expirationDate,
-      obbligatory: this.state.obbligatory,
-      collaborator_id: this.state.collaborator_id,
+      instructor: this.state.instructor,
     };
-
     console.log("nuovo corso");
     console.log(newItem);
 
-    var currentdate = new Date();
-    var now = Date.parse(
-      currentdate.getFullYear() +
-        "-" +
-        (currentdate.getMonth() + 1) +
-        "-" +
-        currentdate.getDate()
-    );
+    ///////////
+    //inserire un controllo per i corsi duplicati
+    //faccio una fetch tramite course id e collaborator id e faccio il controllo
+    ///////////////
 
-    var expiration_date = Date.parse(newItem.expirationDate);
-    var certification_date = Date.parse(newItem.certificationDate);
-
-    if (certification_date <= now && expiration_date >= now)
-      this.props.addCourse(newItem);
-    else if (now > expiration_date) this.props.addCourseToHistory(newItem);
-    else if (now < certification_date) this.props.addCourseToNecessary(newItem);
+    this.props.addCourse(newItem);
 
     //Close modal
     this.toggle();
   };
 
   render() {
+    console.log(this.props.coursesInfos);
     return (
       <div>
         <Button className="ml-5 mt-5 mb-5 mr-2" onClick={this.toggle}>
@@ -120,14 +108,17 @@ class AddCourseModal extends Component {
             ) : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-                <Label for="item">Nome corso</Label>
-                <Input
-                  type="text"
-                  name="name"
-                  id="item"
-                  placeholder="Nome del corso"
-                  onChange={this.onChange}
-                ></Input>
+                <CustomInput
+                  type="select"
+                  id="exampleCustomSelect"
+                  name="customSelect"
+                  onChange={this.onQualificationSelect}
+                  value={this.state.value}
+                >
+                  {this.props.coursesInfos.map(({ id, name }) => (
+                    <option value={id}>{name}</option>
+                  ))}
+                </CustomInput>
                 <Label for="text" style={{ marginTop: "2rem" }}>
                   Data di certificazione
                 </Label>
@@ -156,13 +147,14 @@ class AddCourseModal extends Component {
     );
   }
 }
-
+AddCourseModal.propTypes = {
+  fetchCourses: PropTypes.func.isRequired,
+};
 const mapStateToProps = (state) => ({
-  course: state.course,
+  coursesInfos: state.courses.courses,
 });
 
 export default connect(mapStateToProps, {
   addCourse,
-  addCourseToHistory,
-  addCourseToNecessary,
+  fetchCourses,
 })(AddCourseModal);

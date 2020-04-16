@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { deleteCourse } from "../../actions/coursesActions";
+import { deleteCollaborator } from "../../actions/collaboratosActions";
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-class RemoveCourseModal extends Component {
-  static propTypes = {
-    courses: PropTypes.object.isRequired,
-  };
+class RemoveCollaboratorModal extends Component {
+  //   static propTypes = {
+  //     courses: PropTypes.object.isRequired,
+  //   };
   constructor(props) {
     super(props);
 
@@ -24,20 +24,11 @@ class RemoveCourseModal extends Component {
   };
 
   onDeleteClick = (id) => {
-    const removedCourse = {
-      course_id: id,
-      collaborator_id: this.props.collaborator_id,
-    };
-
-    if (id !== undefined) {
-      this.props.deleteCourse(removedCourse);
-    }
-
+    this.props.deleteCollaborator(id);
     this.toggle();
   };
 
   render() {
-    console.log(this.props.course.id);
     return (
       <div>
         <Button
@@ -53,12 +44,13 @@ class RemoveCourseModal extends Component {
             Rimozione corso di formazione
           </ModalHeader>
           <ModalBody>
-            Sei sicuro di voler rimuovere {this.props.course.name}?
+            Sei sicuro di voler rimuovere {this.props.collaboratorName}{" "}
+            {this.props.collaboratorSurname}?
           </ModalBody>
           <ModalFooter>
             <Button
               color="primary"
-              onClick={this.onDeleteClick.bind(this, this.props.course.id)}
+              onClick={this.onDeleteClick.bind(this, this.props.collaboratorId)}
             >
               Continua
             </Button>{" "}
@@ -73,9 +65,9 @@ class RemoveCourseModal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  courses: state.courses,
+  //   courses: state.courses,
 });
 
 export default connect(mapStateToProps, {
-  deleteCourse,
-})(RemoveCourseModal);
+  deleteCollaborator,
+})(RemoveCollaboratorModal);

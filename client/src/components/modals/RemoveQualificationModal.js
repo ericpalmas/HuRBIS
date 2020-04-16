@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { fetchQualificationsInfos } from "../../actions/qualificationsActions";
 import { fetchQualificationsOfCollaborator } from "../../actions/qualificationsActions";
 import { removeQualificationsFromCollaborator } from "../../actions/qualificationsActions";
+import { removeQualification } from "../../actions/qualificationsActions";
 
 import PropTypes from "prop-types";
 
@@ -18,9 +19,9 @@ import {
   Form,
   Input,
 } from "reactstrap";
-// import Qualifications from "../Qualifications";
+//import Qualifications from "../Qualifications";
 
-class RemoveQualificationFromCollaborator extends Component {
+class RemoveQualificationModal extends Component {
   state = {
     modal: false,
     qualificationsInformations: null,
@@ -28,14 +29,6 @@ class RemoveQualificationFromCollaborator extends Component {
     msg: null,
     listOfId: [],
   };
-
-  // componentDidMount() {
-  //   this.props.fetchQualificationsInfos();
-  //   // console.log(this.props.qualificationsInfos);
-  //   this.setState({
-  //     qualificationsInformations: this.props.qualificationsInfos,
-  //   });
-  // }
 
   toggle = () => {
     this.setState({
@@ -49,36 +42,20 @@ class RemoveQualificationFromCollaborator extends Component {
     });
   };
 
-  onClickAndFetch = () => {
-    this.props.fetchQualificationsInfos();
-    this.state.listOfId = [];
-    this.setState({
-      qualificationsInformations: this.props.qualificationsInfos,
-    });
-    this.toggle();
-  };
-
   onSubmit = (e) => {
     e.preventDefault();
+
     console.log(this.state.listOfId);
-    const item = {
-      qualifications_id: this.state.listOfId,
-      collaborator_id: this.props.collaborator_id,
-    };
-    this.props.removeQualificationsFromCollaborator(item);
+    this.props.removeQualification(this.state.listOfId);
 
     this.toggle();
   };
 
-  componentWillMount() {
-    this.props.fetchQualificationsOfCollaborator(this.props.collaborator_id);
-  }
-
-  filterCompleted = (checked, id) => {
+  filterCompleted = (checked, name) => {
     if (checked === true) {
-      this.state.listOfId.push(id);
+      this.state.listOfId.push(name);
     } else {
-      var index = this.state.listOfId.indexOf(id);
+      var index = this.state.listOfId.indexOf(name);
       this.state.listOfId.splice(index, 1);
     }
   };
@@ -86,7 +63,7 @@ class RemoveQualificationFromCollaborator extends Component {
   render() {
     return (
       <div>
-        <Button className="ml-5 mt-5 mb-5 mr-2" onClick={this.onClickAndFetch}>
+        <Button className="ml-5 mt-5 mb-5 mr-2" onClick={this.toggle}>
           Rimuovi qualifica
         </Button>
 
@@ -102,12 +79,12 @@ class RemoveQualificationFromCollaborator extends Component {
                   Seleziona le qualifiche da rimuovere
                 </Label>
                 <div>
-                  {this.props.qualificationOfCollaborator.map(
+                  {this.props.qualifications.map(
                     ({ id, name, collaborator, necessary_courses }) => (
                       <FormGroup check>
                         <Input
                           onChange={(e) =>
-                            this.filterCompleted(e.target.checked, id)
+                            this.filterCompleted(e.target.checked, name)
                           }
                           type="checkbox"
                           name="check"
@@ -137,18 +114,10 @@ class RemoveQualificationFromCollaborator extends Component {
   }
 }
 
-RemoveQualificationFromCollaborator.propTypes = {
-  fetchQualificationsInfos: PropTypes.func.isRequired,
-  fetchQualificationsOfCollaborator: PropTypes.func.isRequired,
-};
+RemoveQualificationModal.propTypes = {};
 
-const mapStateToProps = (state) => ({
-  qualificationsInfos: state.qualifications.qualifications,
-  qualificationOfCollaborator: state.qualifications.collaboratorQualifications,
-});
+const mapStateToProps = (state) => ({});
 
-export default connect(mapStateToProps, {
-  fetchQualificationsInfos,
-  fetchQualificationsOfCollaborator,
-  removeQualificationsFromCollaborator,
-})(RemoveQualificationFromCollaborator);
+export default connect(mapStateToProps, { removeQualification })(
+  RemoveQualificationModal
+);

@@ -1,6 +1,8 @@
 import React, { Component, useState } from "react";
 import { connect } from "react-redux";
 import { addCourse } from "../../actions/coursesActions";
+import { fetchCourses } from "../../actions/coursesActions";
+
 import PropTypes from "prop-types";
 
 import {
@@ -42,22 +44,11 @@ class AddQualificationModal extends Component {
 
   componentDidMount() {
     this.state.listOfCourses.push(" ");
+    this.props.fetchCourses();
   }
 
   onSubmit = (e) => {
     e.preventDefault();
-
-    // const newItem = {
-    //   name: this.state.name,
-    //   certificationDate: this.state.certificationDate,
-    //   expirationDate: this.state.expirationDate,
-    //   obbligatory: this.state.obbligatory,
-    //   collaborator_id: this.state.collaborator_id
-    // };
-
-    // console.log(newItem);
-    // this.props.addCourse(newItem);
-    //Close modal
     this.toggle();
   };
 
@@ -79,7 +70,9 @@ class AddQualificationModal extends Component {
             ) : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-                <ArrayFormData></ArrayFormData>
+                <ArrayFormData
+                  courses={this.props.coursesInfos}
+                ></ArrayFormData>
               </FormGroup>
             </Form>
           </ModalBody>
@@ -89,10 +82,13 @@ class AddQualificationModal extends Component {
   }
 }
 
-// const mapStateToProps = state => ({
-//   course: state.course
-// });
+AddQualificationModal.propTypes = {
+  fetchCourses: PropTypes.func.isRequired,
+};
+const mapStateToProps = (state) => ({
+  coursesInfos: state.courses.courses,
+});
 
-// export default connect(mapStateToProps, { addCourse })(AddQualificationModal);
-
-export default AddQualificationModal;
+export default connect(mapStateToProps, { fetchCourses })(
+  AddQualificationModal
+);

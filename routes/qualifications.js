@@ -7,11 +7,27 @@ Router.get("/", (req, res) => {
   mysqlConnection.query(
     `SELECT qualification.id, qualification.name,
     group_concat(distinct collaborator.name  , " ",collaborator.surname separator ', ') AS collaborator,
-    group_concat(distinct necessary_courses.name separator ', ') AS necessary_courses
+    group_concat(distinct courses.name separator ', ') AS courses
     FROM qualification
-    LEFT OUTER JOIN collaborator ON collaborator.id=qualification.collaborator_id
-    LEFT OUTER join necessary_courses ON necessary_courses.qualification_id=qualification.id
-    group by qualification.name`,
+    LEFT OUTER JOIN qualification_has_collaborator ON qualification_has_collaborator.qualification_id = qualification.id
+    LEFT OUTER JOIN collaborator ON collaborator.id = qualification_has_collaborator.collaborator_id
+    LEFT OUTER JOIN courses_has_qualification ON courses_has_qualification.qualification_id = qualification.id
+    LEFT OUTER JOIN courses ON courses.id = courses_has_qualification.courses_id
+    group by qualification.id`,
+
+    (err, rows, fields) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+});
+
+Router.get("/allQualification", (req, res) => {
+  mysqlConnection.query(
+    `SELECT qualification.id, qualification.name from qualification`,
 
     (err, rows, fields) => {
       if (!err) {
@@ -26,47 +42,47 @@ Router.get("/", (req, res) => {
 //aggiungi i corsi necessari di una qualifica
 Router.post("/addQualification", (req, res) => {
   ////////////aggiungere ciclo for per aggiungere i corsi necessari
-
-  ///////////////////
   const newQualification = req.body;
   console.log(newQualification);
-  console.log(newQualification.name);
-  console.log(newQualification.listOfId[0].corso);
-  console.log(newQualification.listOfId[1].corso);
-  // const sql = `BEGIN;
-  //   INSERT INTO qualification (name) VALUES('nome della qualifica');
-  //   INSERT INTO necessary_courses (qualification_id, name) VALUES`;
 
-  // for (let i = 0; i < req.body.lenght; i++) {
-  //   sql += `(LAST_INSERT_ID(),'${req.body[i].name}')`;
-  // }
-  // sql += `;COMMIT;`;
+  var sql = `INSERT INTO qualification (name) VALUES ('${newQualification.name}');`;
 
-  var sql = `BEGIN;
-    INSERT INTO qualification (name) VALUES('${newQualification.name}');
-    INSERT INTO necessary_courses (qualification_id, name) VALUES`;
   newQualification.listOfId.forEach(myFunction);
   function myFunction(value, index, array) {
-    sql += `(LAST_INSERT_ID(),'${value.corso}')`;
-    if (index !== newQualification.listOfId.length - 1) sql += ",";
+    console.log(value.corso);
+    sql += `INSERT INTO courses_has_qualification (qualification_id, courses_id) VALUES ( (SELECT MAX(id)  FROM qualification), '${value.corso}');`;
   }
-  sql += `;COMMIT;`;
+
+  // console.log(newQualification.name);
+  // console.log(newQualification.listOfId[0].corso);
+  // console.log(newQualification.listOfId[1].corso);
+
+  // var sql = `BEGIN;
+  //   INSERT INTO qualification (name) VALUES('${newQualification.name}');
+  //   INSERT INTO necessary_courses (qualification_id, name) VALUES`;
+  // newQualification.listOfId.forEach(myFunction);
+  // function myFunction(value, index, array) {
+  //   sql += `(LAST_INSERT_ID(),'${value.corso}')`;
+  //   if (index !== newQualification.listOfId.length - 1) sql += ",";
+  // }
+  // sql += `;COMMIT;`;
 
   console.log(sql);
 
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
     console.log(result);
+    console.log(err);
   });
 });
 
 // //aggiungi una qualifica ad un collaboratore
 Router.post("/addQualificationToCollaborator", (req, res) => {
   const newQualification = req.body;
-
   console.log(newQualification);
-  const sql = `insert into qualification(qualification.name, qualification.collaborator_id) values
-  ("${newQualification.name}", ${newQualification.collaborator_id})`;
+
+  const sql = `insert into qualification_has_collaborator (qualification_id, collaborator_id) 
+  values ("${newQualification.qualification_id}","${newQualification.collaborator_id}")`;
 
   mysqlConnection.query(sql, newQualification, (err, result) => {
     if (err) throw err;
@@ -75,17 +91,13 @@ Router.post("/addQualificationToCollaborator", (req, res) => {
 });
 
 Router.post("/removeQualifications", (req, res) => {
-  console.log("sono nella query");
   const listOfId = req.body;
-
-  var sql =
-    "UPDATE qualification SET qualification.collaborator_id = NULL WHERE qualification.id IN (";
-  listOfId.forEach(myFunction);
+  console.log(listOfId);
+  var sql = ``;
+  listOfId.qualifications_id.forEach(myFunction);
   function myFunction(value, index, array) {
-    sql += value;
-    if (index !== listOfId.length - 1) sql += ",";
+    sql += `DELETE FROM qualification_has_collaborator WHERE qualification_id='${value}' and collaborator_id='${listOfId.collaborator_id}';`;
   }
-  sql += ")";
 
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
@@ -95,8 +107,39 @@ Router.post("/removeQualifications", (req, res) => {
 
 Router.get("/:id", (req, res) => {
   mysqlConnection.query(
-    `select qualification.id, qualification.name, qualification.collaborator_id from qualification
-    where qualification.collaborator_id = ${req.params.id}`,
+    `select qualification.id, qualification.name from qualification_has_collaborator 
+    INNER JOIN qualification ON qualification_has_collaborator.qualification_id = qualification.id
+    where qualification_has_collaborator.collaborator_id = ${req.params.id}`,
+    (err, rows, fields) => {
+      if (!err) {
+        res.send(rows);
+        console.log(rows);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+});
+
+Router.post("/removeQualificationsAndCourses", (req, res) => {
+  qualifications = req.body;
+  var sql = "DELETE FROM qualification WHERE qualification.name IN (";
+  qualifications.forEach(myFunction);
+  function myFunction(value, index, array) {
+    sql += `'` + value + `'`;
+    if (index !== qualifications.length - 1) sql += ",";
+  }
+  sql += ")";
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+});
+
+Router.get("collaboratorId/:id", (req, res) => {
+  mysqlConnection.query(
+    `select qualification.collaborator_id from qualification where qualification.id = ${req.params.id}`,
     (err, rows, fields) => {
       if (!err) {
         res.send(rows);

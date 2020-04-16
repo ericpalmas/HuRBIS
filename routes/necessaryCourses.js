@@ -30,4 +30,48 @@ Router.delete("/:id", (req, res) => {
   );
 });
 
+// modifica corso necessario
+Router.post("/modifyNecessaryCourse/:id", (req, res) => {
+  const newCourse = req.body;
+  console.log(newCourse);
+
+  const sql = `UPDATE necessary_courses SET name='${newCourse.name}', certification_date = '${newCourse.certificationDate}', expiration_date = '${newCourse.expirationDate}' WHERE id = '${req.params.id}'`;
+
+  console.log(sql);
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+});
+
+// // modifica da necessario a corrente
+Router.post("/modifyFromNecessaryToCurrent/:id", (req, res) => {
+  const newCourse = req.body;
+  console.log(newCourse);
+
+  const sql = `insert into extra_courses (name, certification_date, expiration_date, collaborator_id)
+  VALUES ('${newCourse.name}', '${newCourse.certificationDate}', '${newCourse.expirationDate}', '${newCourse.collaborator_id}');
+  DELETE FROM necessary_courses WHERE id = '${req.params.id}';`;
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+});
+
+// modifica da necessario a storico
+Router.post("/modifyFromNecessaryToHistory/:id", (req, res) => {
+  const newCourse = req.body;
+  console.log(newCourse);
+
+  const sql = `insert into history_courses (name, certification_date, expiration_date, collaborator_id)
+  VALUES ('${newCourse.name}', '${newCourse.certificationDate}', '${newCourse.expirationDate}', '${newCourse.collaborator_id}');
+  DELETE FROM necessary_courses WHERE id = '${req.params.id}' ;`;
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+});
+
 module.exports = Router;
