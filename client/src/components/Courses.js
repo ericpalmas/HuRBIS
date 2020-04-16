@@ -15,13 +15,15 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { fetchCoursesInformations } from "../actions/coursesActions";
 import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
-import AddQualificationModal from "./modals/AddQualificationModal";
+import AddNewCourseModal from "./modals/AddNewCourseModal";
+import RemoveCourseModalDue from "./modals/RemoveCourseModalDue";
 
 class Courses extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      remove: false,
       coursesInformations: [],
       dropdownButton: false,
     };
@@ -34,6 +36,12 @@ class Courses extends Component {
   toggle = () => {
     this.setState({
       dropdownButton: !this.state.dropdownButton,
+    });
+  };
+
+  removeElements = () => {
+    this.setState({
+      remove: !this.state.remove,
     });
   };
 
@@ -76,6 +84,7 @@ class Courses extends Component {
               <th>Costo unitario</th>
               <th>Collaboratori</th>
               <th>Qualifiche</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -93,13 +102,24 @@ class Courses extends Component {
                 <td>
                   <Link>{qualification}</Link>
                 </td>
+                <td>
+                  {this.state.remove ? (
+                    <RemoveCourseModalDue
+                      course_id={id}
+                      course_name={name}
+                      className="remove-btn ml-1 mr-1 mt-1"
+                      color="danger"
+                      size="sm"
+                    ></RemoveCourseModalDue>
+                  ) : null}
+                </td>
               </tr>
             ))}
           </tbody>
         </Table>
 
         <div id="addCourseButton">
-          <AddQualificationModal
+          <AddNewCourseModal
             // collaborator_id={this.props.match.params.id}
             className="ml-5 mt-5 mb-5 mr-2 float-left"
           />
@@ -107,7 +127,7 @@ class Courses extends Component {
         <Button
           className="ml-5 mt-5 mb-5 mr-2"
           id="removeModal"
-          // onClick={this.removeElements}
+          onClick={this.removeElements}
         >
           Rimuovi corso
         </Button>

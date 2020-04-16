@@ -106,7 +106,7 @@ class Qualifications extends Component {
         <RemoveQualificationModal
           className="ml-5 mt-5 mb-5 mr-2"
           id="removeModal"
-          qualifications={this.state.qualificationsInformations}
+          qualifications={this.props.qualificationsInfos}
         ></RemoveQualificationModal>
       </div>
     );

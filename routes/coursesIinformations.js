@@ -5,7 +5,7 @@ const mysqlConnection = require("../config/connection");
 // Get all courses
 Router.get("/", (req, res) => {
   mysqlConnection.query(
-    `SELECT courses.name, courses.cost,
+    `SELECT courses.id, courses.name, courses.cost,
     group_concat(distinct collaborator.name, " ", collaborator.surname separator ', ') AS collaborator,
     group_concat(distinct qualification.name separator ', ') AS qualification
     from courses

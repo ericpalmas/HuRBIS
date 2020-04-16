@@ -19,7 +19,6 @@ import {
   Form,
   Input,
 } from "reactstrap";
-//import Qualifications from "../Qualifications";
 
 class RemoveQualificationModal extends Component {
   state = {

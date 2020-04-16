@@ -41,33 +41,13 @@ Router.get("/allQualification", (req, res) => {
 
 //aggiungi i corsi necessari di una qualifica
 Router.post("/addQualification", (req, res) => {
-  ////////////aggiungere ciclo for per aggiungere i corsi necessari
   const newQualification = req.body;
-  console.log(newQualification);
-
   var sql = `INSERT INTO qualification (name) VALUES ('${newQualification.name}');`;
-
   newQualification.listOfId.forEach(myFunction);
   function myFunction(value, index, array) {
     console.log(value.corso);
     sql += `INSERT INTO courses_has_qualification (qualification_id, courses_id) VALUES ( (SELECT MAX(id)  FROM qualification), '${value.corso}');`;
   }
-
-  // console.log(newQualification.name);
-  // console.log(newQualification.listOfId[0].corso);
-  // console.log(newQualification.listOfId[1].corso);
-
-  // var sql = `BEGIN;
-  //   INSERT INTO qualification (name) VALUES('${newQualification.name}');
-  //   INSERT INTO necessary_courses (qualification_id, name) VALUES`;
-  // newQualification.listOfId.forEach(myFunction);
-  // function myFunction(value, index, array) {
-  //   sql += `(LAST_INSERT_ID(),'${value.corso}')`;
-  //   if (index !== newQualification.listOfId.length - 1) sql += ",";
-  // }
-  // sql += `;COMMIT;`;
-
-  console.log(sql);
 
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;

@@ -16,6 +16,8 @@ import {
   MODIFY_NECESSARY_COURSE,
   MODIFY_FROM_NECESSARY_TO_CURRENT,
   MODIFY_FROM_NECESSARY_TO_HISTORY,
+  ADD_NEW_COURSE,
+  DELETE_COURSE_FROM_DATABASE,
 
   /////////////////
   FETCH_COLLABORATOR_INFOS,
@@ -36,6 +38,8 @@ const initialState = {
   necessaryModifiedCourses: [],
   modifiedFromNecessaryToCurrent: [],
   modifiedFromNecessaryToHistory: [],
+  newCourses: [],
+  coursesRemoved: [],
 
   coursesOfCollaborator: [],
 };
@@ -52,6 +56,12 @@ export default function (state = initialState, action) {
         ...state,
         courses: [action.payload, ...state.courses],
       };
+    case DELETE_COURSE_FROM_DATABASE:
+      return {
+        ...state,
+        coursesRemoved: [action.payload, ...state.coursesRemoved],
+      };
+
     case DELETE_COURSE_FROM_HISTORY:
       return {
         ...state,
@@ -93,6 +103,12 @@ export default function (state = initialState, action) {
           action.payload,
           ...state.currentModifiedCourses,
         ],
+      };
+
+    case ADD_NEW_COURSE:
+      return {
+        ...state,
+        newCourses: [action.payload, ...state.newCourses],
       };
     case MODIFY_FROM_CURRENT_TO_HISTORY:
       return {

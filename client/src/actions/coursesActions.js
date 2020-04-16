@@ -9,6 +9,7 @@ import {
   ADD_COURSE_TO_NECESSARY,
   DELETE_COURSE_FROM_NECESSARY,
   MODIFY_CURRENT_COURSE,
+  ADD_NEW_COURSE,
   // MODIFY_FROM_CURRENT_TO_HISTORY,
   // MODIFY_FROM_CURRENT_TO_NECESSARY,
   // MODIFY_HISTORY_COURSE,
@@ -17,6 +18,7 @@ import {
   // MODIFY_NECESSARY_COURSE,
   // MODIFY_FROM_NECESSARY_TO_CURRENT,
   // MODIFY_FROM_NECESSARY_TO_HISTORY,
+  DELETE_COURSE_FROM_DATABASE,
   FETCH_COURSES_OF_COLLABORATOR,
   FETCH_COLLABORATOR_INFOS,
 } from "./types";
@@ -30,23 +32,23 @@ export const addCourse = (course) => (dispatch) => {
   );
 };
 
-export const addCourseToHistory = (course) => (dispatch) => {
-  axios.post("/coursesHistory/addCourse", course).then((res) =>
-    dispatch({
-      type: ADD_COURSE_TO_HISTORY,
-      payload: res.data,
-    })
-  );
-};
+// export const addCourseToHistory = (course) => (dispatch) => {
+//   axios.post("/coursesHistory/addCourse", course).then((res) =>
+//     dispatch({
+//       type: ADD_COURSE_TO_HISTORY,
+//       payload: res.data,
+//     })
+//   );
+// };
 
-export const addCourseToNecessary = (course) => (dispatch) => {
-  axios.post("/necessaryCourses/addCourse", course).then((res) =>
-    dispatch({
-      type: ADD_COURSE_TO_NECESSARY,
-      payload: res.data,
-    })
-  );
-};
+// export const addCourseToNecessary = (course) => (dispatch) => {
+//   axios.post("/necessaryCourses/addCourse", course).then((res) =>
+//     dispatch({
+//       type: ADD_COURSE_TO_NECESSARY,
+//       payload: res.data,
+//     })
+//   );
+// };
 
 export const deleteCourse = (removedCourse) => (dispatch) => {
   axios.post(`/courses/`, removedCourse).then((res) =>
@@ -212,4 +214,22 @@ export const fetchCoursesOfCollaborator = (id) => async (dispatch) => {
     type: FETCH_COURSES_OF_COLLABORATOR,
     payload: res.data,
   });
+};
+
+export const addNewCourse = (course) => (dispatch) => {
+  axios.post("/courses/addNewCourse", course).then((res) =>
+    dispatch({
+      type: ADD_NEW_COURSE,
+      payload: res.data,
+    })
+  );
+};
+
+export const deleteCourseFromDatabase = (id) => (dispatch) => {
+  axios.delete(`/courses/${id}`).then((res) =>
+    dispatch({
+      type: DELETE_COURSE_FROM_DATABASE,
+      payload: id,
+    })
+  );
 };
