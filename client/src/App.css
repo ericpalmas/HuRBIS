@@ -107,3 +107,20 @@
 #tableColumnCourses {
   width: 20rem;
 }
+
+/* .DayPicker {
+  flex-direction: row;
+  font-size: 2rem;
+
+  padding: 10rem;
+  width: 100%;
+  height: 100%;
+
+}
+
+.DayPicker-Months {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+} */

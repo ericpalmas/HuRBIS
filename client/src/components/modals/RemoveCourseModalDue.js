@@ -49,7 +49,7 @@ class RemoveCourseModalDue extends Component {
             Rimozione corso di formazione
           </ModalHeader>
           <ModalBody>
-            Sei sicuro di voler rimuovereeeeeeeeeee {this.props.course_name}?
+            Sei sicuro di voler rimuovere {this.props.course_name}?
           </ModalBody>
           <ModalFooter>
             <Button

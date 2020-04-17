@@ -10,6 +10,9 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { fetchCoursesOfCollaborator } from "../actions/coursesActions";
 import { fetchCollaboratorInfos } from "../actions/collaboratosActions";
+import CollaboratorDetailPDF from "./CollaboratorDetailPDF";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const Corso = ({ corsi, elem, collaborator_id }) => (
   <Table>
@@ -108,6 +111,10 @@ class CollaboratorDetail extends Component {
       remove: false,
     });
   };
+
+  onDocumentLoad({ numPages }) {
+    this.setState({ numPages });
+  }
 
   filterArray = (courses) => {
     var currentdate = new Date();
@@ -223,6 +230,22 @@ class CollaboratorDetail extends Component {
             collaborator_id={this.props.match.params.id}
           ></RemoveQualificationFromCollaborator>
         </div>
+
+        {/* <div id="addCourseButton">
+          <Button
+            className="ml-5 mt-5 mb-5 mr-2 float-left"
+            onClick={this.generatePDF}
+          >
+            Scarica scheda collaboratore
+          </Button>
+        </div> */}
+
+        <CollaboratorDetailPDF
+          collaborator={this.state.collaborator}
+          corsiInCorso={this.state.corsiInCorso}
+          corsiDaSvolgere={this.state.corsiDaSvolgere}
+          corsiSvolti={this.state.corsiSvolti}
+        ></CollaboratorDetailPDF>
       </div>
     );
   }
