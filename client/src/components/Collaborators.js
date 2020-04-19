@@ -11,11 +11,8 @@ import {
   DropdownToggle,
 } from "reactstrap";
 
-import { connect } from "react-redux";
 import { fetchCollaboratorsInfos } from "../actions/collaboratosInfosActions";
-// import { fetchCollaborators } from "../actions/collaboratosActions";
-// import { fetchQualifications } from "../actions/qualificationsActions";
-// import { fetchCourses } from "../actions/coursesActions";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
 import AddCollaboratorModal from "./modals/AddCollaboratorModal";

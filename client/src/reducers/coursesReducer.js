@@ -18,6 +18,7 @@ import {
   MODIFY_FROM_NECESSARY_TO_HISTORY,
   ADD_NEW_COURSE,
   DELETE_COURSE_FROM_DATABASE,
+  FETCH_COURSES_DATES,
 
   /////////////////
   FETCH_COLLABORATOR_INFOS,
@@ -40,6 +41,7 @@ const initialState = {
   modifiedFromNecessaryToHistory: [],
   newCourses: [],
   coursesRemoved: [],
+  dates: [],
 
   coursesOfCollaborator: [],
 };
@@ -178,6 +180,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         coursesOfCollaborator: action.payload,
+      };
+    case FETCH_COURSES_DATES:
+      console.log("FETCH_COURSES_DATES");
+      return {
+        ...state,
+        dates: action.payload,
       };
     default:
       return state;
