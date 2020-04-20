@@ -44,4 +44,24 @@ Router.get("/allDates", (req, res) => {
   );
 });
 
+Router.get("/collaborators", (req, res) => {
+  mysqlConnection.query(
+    `SELECT qualification.name as qualName, collaborator.name, collaborator.surname, collaborator.yearOfBirth,
+    group_concat(distinct courses.id separator ', ') AS courses
+    from collaborator
+    LEFT OUTER JOIN collaborator_has_courses ON collaborator_has_courses.collaborator_id = collaborator.id
+    LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
+    LEFT OUTER JOIN qualification_has_collaborator ON qualification_has_collaborator.collaborator_id = collaborator.id
+    LEFT OUTER JOIN qualification ON qualification.id = qualification_has_collaborator.qualification_id
+    group by collaborator.id`,
+    (err, rows, fields) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+});
+
 module.exports = Router;

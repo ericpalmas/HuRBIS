@@ -23,6 +23,7 @@ class Courses extends Component {
     super(props);
 
     this.state = {
+      search: "",
       remove: false,
       coursesInformations: [],
       dropdownButton: false,
@@ -45,15 +46,25 @@ class Courses extends Component {
     });
   };
 
+  updateSearch(event) {
+    this.setState({
+      search: event.target.value,
+    });
+  }
+
   render() {
     const courses = this.props.coursesInfos;
     console.log(courses);
+    console.log(this.state.search);
     return (
       <div>
         <Form inline>
           <FormGroup>
-            <Button id="searchButton">Cerca</Button>
+            {/* <Button id="searchButton">Cerca</Button> */}
             <Input
+              // className="ml-6"
+              value={this.state.search}
+              onChange={this.updateSearch.bind(this)}
               type="search"
               name="search"
               id="exampleSearch"
@@ -88,33 +99,54 @@ class Courses extends Component {
             </tr>
           </thead>
           <tbody>
-            {courses.map(({ id, name, cost, collaborator, qualification }) => (
-              <tr>
-                <td>
-                  <Link>{name}</Link>
-                </td>
-                <td>
-                  <Link>{cost}</Link>
-                </td>
-                <td>
-                  <Link>{collaborator}</Link>
-                </td>
-                <td>
-                  <Link>{qualification}</Link>
-                </td>
-                <td>
-                  {this.state.remove ? (
-                    <RemoveCourseModalDue
-                      course_id={id}
-                      course_name={name}
-                      className="remove-btn ml-1 mr-1 mt-1"
-                      color="danger"
-                      size="sm"
-                    ></RemoveCourseModalDue>
-                  ) : null}
-                </td>
-              </tr>
-            ))}
+            {courses
+              .filter(
+                (course) =>
+                  (course.name !== null &&
+                    course.name
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase())) ||
+                  (course.cost !== null &&
+                    course.cost
+                      .toString()
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase())) ||
+                  (course.collaborator !== null &&
+                    course.collaborator
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase())) ||
+                  (course.qualification !== null &&
+                    course.qualification
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase()))
+              )
+              .map(({ id, name, cost, collaborator, qualification }) => (
+                <tr>
+                  <td>
+                    <Link>{name}</Link>
+                  </td>
+                  <td>
+                    <Link>{cost}</Link>
+                  </td>
+                  <td>
+                    <Link>{collaborator}</Link>
+                  </td>
+                  <td>
+                    <Link>{qualification}</Link>
+                  </td>
+                  <td>
+                    {this.state.remove ? (
+                      <RemoveCourseModalDue
+                        course_id={id}
+                        course_name={name}
+                        className="remove-btn ml-1 mr-1 mt-1"
+                        color="danger"
+                        size="sm"
+                      ></RemoveCourseModalDue>
+                    ) : null}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </Table>
 

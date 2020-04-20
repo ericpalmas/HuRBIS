@@ -22,6 +22,7 @@ class Qualifications extends Component {
     super(props);
 
     this.state = {
+      search: "",
       qualificationsInformations: [],
       dropdownButton: false,
     };
@@ -29,9 +30,6 @@ class Qualifications extends Component {
 
   componentDidMount() {
     this.props.fetchQualificationsInfos();
-    // this.setState({
-    //   qualificationsInformations: this.props.qualificationsInfos,
-    // });
   }
 
   toggle = () => {
@@ -40,16 +38,26 @@ class Qualifications extends Component {
     });
   };
 
+  updateSearch(event) {
+    this.setState({
+      search: event.target.value,
+    });
+  }
+
   render() {
     console.log("Qualifiche");
     const qualifications = this.props.qualificationsInfos;
     console.log(qualifications);
+    console.log(this.state.search);
     return (
       <div>
         <Form inline>
           <FormGroup>
-            <Button id="searchButton">Cerca</Button>
+            {/* <Button id="searchButton">Cerca</Button> */}
             <Input
+              // className="ml-4"
+              value={this.state.search}
+              onChange={this.updateSearch.bind(this)}
               type="search"
               name="search"
               id="exampleSearch"
@@ -73,6 +81,16 @@ class Qualifications extends Component {
           </FormGroup>
         </Form>
 
+        {/* <div>
+          {collaboratorsInfos
+            .filter((collaborator) =>
+              collaborator.name.includes(this.state.search)
+            )
+            .map((filteredPerson) => (
+              <li>{filteredPerson.name}</li>
+            ))}
+        </div> */}
+
         <Table hover id="collaboratorsTable">
           <thead>
             <tr>
@@ -82,19 +100,35 @@ class Qualifications extends Component {
             </tr>
           </thead>
           <tbody>
-            {qualifications.map(({ id, name, collaborator, courses }) => (
-              <tr>
-                <td id="tableColumnInfo">
-                  <Link>{name}</Link>
-                </td>
-                <td id="tableColumnInfo">
-                  <Link>{collaborator}</Link>
-                </td>
-                <td id="tableColumnCourses">
-                  <Link> {courses}</Link>
-                </td>
-              </tr>
-            ))}
+            {qualifications
+              .filter(
+                (qualification) =>
+                  (qualification.name !== null &&
+                    qualification.name
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase())) ||
+                  (qualification.collaborator !== null &&
+                    qualification.collaborator
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase())) ||
+                  (qualification.courses !== null &&
+                    qualification.courses
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase()))
+              )
+              .map(({ id, name, collaborator, courses }) => (
+                <tr>
+                  <td id="tableColumnInfo">
+                    <Link>{name}</Link>
+                  </td>
+                  <td id="tableColumnInfo">
+                    <Link>{collaborator}</Link>
+                  </td>
+                  <td id="tableColumnCourses">
+                    <Link> {courses}</Link>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </Table>
         <div id="addCourseButton">

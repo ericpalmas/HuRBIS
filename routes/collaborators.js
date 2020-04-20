@@ -56,31 +56,6 @@ Router.delete("/:id", (req, res) => {
   );
 });
 
-// // Get all collaborators from risnova
-// Router.get("/collaboratorsInfo", (req, res) => {
-//   risnovaConnection.query("SELECT [Id],[ResName],[ResName2],[StartValidity],[EndValidity],[Enabled],[RecStatus]" +
-// ",[RecVerGuid],[RecDetails],[InsertTimestamp],[UpdateTimestamp],[DeleteTimestamp],[InsertDbId],[UpdateDbId]" +
-// ",[DeleteDbId],[Author],[ResType],[ResName],[ResName2],[ResCode],[BornDate],[Gender],[Category],[Description]" +
-// ",[Department],[Phone],[Email],[Web],[Color],[Image],[Note],[ResDetailsType],[ResDetails],[ResText],[Priority]"+
-// ",[SortPriority],[Exclusive],[Flags],[StartValidityAdjStr],[AvgActiveTime],[AvgActiveTimeModel],[Balance]"+
-// ",[BalanceDate],[ResContext],[Reference1],[Reference2],[AttResItemId1],[AttResItemId2],[UserId],[ACL]"+
-// ",[NotifyInfo],[CustomText1],[CustomText2],[CustomText3],[CustomText4],[CustomText5],[CustomNumber1Str]"+
-// ",[CustomNumber2Str],[CustomNumber3Str],[CustomNumber4Str],[CustomNumber5Str],[CustomId1],[CustomId2]" +
-// ",[CustomId3],[CustomId4],[CustomId5],[ShortName],[Status],[Origin],[Degree],[Function],[Division],[Area]"+
-// ",[Service],[Office],[Position],[SvcPlace],[OccCoeff],[Supervisor],[Insurance],[MedInfo],[SecInfo],[Equipment]"+
-// ",[Skills],[Address],[ComDev1],[ComDev2],[ComDev3],[ComDev4],[ComDev5],[CustomBits1Str],[CustomText6],[CustomText7]"+
-// ",[CustomText8],[CustomText9],[CustomText10],[CustomValue1Str],[CustomValue2Str],[CustomValue3Str]"+
-// ",[CustomValue4Str],[CustomValue5Str],[CustomValue6Str],[CustomValue7Str],[CustomValue8Str],[CustomValue9Str]"+
-// ",[CustomValue10Str],[EdLim],[Vis],[Flags2] FROM [RSuiteTreValli].[dbo].[AttResItem] where ResContext = 2"+
-// "and [Enabled] = 1 and RecStatus = 0   ", (err, rows, fields) => {
-//     if (!err) {
-//       res.send(rows);
-//     } else {
-//       console.log(err);
-//     }
-//   });
-// });
-
 // Get infos of one collaborator
 Router.get("/infos/:id", (req, res) => {
   console.log("sono quaaaaaaaa");

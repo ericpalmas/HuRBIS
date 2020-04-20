@@ -361,8 +361,10 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
 import { connect } from "react-redux";
-import { fetchCoursesInformations } from "../actions/coursesActions";
+import { fetchCollaboratorsData } from "../actions/collaboratosInfosActions";
 import { FaTrashAlt } from "react-icons/fa";
+import axios from "axios";
+import { fetchCoursesInformations } from "../actions/coursesActions";
 import PropTypes from "prop-types";
 
 import {
@@ -381,55 +383,55 @@ import {
 
 var tableData = [
   {
-    _id: "5de8d7",
-    name: "Oneill Chang",
-    company: "TINGLES",
-    email: "oneillchang@tingles.com",
-    phone: "+1 (826) 583-3110",
+    Qual: "5de8d7",
+    Surname: "Oneill Chang",
+    Name: "TINGLES",
+    annoNascita: "oneillchang@tingles.com",
   },
   {
-    _id: "5de8d5",
-    name: "Rogers Davis",
-    company: "ENTALITY",
-    email: "rogersdavis@entality.com",
-    phone: "+1 (918) 571-2672",
+    Qual: "5de8d5",
+    Surname: "Rogers Davis",
+    Name: "ENTALITY",
+    annoNascita: "rogersdavis@entality.com",
   },
   {
-    _id: "8d05243",
-    name: "Barlow Alford",
-    company: "BRISTO",
-    email: "barlowalford@bristo.com",
-    phone: "+1 (855) 527-2874",
+    Qual: "8d05243",
+    Surname: "Barlow Alford",
+    Name: "BRISTO",
+    annoNascita: "barlowalford@bristo.com",
   },
   {
-    _id: "6f5b6",
-    name: "Hopper Cote",
-    company: "BEZAL",
-    email: "hoppercote@bezal.com",
-    phone: "+1 (968) 565-2872",
+    Qual: "Qualifica",
+    Surname: "Surname",
+    Name: "Name",
+    annoNascita: "anno nascita",
   },
 ];
 
 var tableHeader = {
-  Qual: "ID",
-  Surname: "Name",
-  Name: "Company",
-  email: "Email",
-  phone: "Phone",
+  Qual: "Qualifica",
+  Surname: "Surname",
+  Name: "Name",
+  annoNascita: "anno nascita",
 };
 
 class Summary extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       data: [],
       indexesToHide: [],
+      collaborators: [],
+      courses: [],
     };
   }
 
   componentDidMount() {
-    this.setState({
-      data: tableData,
+    axios.get(`/courses`).then((res) => {
+      this.setState({ courses: res.data });
+    });
+    axios.get(`/collaboratorsInfos/collaborators`).then((res) => {
+      this.setState({ data: res.data });
     });
   }
 
@@ -439,11 +441,47 @@ class Summary extends Component {
     });
   }
 
+  updateHeader() {
+    for (let i = 0; i < this.state.courses.length; i++) {
+      tableHeader["corso " + this.state.courses[i].id] = this.state.courses[
+        i
+      ].name;
+    }
+  }
+  updateTableItems() {
+    var corsi = [];
+    this.state.data.forEach(function (v) {
+      corsi.push(v.courses);
+      delete v.courses;
+    });
+
+    console.log(corsi);
+    console.log(tableHeader);
+
+    Object.keys(tableHeader).map(function (key) {
+      console.log(key);
+    });
+
+    // this.state.data.forEach(function (v) {
+    //   v["corso "] = "ciao";
+    // });
+
+    console.log(this.state.data);
+
+    // this.state.data[0] = "ciao";
+  }
+
   render() {
+    console.log("infos");
+    console.log(this.state.collaborators);
+    console.log(this.state.data);
+    this.updateHeader();
+    this.updateTableItems();
+
     let header = Object.entries(tableHeader).map((headerData, index) => {
       if (!this.state.indexesToHide.includes(index))
         return (
-          <td>
+          <td id="tableItem">
             {" "}
             <div class="float-left">
               {headerData[1]} <br />{" "}
@@ -465,7 +503,7 @@ class Summary extends Component {
     return (
       <Table id="summaryTable" bordered striped>
         <thead>
-          <tr id="collaboratorTableItem">{header}</tr>
+          <tr>{header}</tr>
         </thead>
         <tbody>
           {this.state.data.map((item, index) => {

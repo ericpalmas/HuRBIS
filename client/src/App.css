@@ -110,5 +110,12 @@
 
 #summaryTable {
   margin: 4rem 2rem 2rem 4rem;
-  width: 90rem;
+}
+
+#tableItem {
+  min-width: 15rem;
+}
+
+#exampleSearch {
+  margin-left: 4rem;
 }

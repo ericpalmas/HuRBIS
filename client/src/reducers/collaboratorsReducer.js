@@ -1,5 +1,5 @@
 import {
-  FETCH_COLLABORATORS_INFOS,
+  //FETCH_COLLABORATORS_INFOS,
   FETCH_COLLABORATOR_INFOS,
   FETCH_COLLABORATORS,
   // FETCH_SINGLE_COLLABORATOR,
@@ -29,11 +29,11 @@ export default function (state = initialState, action) {
     //       (collaborator) => collaborator._id !== action.payload
     //     ),
     //   };
-    case FETCH_COLLABORATORS_INFOS:
-      return {
-        ...state,
-        collaboratorsInfos: action.payload,
-      };
+    // case FETCH_COLLABORATORS_INFOS:
+    //   return {
+    //     ...state,
+    //     collaboratorsInfos: action.payload,
+    //   };
     case ADD_COLLABORATOR:
       return {
         ...state,

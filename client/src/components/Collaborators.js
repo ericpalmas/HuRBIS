@@ -22,6 +22,7 @@ class Collaborators extends Component {
     super(props);
 
     this.state = {
+      search: "",
       courses: [],
       corsiSvolti: [],
       corsiDaSvolgere: [],
@@ -56,17 +57,31 @@ class Collaborators extends Component {
     console.log(this.state.remove);
   };
 
+  updateSearch(event) {
+    this.setState({
+      search: event.target.value,
+    });
+  }
+
   render() {
     const collaboratorsInfos = this.props.collaboratorsInfos;
+    console.log(this.state.search);
+    // let collaboratorFiltered = this.props.collaboratorsInfos;
     console.log("infos");
     console.log(collaboratorsInfos);
+
+    // if (this.state.search !== "")
+    //   this.filterByValue(collaboratorsInfos, this.state.search);
 
     return (
       <div>
         <Form inline>
           <FormGroup>
-            <Button id="searchButton">Cerca</Button>
+            {/* <Button id="searchButton">Cerca</Button> */}
             <Input
+              // className="ml-4"
+              value={this.state.search}
+              onChange={this.updateSearch.bind(this)}
               type="search"
               name="search"
               id="exampleSearch"
@@ -89,6 +104,15 @@ class Collaborators extends Component {
             </ButtonDropdown>
           </FormGroup>
         </Form>
+        {/* <div>
+          {collaboratorsInfos
+            .filter((collaborator) =>
+              collaborator.name.includes(this.state.search)
+            )
+            .map((filteredPerson) => (
+              <li>{filteredPerson.name}</li>
+            ))}
+        </div> */}
 
         <Table hover id="collaboratorsTable">
           <thead>
@@ -101,48 +125,73 @@ class Collaborators extends Component {
             </tr>
           </thead>
           <tbody>
-            {collaboratorsInfos.map(
-              ({
-                id,
-                name,
-                surname,
-                qualification,
-                necessary_courses,
-                extra_courses,
-                yearOfBirth,
-              }) => (
-                <tr>
-                  <td id="tableColumnInfo">
-                    <Link to={"/collaborators/" + id}>
-                      {name} {surname}
-                    </Link>
-                  </td>
-                  <td id="tableColumnBirthDate">
-                    <Link to={"/collaborators/" + id}>
-                      {!!yearOfBirth ? yearOfBirth : "      //"}
-                    </Link>
-                  </td>
-                  <td id="tableColumnQualification">
-                    <Link to={"/collaborators/" + id}>{qualification}</Link>
-                  </td>
-                  <td id="tableColumnCourses">
-                    <Link to={"/collaborators/" + id}>{extra_courses}</Link>
-                  </td>
-                  <td>
-                    {this.state.remove ? (
-                      <RemoveCollaboratorModal
-                        collaboratorId={id}
-                        collaboratorName={name}
-                        collaboratorSurname={surname}
-                        className="remove-btn ml-1 mr-1 mt-1"
-                        color="danger"
-                        size="sm"
-                      ></RemoveCollaboratorModal>
-                    ) : null}
-                  </td>
-                </tr>
+            {collaboratorsInfos
+              .filter(
+                (collaborator) =>
+                  (collaborator.name !== null &&
+                    collaborator.name
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase())) ||
+                  (collaborator.surname !== null &&
+                    collaborator.surname
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase())) ||
+                  (collaborator.qualification !== null &&
+                    collaborator.qualification
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase())) ||
+                  (collaborator.yearOfBirth !== null &&
+                    collaborator.yearOfBirth
+                      .toString()
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase())) ||
+                  (collaborator.courses !== null &&
+                    collaborator.courses
+                      .toString()
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase()))
               )
-            )}
+              .map(
+                ({
+                  id,
+                  name,
+                  surname,
+                  qualification,
+                  courses,
+                  yearOfBirth,
+                }) => (
+                  <tr>
+                    <td id="tableColumnInfo">
+                      <Link to={"/collaborators/" + id}>
+                        {name} {surname}
+                      </Link>
+                    </td>
+                    <td id="tableColumnBirthDate">
+                      <Link to={"/collaborators/" + id}>
+                        {!!yearOfBirth ? yearOfBirth : "      //"}
+                      </Link>
+                    </td>
+                    <td id="tableColumnQualification">
+                      <Link to={"/collaborators/" + id}>{qualification}</Link>
+                    </td>
+                    <td id="tableColumnCourses">
+                      <Link to={"/collaborators/" + id}>{courses}</Link>
+                    </td>
+                    <td>
+                      {this.state.remove ? (
+                        <RemoveCollaboratorModal
+                          collaboratorId={id}
+                          collaboratorName={name}
+                          collaboratorSurname={surname}
+                          className="remove-btn ml-1 mr-1 mt-1"
+                          color="danger"
+                          size="sm"
+                        ></RemoveCollaboratorModal>
+                      ) : null}
+                    </td>
+                  </tr>
+                )
+              )}
           </tbody>
         </Table>
         <div id="addCourseButton">
