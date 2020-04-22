@@ -23,7 +23,6 @@ import ArrayFormData from "../ArrayFormData";
 class AddQualificationModal extends Component {
   state = {
     modal: false,
-    msg: null,
     listOfCourses: [],
     coursesNumber: 0,
   };
@@ -49,7 +48,6 @@ class AddQualificationModal extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    this.toggle();
   };
 
   render() {
@@ -65,9 +63,6 @@ class AddQualificationModal extends Component {
             Aggiungi nuova qualifica{" "}
           </ModalHeader>
           <ModalBody>
-            {this.state.msg ? (
-              <Alert color="danger">{this.state.msg}</Alert>
-            ) : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
                 <ArrayFormData

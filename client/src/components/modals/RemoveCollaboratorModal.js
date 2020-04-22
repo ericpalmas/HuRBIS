@@ -6,9 +6,6 @@ import { deleteCollaborator } from "../../actions/collaboratosActions";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 class RemoveCollaboratorModal extends Component {
-  //   static propTypes = {
-  //     courses: PropTypes.object.isRequired,
-  //   };
   constructor(props) {
     super(props);
 
@@ -26,6 +23,7 @@ class RemoveCollaboratorModal extends Component {
   onDeleteClick = (id) => {
     this.props.deleteCollaborator(id);
     this.toggle();
+    window.location.reload();
   };
 
   render() {

@@ -13,6 +13,17 @@ Router.get("/", (req, res) => {
   });
 });
 
+// // // Get all courses
+// Router.get("/inCorso", (req, res) => {
+//   mysqlConnection.query("SELECT * FROM courses;", (err, rows, fields) => {
+//     if (!err) {
+//       res.send(rows);
+//     } else {
+//       console.log(err);
+//     }
+//   });
+// });
+
 // //aggiungi un corso ad un collaboratore
 Router.post("/addCourse", (req, res) => {
   const newCourse = req.body;

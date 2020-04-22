@@ -30,6 +30,7 @@ class RemoveCourseModalDue extends Component {
     }
 
     this.toggle();
+    window.location.reload();
   };
 
   render() {

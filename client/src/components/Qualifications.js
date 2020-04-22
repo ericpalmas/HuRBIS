@@ -1,6 +1,5 @@
 import React, { Component, Fragment, useState } from "react";
 import {
-  Button,
   Form,
   FormGroup,
   Input,
@@ -44,18 +43,26 @@ class Qualifications extends Component {
     });
   }
 
+  handleChange = (event) => {
+    this.setState({ sort: event.target.value });
+  };
+
   render() {
     console.log("Qualifiche");
     const qualifications = this.props.qualificationsInfos;
+
+    const sorted = qualifications.sort((a, b) => {
+      if (this.state.sort === "asc") return 1 * a.name.localeCompare(b.name);
+      else if (this.state.sort === "desc")
+        return -1 * a.name.localeCompare(b.name);
+    });
     console.log(qualifications);
     console.log(this.state.search);
     return (
       <div>
         <Form inline>
           <FormGroup>
-            {/* <Button id="searchButton">Cerca</Button> */}
             <Input
-              // className="ml-4"
               value={this.state.search}
               onChange={this.updateSearch.bind(this)}
               type="search"
@@ -71,25 +78,23 @@ class Qualifications extends Component {
             >
               <DropdownToggle caret> Ordina per </DropdownToggle>
               <DropdownMenu>
-                <DropdownItem> Scadenza licenza: crescente </DropdownItem>
+                <DropdownItem
+                  value="asc"
+                  onClick={this.handleChange.bind(this)}
+                >
+                  Ordine alfabetico: crescente
+                </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem> Scadenza licenza: decrescente</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem> Ordine alfabetico </DropdownItem>
+                <DropdownItem
+                  value="desc"
+                  onClick={this.handleChange.bind(this)}
+                >
+                  Ordine alfabetico: decrescente
+                </DropdownItem>
               </DropdownMenu>
             </ButtonDropdown>
           </FormGroup>
         </Form>
-
-        {/* <div>
-          {collaboratorsInfos
-            .filter((collaborator) =>
-              collaborator.name.includes(this.state.search)
-            )
-            .map((filteredPerson) => (
-              <li>{filteredPerson.name}</li>
-            ))}
-        </div> */}
 
         <Table hover id="collaboratorsTable">
           <thead>
@@ -100,7 +105,8 @@ class Qualifications extends Component {
             </tr>
           </thead>
           <tbody>
-            {qualifications
+            {sorted
+
               .filter(
                 (qualification) =>
                   (qualification.name !== null &&
@@ -132,10 +138,7 @@ class Qualifications extends Component {
           </tbody>
         </Table>
         <div id="addCourseButton">
-          <AddQualificationModal
-            // collaborator_id={this.props.match.params.id}
-            className="ml-5 mt-5 mb-5 mr-2 float-left"
-          />
+          <AddQualificationModal className="ml-5 mt-5 mb-5 mr-2 float-left" />
         </div>
         <RemoveQualificationModal
           className="ml-5 mt-5 mb-5 mr-2"

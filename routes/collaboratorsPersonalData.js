@@ -6,7 +6,7 @@ const risnovaConnection = require("../config/risnovaConnection");
 // Get all collaborators infos
 Router.get("/", (req, res) => {
   mysqlConnection.query(
-    `SELECT collaborator.id, collaborator.name, collaborator.surname, collaborator.yearOfBirth,
+    `SELECT collaborator.id, collaborator.name, collaborator.surname, collaborator.yearOfBirth, collaborator.removed, min(expiration_date) as min_expiration_date,
     group_concat(distinct qualification.name separator ', ') AS qualification,
     group_concat(distinct courses.name separator ', ') AS courses
     from collaborator
@@ -46,7 +46,7 @@ Router.get("/allDates", (req, res) => {
 
 Router.get("/collaborators", (req, res) => {
   mysqlConnection.query(
-    `SELECT qualification.name as qualName, collaborator.name, collaborator.surname, collaborator.yearOfBirth,
+    `SELECT qualification.name as qualName, collaborator.name, collaborator.surname, collaborator.yearOfBirth, collaborator.removed,
     group_concat(distinct courses.id separator ', ') AS courses
     from collaborator
     LEFT OUTER JOIN collaborator_has_courses ON collaborator_has_courses.collaborator_id = collaborator.id

@@ -8,6 +8,7 @@ const CoursesInfosRoutes = require("./routes/coursesIinformations");
 const collaboratorHistoryCoursesRoutes = require("./routes/historyCourses");
 const necessaryCoursesRoutes = require("./routes/necessaryCourses");
 const datesRoutes = require("./routes/calendarDates");
+const collaboratorCoursesRoutes = require("./routes/collaboratorCourses");
 const app = express();
 
 app.use(bodyparser.json());
@@ -20,5 +21,6 @@ app.use("/coursesInformations", CoursesInfosRoutes);
 app.use("/coursesHistory", collaboratorHistoryCoursesRoutes);
 app.use("/necessaryCourses", necessaryCoursesRoutes);
 app.use("/dates", datesRoutes);
+app.use("/collaboratorCourses", collaboratorCoursesRoutes);
 
 app.listen(5000, () => `Server running on port 5000`);

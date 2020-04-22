@@ -45,7 +45,7 @@ Router.post("/", (req, res) => {
 // Delete a collaborator from the dabase
 Router.delete("/:id", (req, res) => {
   mysqlConnection.query(
-    `DELETE FROM collaborator WHERE id = ${req.params.id}`,
+    `UPDATE collaborator SET removed='1' WHERE id = ${req.params.id}`,
     (err, rows, fields) => {
       if (!err) {
         res.send(rows);
@@ -58,8 +58,6 @@ Router.delete("/:id", (req, res) => {
 
 // Get infos of one collaborator
 Router.get("/infos/:id", (req, res) => {
-  console.log("sono quaaaaaaaa");
-  console.log(req.params.id);
   mysqlConnection.query(
     `SELECT collaborator.id, collaborator.name, collaborator.surname,
     group_concat(distinct qualification.name separator ',') AS qualification
@@ -71,7 +69,6 @@ Router.get("/infos/:id", (req, res) => {
     (err, rows, fields) => {
       if (!err) {
         res.send(rows);
-        console.log(rows);
       } else {
         console.log(err);
       }

@@ -367,19 +367,7 @@ import axios from "axios";
 import { fetchCoursesInformations } from "../actions/coursesActions";
 import PropTypes from "prop-types";
 
-import {
-  CustomInput,
-  Alert,
-  Button,
-  Table,
-  ModalHeader,
-  ModalBody,
-  FormGroup,
-  Label,
-  Modal,
-  Form,
-  Input,
-} from "reactstrap";
+import { Button, Table } from "reactstrap";
 
 var tableData = [
   {

@@ -34,7 +34,12 @@ class AddCollaboratorModal extends Component {
     name: "",
     surname: "",
     yearOfBirth: "",
-    msg: null,
+    insertName: false,
+    insertSurname: false,
+    insertYearOfBirth: false,
+    msg1: "Inserire il nome",
+    msg2: "Inserire il cognome",
+    msg3: "Inserire la data di nascita",
   };
 
   toggle = () => {
@@ -72,10 +77,37 @@ class AddCollaboratorModal extends Component {
 
     console.log("nuovo collaboratore");
     console.log(newCollaborator);
-    this.props.addCollaborator(newCollaborator);
 
-    //Close modal
-    this.toggle();
+    if (newCollaborator.name == "") {
+      this.setState({
+        insertName: true,
+      });
+    } else {
+      this.setState({
+        insertName: false,
+      });
+      if (newCollaborator.surname == "") {
+        this.setState({
+          insertSurname: true,
+        });
+      } else {
+        this.setState({
+          insertSurname: false,
+        });
+        if (newCollaborator.yearOfBirth == "") {
+          this.setState({
+            insertYearOfBirth: true,
+          });
+        } else {
+          this.setState({
+            insertYearOfBirth: false,
+          });
+          this.props.addCollaborator(newCollaborator);
+          this.toggle();
+          window.location.reload();
+        }
+      }
+    }
   };
 
   render() {
@@ -91,8 +123,14 @@ class AddCollaboratorModal extends Component {
             Aggiungi nuovo collaboratore{" "}
           </ModalHeader>
           <ModalBody>
-            {this.state.msg ? (
-              <Alert color="danger">{this.state.msg}</Alert>
+            {this.state.insertName ? (
+              <Alert color="danger">{this.state.msg1}</Alert>
+            ) : null}
+            {this.state.insertSurname ? (
+              <Alert color="danger">{this.state.msg2}</Alert>
+            ) : null}
+            {this.state.insertYearOfBirth ? (
+              <Alert color="danger">{this.state.msg3}</Alert>
             ) : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>

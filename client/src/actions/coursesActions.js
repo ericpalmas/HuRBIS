@@ -14,12 +14,23 @@ import {
   FETCH_COURSES_OF_COLLABORATOR,
   FETCH_COLLABORATOR_INFOS,
   FETCH_COURSES_DATES,
+  FETCH_NECESSARY_COURSES_OF_QUALIFICATION,
+  ADD_COURSES_TO_COLLABORATOR_FROM_QUALIFICATION,
 } from "./types";
 
 export const addCourse = (course) => (dispatch) => {
   axios.post("/courses/addCourse", course).then((res) =>
     dispatch({
       type: ADD_COURSE,
+      payload: res.data,
+    })
+  );
+};
+
+export const addCourseToHistory = (course) => (dispatch) => {
+  axios.post("/coursesHistory/addCourse", course).then((res) =>
+    dispatch({
+      type: ADD_COURSE_TO_HISTORY,
       payload: res.data,
     })
   );
@@ -94,6 +105,15 @@ export const fetchDates = () => (dispatch) => {
   axios.get("/dates").then((res) =>
     dispatch({
       type: FETCH_COURSES_DATES,
+      payload: res.data,
+    })
+  );
+};
+
+export const addCoursesToCollaborator = (item) => (dispatch) => {
+  axios.post("/collaboratorCourses", item).then((res) =>
+    dispatch({
+      type: ADD_COURSES_TO_COLLABORATOR_FROM_QUALIFICATION,
       payload: res.data,
     })
   );

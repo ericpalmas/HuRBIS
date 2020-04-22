@@ -105,7 +105,7 @@
   width: 10rem;
 }
 #tableColumnCourses {
-  width: 20rem;
+  min-width: 4rem;
 }
 
 #summaryTable {

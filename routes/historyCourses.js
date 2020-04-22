@@ -16,61 +16,61 @@ Router.post("/addCourse", (req, res) => {
   });
 });
 
-Router.delete("/:id", (req, res) => {
-  mysqlConnection.query(
-    `DELETE FROM history_courses WHERE id = ${req.params.id}`,
-    (err, rows, fields) => {
-      if (!err) {
-        res.send(rows);
-      } else {
-        console.log(err);
-      }
-    }
-  );
-});
+// Router.delete("/:id", (req, res) => {
+//   mysqlConnection.query(
+//     `DELETE FROM history_courses WHERE id = ${req.params.id}`,
+//     (err, rows, fields) => {
+//       if (!err) {
+//         res.send(rows);
+//       } else {
+//         console.log(err);
+//       }
+//     }
+//   );
+// });
 
-// modifica corso storico
-Router.post("/modifyHistoryCourse/:id", (req, res) => {
-  const newCourse = req.body;
-  console.log(newCourse);
+// // modifica corso storico
+// Router.post("/modifyHistoryCourse/:id", (req, res) => {
+//   const newCourse = req.body;
+//   console.log(newCourse);
 
-  const sql = `UPDATE history_courses SET name='${newCourse.name}', certification_date = '${newCourse.certificationDate}', expiration_date = '${newCourse.expirationDate}' WHERE id ='${req.params.id}'`;
+//   const sql = `UPDATE history_courses SET name='${newCourse.name}', certification_date = '${newCourse.certificationDate}', expiration_date = '${newCourse.expirationDate}' WHERE id ='${req.params.id}'`;
 
-  console.log(sql);
-  mysqlConnection.query(sql, (err, result) => {
-    if (err) throw err;
-    console.log(result);
-  });
-});
+//   console.log(sql);
+//   mysqlConnection.query(sql, (err, result) => {
+//     if (err) throw err;
+//     console.log(result);
+//   });
+// });
 
-// modifica da storico a corrente
-Router.post("/modifyFromHistoryToCurrent/:id", (req, res) => {
-  const newCourse = req.body;
-  console.log(newCourse);
+// // modifica da storico a corrente
+// Router.post("/modifyFromHistoryToCurrent/:id", (req, res) => {
+//   const newCourse = req.body;
+//   console.log(newCourse);
 
-  const sql = `insert into extra_courses (name, certification_date, expiration_date, collaborator_id)
-  VALUES ('${newCourse.name}', '${newCourse.certificationDate}', '${newCourse.expirationDate}', '${newCourse.collaborator_id}');
-  DELETE FROM history_courses WHERE id = '${req.params.id}';`;
+//   const sql = `insert into extra_courses (name, certification_date, expiration_date, collaborator_id)
+//   VALUES ('${newCourse.name}', '${newCourse.certificationDate}', '${newCourse.expirationDate}', '${newCourse.collaborator_id}');
+//   DELETE FROM history_courses WHERE id = '${req.params.id}';`;
 
-  mysqlConnection.query(sql, (err, result) => {
-    if (err) throw err;
-    console.log(result);
-  });
-});
+//   mysqlConnection.query(sql, (err, result) => {
+//     if (err) throw err;
+//     console.log(result);
+//   });
+// });
 
-// // modifica da storico a necessario
-Router.post("/modifyFromHistoryToNecessary/:id", (req, res) => {
-  const newCourse = req.body;
-  console.log(newCourse);
+// // // modifica da storico a necessario
+// Router.post("/modifyFromHistoryToNecessary/:id", (req, res) => {
+//   const newCourse = req.body;
+//   console.log(newCourse);
 
-  const sql = `insert into necessary_courses (name, certification_date, expiration_date, qualification_id)
-  VALUES ('${newCourse.name}', '${newCourse.certificationDate}', '${newCourse.expirationDate}', (select id from qualification where collaborator_id = '${newCourse.collaborator_id}'));
-  DELETE FROM history_courses WHERE id = '${req.params.id}' ;`;
+//   const sql = `insert into necessary_courses (name, certification_date, expiration_date, qualification_id)
+//   VALUES ('${newCourse.name}', '${newCourse.certificationDate}', '${newCourse.expirationDate}', (select id from qualification where collaborator_id = '${newCourse.collaborator_id}'));
+//   DELETE FROM history_courses WHERE id = '${req.params.id}' ;`;
 
-  mysqlConnection.query(sql, (err, result) => {
-    if (err) throw err;
-    console.log(result);
-  });
-});
+//   mysqlConnection.query(sql, (err, result) => {
+//     if (err) throw err;
+//     console.log(result);
+//   });
+// });
 
 module.exports = Router;

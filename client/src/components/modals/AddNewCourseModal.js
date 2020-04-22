@@ -20,7 +20,8 @@ class AddNewCourseModal extends Component {
     name: "",
     surname: "",
     yearOfBirth: "",
-    msg: null,
+    msg: "Inserire il nome del corso",
+    insertName: false,
   };
 
   toggle = () => {
@@ -45,9 +46,18 @@ class AddNewCourseModal extends Component {
     console.log("nuovo corso");
     console.log(newCourse);
 
-    this.props.addNewCourse(newCourse);
-
-    this.toggle();
+    if (newCourse.name == "") {
+      this.setState({
+        insertName: true,
+      });
+    } else {
+      this.setState({
+        insertName: false,
+      });
+      this.props.addNewCourse(newCourse);
+      this.toggle();
+      window.location.reload();
+    }
   };
 
   render() {
@@ -61,7 +71,7 @@ class AddNewCourseModal extends Component {
           <ModalHeader toggle={this.toggle}> Aggiungi nuovo corso </ModalHeader>
           <ModalBody>
             {/* abilitare alerte quando premendo il bottone aggiungi ho il campo vuoto o un collaboratore con quel nome esiste già */}
-            {this.state.msg ? (
+            {this.state.insertName ? (
               <Alert color="danger">{this.state.msg}</Alert>
             ) : null}
             <Form onSubmit={this.onSubmit}>

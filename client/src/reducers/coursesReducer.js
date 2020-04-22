@@ -19,6 +19,8 @@ import {
   ADD_NEW_COURSE,
   DELETE_COURSE_FROM_DATABASE,
   FETCH_COURSES_DATES,
+  FETCH_NECESSARY_COURSES_OF_QUALIFICATION,
+  ADD_COURSES_TO_COLLABORATOR_FROM_QUALIFICATION,
 
   /////////////////
   FETCH_COLLABORATOR_INFOS,
@@ -42,7 +44,8 @@ const initialState = {
   newCourses: [],
   coursesRemoved: [],
   dates: [],
-
+  necessaryCoursesOfQualification: [],
+  coursesAddedFromQualification: [],
   coursesOfCollaborator: [],
 };
 
@@ -186,6 +189,20 @@ export default function (state = initialState, action) {
       return {
         ...state,
         dates: action.payload,
+      };
+    case FETCH_NECESSARY_COURSES_OF_QUALIFICATION:
+      console.log("sono nel reduceeeeeeeeeeeeeeeeeeeeer");
+      return {
+        ...state,
+        necessaryCoursesOfQualification: action.payload,
+      };
+    case ADD_COURSES_TO_COLLABORATOR_FROM_QUALIFICATION:
+      return {
+        ...state,
+        coursesAddedFromQualification: [
+          action.payload,
+          ...state.coursesAddedFromQualification,
+        ],
       };
     default:
       return state;

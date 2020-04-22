@@ -22,6 +22,7 @@ class Collaborators extends Component {
     super(props);
 
     this.state = {
+      sort: "",
       search: "",
       courses: [],
       corsiSvolti: [],
@@ -37,12 +38,6 @@ class Collaborators extends Component {
   componentWillMount() {
     this.props.fetchCollaboratorsInfos();
   }
-
-  initArray = (array) => {
-    for (let i = 0; i < array.size; i++) {
-      array[i] = "";
-    }
-  };
 
   toggle = () => {
     this.setState({
@@ -63,23 +58,28 @@ class Collaborators extends Component {
     });
   }
 
+  handleChange = (event) => {
+    this.setState({ sort: event.target.value });
+  };
+
   render() {
     const collaboratorsInfos = this.props.collaboratorsInfos;
-    console.log(this.state.search);
-    // let collaboratorFiltered = this.props.collaboratorsInfos;
-    console.log("infos");
-    console.log(collaboratorsInfos);
 
-    // if (this.state.search !== "")
-    //   this.filterByValue(collaboratorsInfos, this.state.search);
+    const sorted = collaboratorsInfos.sort((a, b) => {
+      if (this.state.sort === "asc") return 1 * a.name.localeCompare(b.name);
+      else if (this.state.sort === "desc")
+        return -1 * a.name.localeCompare(b.name);
+      else if (this.state.sort === "ascDate")
+        return 1 * a.name.localeCompare(b.min_expiration_date);
+      else if (this.state.sort === "descDate")
+        return -1 * a.name.localeCompare(b.min_expiration_date);
+    });
 
     return (
       <div>
         <Form inline>
           <FormGroup>
-            {/* <Button id="searchButton">Cerca</Button> */}
             <Input
-              // className="ml-4"
               value={this.state.search}
               onChange={this.updateSearch.bind(this)}
               type="search"
@@ -95,24 +95,39 @@ class Collaborators extends Component {
             >
               <DropdownToggle caret> Ordina per </DropdownToggle>
               <DropdownMenu>
-                <DropdownItem> Scadenza licenza: crescente </DropdownItem>
+                <DropdownItem
+                  value="asc"
+                  onClick={this.handleChange.bind(this)}
+                >
+                  Ordine alfabetico: crescente
+                </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem> Scadenza licenza: decrescente</DropdownItem>
+                <DropdownItem
+                  value="desc"
+                  onClick={this.handleChange.bind(this)}
+                >
+                  Ordine alfabetico: decrescente
+                </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem> Ordine alfabetico </DropdownItem>
+                <DropdownItem
+                  value="ascDate"
+                  onClick={this.handleChange.bind(this)}
+                >
+                  {" "}
+                  Ordine scadenza: ascendente{" "}
+                </DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem
+                  value="descDate"
+                  onClick={this.handleChange.bind(this)}
+                >
+                  {" "}
+                  Ordine scadenza: decrescente{" "}
+                </DropdownItem>
               </DropdownMenu>
             </ButtonDropdown>
           </FormGroup>
         </Form>
-        {/* <div>
-          {collaboratorsInfos
-            .filter((collaborator) =>
-              collaborator.name.includes(this.state.search)
-            )
-            .map((filteredPerson) => (
-              <li>{filteredPerson.name}</li>
-            ))}
-        </div> */}
 
         <Table hover id="collaboratorsTable">
           <thead>
@@ -125,7 +140,7 @@ class Collaborators extends Component {
             </tr>
           </thead>
           <tbody>
-            {collaboratorsInfos
+            {sorted
               .filter(
                 (collaborator) =>
                   (collaborator.name !== null &&
@@ -151,6 +166,7 @@ class Collaborators extends Component {
                       .toLowerCase()
                       .includes(this.state.search.toLowerCase()))
               )
+              .filter((collaborator) => collaborator.removed == "0")
               .map(
                 ({
                   id,
@@ -159,6 +175,7 @@ class Collaborators extends Component {
                   qualification,
                   courses,
                   yearOfBirth,
+                  removed,
                 }) => (
                   <tr>
                     <td id="tableColumnInfo">

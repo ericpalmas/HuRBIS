@@ -52,17 +52,29 @@ class Courses extends Component {
     });
   }
 
+  handleChange = (event) => {
+    this.setState({ sort: event.target.value });
+  };
+
   render() {
     const courses = this.props.coursesInfos;
+
+    const sorted = courses.sort((a, b) => {
+      if (this.state.sort === "asc") return 1 * a.name.localeCompare(b.name);
+      else if (this.state.sort === "desc")
+        return -1 * a.name.localeCompare(b.name);
+      else if (this.state.sort === "ascCost")
+        return 1 * a.name.localeCompare(b.cost);
+      else if (this.state.sort === "descCost")
+        return -1 * a.name.localeCompare(b.cost);
+    });
     console.log(courses);
     console.log(this.state.search);
     return (
       <div>
         <Form inline>
           <FormGroup>
-            {/* <Button id="searchButton">Cerca</Button> */}
             <Input
-              // className="ml-6"
               value={this.state.search}
               onChange={this.updateSearch.bind(this)}
               type="search"
@@ -78,11 +90,35 @@ class Courses extends Component {
             >
               <DropdownToggle caret> Ordina per </DropdownToggle>
               <DropdownMenu>
-                <DropdownItem> Scadenza licenza: crescente </DropdownItem>
+                <DropdownItem
+                  value="asc"
+                  onClick={this.handleChange.bind(this)}
+                >
+                  Ordine alfabetico: crescente
+                </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem> Scadenza licenza: decrescente</DropdownItem>
+                <DropdownItem
+                  value="desc"
+                  onClick={this.handleChange.bind(this)}
+                >
+                  Ordine alfabetico: decrescente
+                </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem> Ordine alfabetico </DropdownItem>
+                <DropdownItem
+                  value="ascCost"
+                  onClick={this.handleChange.bind(this)}
+                >
+                  {" "}
+                  Ordine di costo: ascendente{" "}
+                </DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem
+                  value="descCost"
+                  onClick={this.handleChange.bind(this)}
+                >
+                  {" "}
+                  Ordine di costo: decrescente{" "}
+                </DropdownItem>
               </DropdownMenu>
             </ButtonDropdown>
           </FormGroup>
@@ -99,7 +135,7 @@ class Courses extends Component {
             </tr>
           </thead>
           <tbody>
-            {courses
+            {sorted
               .filter(
                 (course) =>
                   (course.name !== null &&
@@ -151,10 +187,7 @@ class Courses extends Component {
         </Table>
 
         <div id="addCourseButton">
-          <AddNewCourseModal
-            // collaborator_id={this.props.match.params.id}
-            className="ml-5 mt-5 mb-5 mr-2 float-left"
-          />
+          <AddNewCourseModal className="ml-5 mt-5 mb-5 mr-2 float-left" />
         </div>
         <Button
           className="ml-5 mt-5 mb-5 mr-2"

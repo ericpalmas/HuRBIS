@@ -79,6 +79,7 @@ class EditCourseModal extends Component {
 
     //Close modal
     this.toggle();
+    window.location.reload();
   };
 
   render() {

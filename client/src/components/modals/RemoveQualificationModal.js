@@ -48,6 +48,7 @@ class RemoveQualificationModal extends Component {
     this.props.removeQualification(this.state.listOfId);
 
     this.toggle();
+    window.location.reload();
   };
 
   filterCompleted = (checked, name) => {

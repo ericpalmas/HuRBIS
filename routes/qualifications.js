@@ -117,18 +117,18 @@ Router.post("/removeQualificationsAndCourses", (req, res) => {
   });
 });
 
-Router.get("collaboratorId/:id", (req, res) => {
-  mysqlConnection.query(
-    `select qualification.collaborator_id from qualification where qualification.id = ${req.params.id}`,
-    (err, rows, fields) => {
-      if (!err) {
-        res.send(rows);
-        console.log(rows);
-      } else {
-        console.log(err);
-      }
-    }
-  );
-});
+// Router.get("collaboratorId/:id", (req, res) => {
+//   mysqlConnection.query(
+//     `select qualification.collaborator_id from qualification where qualification.id = ${req.params.id}`,
+//     (err, rows, fields) => {
+//       if (!err) {
+//         res.send(rows);
+//         console.log(rows);
+//       } else {
+//         console.log(err);
+//       }
+//     }
+//   );
+// });
 
 module.exports = Router;
