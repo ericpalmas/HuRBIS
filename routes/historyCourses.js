@@ -8,12 +8,27 @@ Router.post("/addCourse", (req, res) => {
   console.log(newCourse);
   const sql =
     `INSERT INTO history_courses(name, certification_date, expiration_date, collaborator_id) VALUES` +
-    ` ( (select courses.name from courses where courses.id=${newCourse.course_id}), '${newCourse.certificationDate}', '${newCourse.expirationDate}', ${newCourse.collaborator_id})`;
+    ` ((select courses.name from courses where courses.id=${newCourse.course_id}), '${newCourse.certificationDate}', '${newCourse.expirationDate}', ${newCourse.collaborator_id})`;
 
   mysqlConnection.query(sql, newCourse, (err, result) => {
     if (err) throw err;
     console.log(result);
   });
+});
+
+// Get all courses
+Router.get("/:id", (req, res) => {
+  mysqlConnection.query(
+    `SELECT * FROM history_courses 
+    where history_courses.collaborator_id = ${req.params.id}`,
+    (err, rows, fields) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
+    }
+  );
 });
 
 // Router.delete("/:id", (req, res) => {

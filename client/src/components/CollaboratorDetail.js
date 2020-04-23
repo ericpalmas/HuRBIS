@@ -10,8 +10,93 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { fetchCoursesOfCollaborator } from "../actions/coursesActions";
 import { fetchCollaboratorInfos } from "../actions/collaboratosActions";
+import { addCourseToHistory } from "../actions/coursesActions";
 import CollaboratorDetailPDF from "./CollaboratorDetailPDF";
+import { deleteCourse } from "../actions/coursesActions";
+import { FiX, FiCheck, FiCircle } from "react-icons/fi";
+import { FaCheck, FaTimes } from "react-icons/fa";
+import { BsCircleFill, BsPersonFill } from "react-icons/bs";
+
+import {
+  AiFillCheckSquare,
+  AiFillCheckCircle,
+  AiFillExclamationCircle,
+  AiOutlineExclamationCircle,
+  AiFillInfoCircle,
+} from "react-icons/ai";
+
 import "jspdf-autotable";
+
+function checkDate(corso) {
+  if (corso.instructor) {
+    return (
+      <BsPersonFill
+        className="ml-1 mr-2 mt-1 float-left"
+        color="black"
+      ></BsPersonFill>
+    );
+  }
+  if (!corso.expiration_date) {
+    return (
+      <BsCircleFill
+        className="ml-1 mr-2 mt-1 float-left"
+        color="grey"
+      ></BsCircleFill>
+    );
+  }
+
+  var currentdate = new Date();
+  var now = Date.parse(
+    currentdate.getFullYear() +
+      "-" +
+      (currentdate.getMonth() + 1) +
+      "-" +
+      currentdate.getDate()
+  );
+  var str1 = corso.expiration_date.substr(0, 10);
+  var expiration_date = Date.parse(str1);
+
+  var str2 = corso.certification_date.substr(0, 10);
+  var certification_date = Date.parse(str2);
+
+  if (certification_date > now) {
+    return (
+      <BsCircleFill
+        className="ml-1 mr-2 mt-1 float-left"
+        color="grey"
+      ></BsCircleFill>
+    );
+  }
+
+  var curYear = currentdate.getFullYear();
+  var expYear = new Date(expiration_date).getFullYear();
+
+  var differenceBetweenDates = expYear - curYear;
+
+  if (expiration_date < now) {
+    return (
+      <AiFillCheckCircle
+        className="ml-1 mr-2 mt-1 float-left"
+        color="blue"
+      ></AiFillCheckCircle>
+    );
+  }
+  if (differenceBetweenDates < 1) {
+    return (
+      <BsCircleFill
+        className="ml-1 mr-2 mt-1 float-left border-black"
+        color="orange"
+      ></BsCircleFill>
+    );
+  } else {
+    return (
+      <BsCircleFill
+        className="ml-1 mr-2 mt-1 float-left"
+        color="green"
+      ></BsCircleFill>
+    );
+  }
+}
 
 const Corso = ({ corsi, elem, collaborator_id }) => (
   <Table>
@@ -25,7 +110,10 @@ const Corso = ({ corsi, elem, collaborator_id }) => (
     {corsi.map((corso) => (
       <tbody key={corso.id}>
         <tr id="collaboratorTableItem">
-          <td>{corso.name}</td>
+          <td>
+            {checkDate(corso)}
+            {corso.name}
+          </td>
           <td>
             {!!corso.certification_date
               ? corso.certification_date.substr(0, 10)
@@ -69,6 +157,8 @@ class CollaboratorDetail extends Component {
     super(props);
 
     this.state = {
+      qualificationCourses: [],
+      corsiPassati: [],
       remove: false,
       modify: false,
       collaborator: {},
@@ -86,6 +176,53 @@ class CollaboratorDetail extends Component {
       });
     axios.get(`/courses/${this.props.match.params.id}`).then((res) => {
       this.setState({ courses: res.data });
+    });
+    axios.get(`/coursesHistory/${this.props.match.params.id}`).then((res) => {
+      this.setState({ corsiPassati: res.data });
+    });
+    axios
+      .get(
+        `/necessaryCourses/qualificationCourses/${this.props.match.params.id}`
+      )
+      .then((res) => {
+        this.setState({ qualificationCourses: res.data });
+      });
+  }
+
+  componentDidMount() {
+    var currentdate = new Date();
+    var now = Date.parse(
+      currentdate.getFullYear() +
+        "-" +
+        (currentdate.getMonth() + 1) +
+        "-" +
+        currentdate.getDate()
+    );
+
+    var corsiObbligatori = [];
+    this.state.courses.forEach(function (v) {
+      corsiObbligatori.push(v.id);
+    });
+    this.state.courses.forEach(function (v) {
+      if (v.expiration_date !== null) {
+        var str1 = v.expiration_date.substr(0, 10);
+        var expiration_date = Date.parse(str1);
+      }
+
+      if (now > expiration_date) {
+        this.props.addCourseToHistory(v.id);
+        if (corsiObbligatori.includes(v.id)) {
+          v.certification_date = null;
+          v.expiration_date = null;
+        } else {
+          const removedCourse = {
+            course_id: v.id,
+            collaborator_id: this.props.match.params.id,
+          };
+
+          this.props.deleteCourse(removedCourse);
+        }
+      }
     });
   }
 
@@ -152,6 +289,10 @@ class CollaboratorDetail extends Component {
 
   render() {
     this.filterArray(this.state.courses);
+    console.log(this.state.corsiInCorso);
+    console.log(this.state.corsiDaSvolgere);
+    console.log(this.state.corsiPassati);
+
     return (
       <div className="ml-5">
         <Label className="ml-5 mr-5">
@@ -187,7 +328,8 @@ class CollaboratorDetail extends Component {
           <h6> Corsi svolti: </h6>
           <br></br>
           <Corso
-            corsi={this.state.corsiSvolti}
+            corsi={this.state.corsiPassati}
+            // corsi={this.state.corsiSvolti}
             elem={this}
             collaborator_id={this.props.match.params.id}
           />
@@ -196,6 +338,7 @@ class CollaboratorDetail extends Component {
         <div id="addCourseButton">
           <AddCourseModal
             id="removeModal"
+            // id={this.state.allCourses[0].id}
             collaborator_id={this.props.match.params.id}
             className="ml-5 mt-5 mb-5 mr-2 float-left"
           />
@@ -234,7 +377,7 @@ class CollaboratorDetail extends Component {
           collaborator={this.state.collaborator}
           corsiInCorso={this.state.corsiInCorso}
           corsiDaSvolgere={this.state.corsiDaSvolgere}
-          corsiSvolti={this.state.corsiSvolti}
+          corsiSvolti={this.state.corsiPassati}
         ></CollaboratorDetailPDF>
       </div>
     );
@@ -254,4 +397,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   fetchCollaboratorInfos,
   fetchCoursesOfCollaborator,
+  addCourseToHistory,
+  deleteCourse,
 })(CollaboratorDetail);

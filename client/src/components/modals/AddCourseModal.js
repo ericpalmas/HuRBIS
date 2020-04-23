@@ -4,6 +4,8 @@ import { addCourse } from "../../actions/coursesActions";
 import { fetchCourses } from "../../actions/coursesActions";
 import { addCourseToHistory } from "../../actions/coursesActions";
 import { fetchCoursesOfCollaborator } from "../../actions/coursesActions";
+import axios from "axios";
+
 import PropTypes from "prop-types";
 
 import {
@@ -24,6 +26,7 @@ class AddCourseModal extends Component {
     super(props);
 
     this.state = {
+      instructor: false,
       modal: false,
       courseIsPresent: false,
       dateError: false,
@@ -33,17 +36,37 @@ class AddCourseModal extends Component {
       expirationDate: "",
       instructor: false,
       collaborator_id: this.props.collaborator_id,
-      course_id: "1",
+      course_id: "",
+      corsi: [],
       msg: "Il corso è già presente",
       msg2: "La data di certificazione deve essere minore della scadenza",
       msg3: "Inserire le date",
     };
+
+    axios.get(`/courses`).then((res) => {
+      console.log(res.data[0]);
+      this.setState({ course_id: res.data[0].id });
+    });
   }
 
   componentDidMount() {
     this.props.fetchCourses();
     this.props.fetchCoursesOfCollaborator(this.props.collaborator_id);
+    // this.setState({
+    //   course_id: this.state.corsi[0].id,
+    // });
+    // if (this.props.corsi.length !== 0) {
+    //   this.setState({
+    //     course_id: this.props.id,
+    //   });
+    // }
+
+    // this.setState({
+    //   corsi: this.props.corsi,
+    // });
+    // console.log(this.state.corsi);
   }
+
   toggle = () => {
     this.setState({
       modal: !this.state.modal,
@@ -77,15 +100,22 @@ class AddCourseModal extends Component {
     });
   };
 
+  handleChange = () => {
+    this.setState({
+      instructor: !this.state.instructor,
+    });
+    console.log(this.state.instructor);
+  };
+
   onSubmit = (e) => {
     e.preventDefault();
 
     const newItem = {
+      instructor: this.state.instructor,
       course_id: this.state.course_id,
       collaborator_id: this.state.collaborator_id,
       certificationDate: this.state.certificationDate,
       expirationDate: this.state.expirationDate,
-      instructor: this.state.instructor,
     };
 
     var listOfId = [];
@@ -145,7 +175,6 @@ class AddCourseModal extends Component {
   };
 
   render() {
-    console.log(this.props.coursesInfos);
     return (
       <div>
         <Button className="ml-5 mt-5 mb-5 mr-2" onClick={this.toggle}>
@@ -169,6 +198,9 @@ class AddCourseModal extends Component {
             ) : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
+                <Label for="text" style={{ marginTop: "0.1rem" }}>
+                  Nome corso
+                </Label>
                 <CustomInput
                   type="select"
                   id="exampleCustomSelect"
@@ -196,6 +228,10 @@ class AddCourseModal extends Component {
                   id="item"
                   onChange={this.onChangeExpirationDate}
                 ></Input>
+                <Label className="ml-4 mt-4">
+                  <Input type="checkbox" onChange={this.handleChange} />{" "}
+                  Istruttore
+                </Label>
                 <Button style={{ marginTop: "2rem" }} block>
                   {" "}
                   Aggiungi corso

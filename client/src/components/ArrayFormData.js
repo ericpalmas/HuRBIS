@@ -22,13 +22,17 @@ import {
 
 const ArrayFormData = (props) => {
   //const [inputFields, setInputFields] = useState([{ corso: "" }]);
-  const [inputFields, setInputFields] = useState([{ corso: "1" }]);
+  const [inputFields, setInputFields] = useState([
+    { corso: props.courses[0].id },
+  ]);
   //const [qualificationName, setQualificationName] = useState({ name: "" });
   const [inputVal, setInputVal] = useState("");
 
   const [toggleState, setToggleState] = useState(false);
 
   const [multipleId, setMultipleId] = useState(false);
+
+  console.log(props.courses);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,7 +78,7 @@ const ArrayFormData = (props) => {
 
   const handleAddFields = () => {
     const values = [...inputFields];
-    values.push({ corso: "1" });
+    values.push({ corso: props.courses[0].id });
     setInputFields(values);
   };
 

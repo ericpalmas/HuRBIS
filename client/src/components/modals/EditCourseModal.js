@@ -22,6 +22,7 @@ class EditCourseModal extends Component {
     super(props);
 
     this.state = {
+      instructor: this.props.course.instructor,
       modal: false,
       name: this.props.course.name,
       certificationDate: this.props.course.certification_date,
@@ -73,6 +74,7 @@ class EditCourseModal extends Component {
       expirationDate: this.state.expirationDate.substr(0, 10),
       collaborator_id: this.state.collaborator_id,
       course_id: this.state.course_id,
+      instructor: this.state.instructor,
     };
 
     this.props.modifyCourse(newCourse);
@@ -82,7 +84,15 @@ class EditCourseModal extends Component {
     window.location.reload();
   };
 
+  handleChange = () => {
+    this.setState({
+      instructor: !this.state.instructor,
+    });
+    console.log(this.state.instructor);
+  };
+
   render() {
+    console.log(this.props.course);
     return (
       <div>
         <Button
@@ -136,6 +146,18 @@ class EditCourseModal extends Component {
                       : ""
                   }
                 ></Input>
+                <Label className="ml-4 mt-4">
+                  {this.state.instructor ? (
+                    <Input
+                      checked
+                      type="checkbox"
+                      onChange={this.handleChange}
+                    />
+                  ) : (
+                    <Input type="checkbox" onChange={this.handleChange} />
+                  )}
+                  Istruttore
+                </Label>
                 <Button style={{ marginTop: "2rem" }} block>
                   {" "}
                   Modifica corso
