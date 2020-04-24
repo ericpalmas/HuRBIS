@@ -16,6 +16,7 @@ import {
   FETCH_COURSES_DATES,
   FETCH_NECESSARY_COURSES_OF_QUALIFICATION,
   ADD_COURSES_TO_COLLABORATOR_FROM_QUALIFICATION,
+  RENEW_CURRENT_COURSE,
 } from "./types";
 
 export const addCourse = (course) => (dispatch) => {
@@ -28,6 +29,7 @@ export const addCourse = (course) => (dispatch) => {
 };
 
 export const addCourseToHistory = (course) => (dispatch) => {
+  console.log(course);
   axios.post("/coursesHistory/addCourse", course).then((res) =>
     dispatch({
       type: ADD_COURSE_TO_HISTORY,
@@ -69,6 +71,15 @@ export const modifyCourse = (course) => (dispatch) => {
   axios.post(`/courses/modifyCourse`, course).then((res) =>
     dispatch({
       type: MODIFY_CURRENT_COURSE,
+      payload: res.data,
+    })
+  );
+};
+
+export const renewCourse = (course) => (dispatch) => {
+  axios.post(`/courses/renewCourse`, course).then((res) =>
+    dispatch({
+      type: RENEW_CURRENT_COURSE,
       payload: res.data,
     })
   );

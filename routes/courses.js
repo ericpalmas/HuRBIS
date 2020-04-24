@@ -111,4 +111,17 @@ Router.post("/modifyCourse", (req, res) => {
   });
 });
 
+// modifica un corso in corso
+Router.post("/renewCourse", (req, res) => {
+  const course = req.body;
+
+  console.log(course);
+  const sql = `UPDATE collaborator_has_courses SET certification_date=null, expiration_date=null WHERE collaborator_id='${course.collaborator_id}' and courses_id='${course.course_id}';`;
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+});
+
 module.exports = Router;

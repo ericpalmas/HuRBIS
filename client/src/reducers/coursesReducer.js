@@ -21,6 +21,7 @@ import {
   FETCH_COURSES_DATES,
   FETCH_NECESSARY_COURSES_OF_QUALIFICATION,
   ADD_COURSES_TO_COLLABORATOR_FROM_QUALIFICATION,
+  RENEW_CURRENT_COURSE,
 
   /////////////////
   FETCH_COLLABORATOR_INFOS,
@@ -47,6 +48,7 @@ const initialState = {
   necessaryCoursesOfQualification: [],
   coursesAddedFromQualification: [],
   coursesOfCollaborator: [],
+  renewCourses: [],
 };
 
 export default function (state = initialState, action) {
@@ -108,6 +110,11 @@ export default function (state = initialState, action) {
           action.payload,
           ...state.currentModifiedCourses,
         ],
+      };
+    case RENEW_CURRENT_COURSE:
+      return {
+        ...state,
+        renewCourses: [action.payload, ...state.renewCourses],
       };
 
     case ADD_NEW_COURSE:

@@ -12,6 +12,7 @@ import { fetchCoursesOfCollaborator } from "../actions/coursesActions";
 import { fetchCollaboratorInfos } from "../actions/collaboratosActions";
 import { addCourseToHistory } from "../actions/coursesActions";
 import CollaboratorDetailPDF from "./CollaboratorDetailPDF";
+import { renewCourse } from "../actions/coursesActions";
 import { deleteCourse } from "../actions/coursesActions";
 import { FiX, FiCheck, FiCircle } from "react-icons/fi";
 import { FaCheck, FaTimes } from "react-icons/fa";
@@ -155,8 +156,12 @@ const Corso = ({ corsi, elem, collaborator_id }) => (
 class CollaboratorDetail extends Component {
   constructor(props) {
     super(props);
+    // this.filterArray = this.filterArray.bind(this);
+    // this.updateHistory = this.updateHistory.bind(this);
 
     this.state = {
+      collaborator_id: props.match.params.id,
+
       qualificationCourses: [],
       corsiPassati: [],
       remove: false,
@@ -189,43 +194,6 @@ class CollaboratorDetail extends Component {
       });
   }
 
-  componentDidMount() {
-    var currentdate = new Date();
-    var now = Date.parse(
-      currentdate.getFullYear() +
-        "-" +
-        (currentdate.getMonth() + 1) +
-        "-" +
-        currentdate.getDate()
-    );
-
-    var corsiObbligatori = [];
-    this.state.courses.forEach(function (v) {
-      corsiObbligatori.push(v.id);
-    });
-    this.state.courses.forEach(function (v) {
-      if (v.expiration_date !== null) {
-        var str1 = v.expiration_date.substr(0, 10);
-        var expiration_date = Date.parse(str1);
-      }
-
-      if (now > expiration_date) {
-        this.props.addCourseToHistory(v.id);
-        if (corsiObbligatori.includes(v.id)) {
-          v.certification_date = null;
-          v.expiration_date = null;
-        } else {
-          const removedCourse = {
-            course_id: v.id,
-            collaborator_id: this.props.match.params.id,
-          };
-
-          this.props.deleteCourse(removedCourse);
-        }
-      }
-    });
-  }
-
   showModal = () => {
     this.setState({ show: true });
   };
@@ -252,7 +220,68 @@ class CollaboratorDetail extends Component {
     this.setState({ numPages });
   }
 
+  componentWillReceiveProps() {
+    console.log(this.state);
+    console.log(this.props);
+
+    const collaborator = this.state.collaborator;
+    var qualificationCourses = this.state.qualificationCourses;
+    const courses = this.state.courses;
+    const addCourseToHistory = this.props.addCourseToHistory;
+    const deleteCourse = this.props.deleteCourse;
+    const renewCourse = this.props.renewCourse;
+
+    console.log(qualificationCourses);
+    var currentdate = new Date();
+    var now = Date.parse(
+      currentdate.getFullYear() +
+        "-" +
+        (currentdate.getMonth() + 1) +
+        "-" +
+        currentdate.getDate()
+    );
+    var corsiObbligatori = [];
+    qualificationCourses.forEach(function (v) {
+      corsiObbligatori.push(v.courses_id);
+    });
+
+    courses.forEach(function (v) {
+      if (v.expiration_date !== null) {
+        var str1 = v.expiration_date.substr(0, 10);
+        var expiration_date = Date.parse(str1);
+        if (now > expiration_date) {
+          console.log("corso storico trovato");
+          var newCourse = {
+            course_id: v.id,
+            certificationDate: v.certification_date.substr(0, 10),
+            expirationDate: v.expiration_date.substr(0, 10),
+            collaborator_id: parseInt(collaborator.id),
+          };
+          console.log(newCourse);
+          addCourseToHistory(newCourse);
+          if (corsiObbligatori.includes(v.id)) {
+            console.log("obbligatory");
+            const updateCourse = {
+              course_id: v.id,
+              collaborator_id: parseInt(collaborator.id),
+            };
+            console.log(updateCourse);
+            renewCourse(updateCourse);
+          } else {
+            console.log("removed");
+            const removedCourse = {
+              course_id: v.id,
+              collaborator_id: parseInt(collaborator.id),
+            };
+            console.log(removedCourse);
+            deleteCourse(removedCourse);
+          }
+        }
+      }
+    });
+  }
   filterArray = (courses) => {
+    console.log(courses);
     var currentdate = new Date();
     var now = Date.parse(
       currentdate.getFullYear() +
@@ -279,19 +308,66 @@ class CollaboratorDetail extends Component {
 
         if (certification_date <= now && expiration_date >= now)
           this.state.corsiInCorso.push(courses[i]);
-        else if (now > expiration_date) this.state.corsiSvolti.push(courses[i]);
-        else if (now < certification_date)
+        else if (now > expiration_date) {
+          this.state.corsiSvolti.push(courses[i]);
+        } else if (now < certification_date)
           this.state.corsiDaSvolgere.push(courses[i]);
       }
     }
     return courses;
   };
 
-  render() {
+  updateHistory = (props, state) => {
+    // console.log(props);
+    // console.log("ciaoooooooooooooooooo");
+    // console.log(state);
+    // var currentdate = new Date();
+    // var now = Date.parse(
+    //   currentdate.getFullYear() +
+    //     "-" +
+    //     (currentdate.getMonth() + 1) +
+    //     "-" +
+    //     currentdate.getDate()
+    // );
+    // var corsiObbligatori = [];
+    // this.state.qualificationCourses.forEach(function (v) {
+    //   corsiObbligatori.push(v.id);
+    // });
+    // this.state.courses.forEach(function (v) {
+    //   if (v.expiration_date !== null) {
+    //     var str1 = v.expiration_date.substr(0, 10);
+    //     var expiration_date = Date.parse(str1);
+    //     if (now > expiration_date) {
+    //       console.log("corso storico trovato");
+    //       var newCourse = {
+    //         course_id: v.id,
+    //         certificationDate: v.certification_date,
+    //         expirationDate: v.expiration_date,
+    //         collaborator_id: v.collaborator_id,
+    //       };
+    //       console.log(newCourse);
+    //       //props.addCourseToHistory(newCourse);
+    //       if (corsiObbligatori.includes(v.id)) {
+    //         v.certification_date = null;
+    //         v.expiration_date = null;
+    //       } else {
+    //         const removedCourse = {
+    //           course_id: v.id,
+    //           collaborator_id: props.match.params.id,
+    //         };
+    //         //props.deleteCourse(removedCourse);
+    //       }
+    //     }
+    //   }
+    // });
+  };
+
+  render = () => {
     this.filterArray(this.state.courses);
-    console.log(this.state.corsiInCorso);
-    console.log(this.state.corsiDaSvolgere);
-    console.log(this.state.corsiPassati);
+    // console.log(this.state.corsiInCorso);
+    // console.log(this.state.corsiDaSvolgere);
+    // console.log(this.state.corsiPassati);
+    // console.log(this.state.corsiSvolti);
 
     return (
       <div className="ml-5">
@@ -338,7 +414,6 @@ class CollaboratorDetail extends Component {
         <div id="addCourseButton">
           <AddCourseModal
             id="removeModal"
-            // id={this.state.allCourses[0].id}
             collaborator_id={this.props.match.params.id}
             className="ml-5 mt-5 mb-5 mr-2 float-left"
           />
@@ -381,17 +456,19 @@ class CollaboratorDetail extends Component {
         ></CollaboratorDetailPDF>
       </div>
     );
-  }
+  };
 }
 
 CollaboratorDetail.propTypes = {
   fetchCollaboratorInfos: PropTypes.func.isRequired,
   fetchCoursesOfCollaborator: PropTypes.func.isRequired,
+  //addCourseToHistory: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   collaboratorInfos: state.collaborators.collaboratorInfos,
   coursesOfCollaborator: state.courses.coursesOfCollaborator,
+  //addCourseToHistory: state.courses.historyCourses,
 });
 
 export default connect(mapStateToProps, {
@@ -399,4 +476,5 @@ export default connect(mapStateToProps, {
   fetchCoursesOfCollaborator,
   addCourseToHistory,
   deleteCourse,
+  renewCourse,
 })(CollaboratorDetail);

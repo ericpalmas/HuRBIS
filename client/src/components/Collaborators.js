@@ -65,6 +65,8 @@ class Collaborators extends Component {
   render() {
     const collaboratorsInfos = this.props.collaboratorsInfos;
 
+    console.log(collaboratorsInfos);
+
     const sorted = collaboratorsInfos.sort((a, b) => {
       if (this.state.sort === "asc") return 1 * a.name.localeCompare(b.name);
       else if (this.state.sort === "desc")

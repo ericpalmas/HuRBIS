@@ -14,19 +14,19 @@ Router.get("/", (req, res) => {
   });
 });
 
-// Get single collaborator
-Router.get("/:id", (req, res) => {
-  mysqlConnection.query(
-    `SELECT * FROM collaborator WHERE id = ${req.params.id}`,
-    (err, rows, fields) => {
-      if (!err) {
-        res.send(rows);
-      } else {
-        console.log(err);
-      }
-    }
-  );
-});
+// // Get single collaborator
+// Router.get("/:id", (req, res) => {
+//   mysqlConnection.query(
+//     `SELECT * FROM collaborator WHERE id = ${req.params.id}`,
+//     (err, rows, fields) => {
+//       if (!err) {
+//         res.send(rows);
+//       } else {
+//         console.log(err);
+//       }
+//     }
+//   );
+// });
 
 // Add a collaborator to the database
 Router.post("/", (req, res) => {

@@ -112,14 +112,11 @@ class EditCourseModal extends Component {
           <ModalBody>
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-                <Label for="item">Nome corso</Label>
-                <Input
-                  type="text"
-                  name="name"
-                  id="item"
-                  placeholder={this.state.name ? this.state.name : ""}
-                  onChange={this.onChange}
-                ></Input>
+                <Label for="item">Nome corso: </Label>
+                <Label type="text" name="name" id="item" className="ml-2">
+                  {this.state.name}
+                </Label>
+                <br></br>
                 <Label for="text" style={{ marginTop: "2rem" }}>
                   Data di certificazione
                 </Label>
