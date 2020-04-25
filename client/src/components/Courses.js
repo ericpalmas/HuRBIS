@@ -1,4 +1,3 @@
-import React, { Component, Fragment, useState } from "react";
 import {
   Button,
   Form,
@@ -10,7 +9,7 @@ import {
   DropdownItem,
   DropdownToggle,
 } from "reactstrap";
-
+import React, { Component, Fragment, useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { fetchCoursesInformations } from "../actions/coursesActions";

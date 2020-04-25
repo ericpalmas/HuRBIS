@@ -1,74 +1,72 @@
 import React, { Component } from "react";
-
+import axios from "axios";
 import "../css/jquery.datatables.css";
 const $ = require("jquery");
 $.DataTable = require("datatables.net");
 
-export class Tbl extends Component {
+export default class Tbl extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      courses: [],
+      minCertifications: [],
+      dati: this.props.data,
+      header: this.props.header,
+    };
   }
 
   componentDidMount() {
-    console.log(this.el);
+    console.log(this.state);
+
     this.$el = $(this.el);
+
+    $(document).ready(function () {
+      $("#example").DataTable({
+        columnDefs: [
+          {
+            targets: [2],
+            visible: true,
+            searchable: false,
+          },
+          {
+            targets: [3],
+            visible: true,
+          },
+        ],
+      });
+    });
+
     this.$el.DataTable({
-      data: this.props.data,
-      columnDefs: [
-        {
-          targets: [0],
-          visible: true,
-          searchable: false,
-        },
-        {
-          targets: [1],
-          visible: true,
-        },
-        {
-          targets: [2],
-          visible: false,
-          searchable: false,
-        },
-        {
-          targets: [3],
-          visible: true,
-        },
-        {
-          targets: [4],
-          visible: false,
-          searchable: false,
-        },
-        {
-          targets: [5],
-          visible: true,
-        },
-      ],
-      columns: [
-        { title: "Name" },
-        { title: "Position" },
-        { title: "Office" },
-        { title: "Extn." },
-        { title: "Start date" },
-        { title: "Salary" },
-      ],
+      data: this.state.dati,
+      columns: this.state.header,
+      // columns: [
+      //   { title: "Qualifica" },
+      //   { title: "Cognome" },
+      //   { title: "Nome" },
+      //   { title: "Anno nascita." },
+      //   { title: "Corso 1" },
+      //   { title: "Corso 2" },
+      //   { title: "Corso 3" },
+      //   { title: "Corso 4" },
+      //   { title: "Corso 5" },
+      // ],
     });
 
     // $("th").click(function () {
     //   console.log(this.);
     // });
 
-    $("td").click(function () {
-      var col = $(this).parent().children().index($(this));
-      var row = $(this).parent().parent().children().index($(this).parent());
-      alert("Row: " + row + ", Column: " + col);
-    });
+    // $("td").click(function () {
+    //   var col = $(this).parent().children().index($(this));
+    //   var row = $(this).parent().parent().children().index($(this).parent());
+    //   alert("Row: " + row + ", Column: " + col);
+    // });
 
-    $("th").click(function () {
-      var col = $(this).parent().children().index($(this));
-      $("td:nth-child(" + col + ")").hide();
-    });
+    // $("th").click(function () {
+    //   var col = $(this).parent().children().index($(this));
+    //   $("td:nth-child(" + col + ")").hide();
+    // });
   }
 
   //   componentWillUnmount() {

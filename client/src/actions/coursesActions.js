@@ -17,6 +17,7 @@ import {
   FETCH_NECESSARY_COURSES_OF_QUALIFICATION,
   ADD_COURSES_TO_COLLABORATOR_FROM_QUALIFICATION,
   RENEW_CURRENT_COURSE,
+  GET_MIN_CERTIFICATIONS,
 } from "./types";
 
 export const addCourse = (course) => (dispatch) => {
@@ -58,7 +59,6 @@ export const fetchCoursesInformations = () => (dispatch) => {
 };
 
 export const fetchCourses = () => (dispatch) => {
-  console.log("sono qua");
   axios.get("/courses").then((res) =>
     dispatch({
       type: FETCH_COURSES,
@@ -125,6 +125,15 @@ export const addCoursesToCollaborator = (item) => (dispatch) => {
   axios.post("/collaboratorCourses", item).then((res) =>
     dispatch({
       type: ADD_COURSES_TO_COLLABORATOR_FROM_QUALIFICATION,
+      payload: res.data,
+    })
+  );
+};
+
+export const fetchMinCertifications = (data) => (dispatch) => {
+  axios.post("/courses/certifications", data).then((res) =>
+    dispatch({
+      type: GET_MIN_CERTIFICATIONS,
       payload: res.data,
     })
   );

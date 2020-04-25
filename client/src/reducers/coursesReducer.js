@@ -22,6 +22,7 @@ import {
   FETCH_NECESSARY_COURSES_OF_QUALIFICATION,
   ADD_COURSES_TO_COLLABORATOR_FROM_QUALIFICATION,
   RENEW_CURRENT_COURSE,
+  GET_MIN_CERTIFICATIONS,
 
   /////////////////
   FETCH_COLLABORATOR_INFOS,
@@ -49,6 +50,7 @@ const initialState = {
   coursesAddedFromQualification: [],
   coursesOfCollaborator: [],
   renewCourses: [],
+  minCertifications: [],
 };
 
 export default function (state = initialState, action) {
@@ -210,6 +212,11 @@ export default function (state = initialState, action) {
           action.payload,
           ...state.coursesAddedFromQualification,
         ],
+      };
+    case GET_MIN_CERTIFICATIONS:
+      return {
+        ...state,
+        minCertifications: [action.payload, ...state.minCertifications],
       };
     default:
       return state;

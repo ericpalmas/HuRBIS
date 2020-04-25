@@ -13,17 +13,6 @@ Router.get("/", (req, res) => {
   });
 });
 
-// // // Get all courses
-// Router.get("/inCorso", (req, res) => {
-//   mysqlConnection.query("SELECT * FROM courses;", (err, rows, fields) => {
-//     if (!err) {
-//       res.send(rows);
-//     } else {
-//       console.log(err);
-//     }
-//   });
-// });
-
 // //aggiungi un corso ad un collaboratore
 Router.post("/addCourse", (req, res) => {
   const newCourse = req.body;
@@ -122,6 +111,31 @@ Router.post("/renewCourse", (req, res) => {
     if (err) throw err;
     console.log(result);
   });
+});
+
+// Corsi di un collaboratore
+Router.get("/minCertificationDate/:id", (req, res) => {
+  console.log(req.body);
+  mysqlConnection.query(
+    `select DISTINCT (t.id), t.name, t.min_certification from
+    ((SELECT collaborator.id, collaborator.name, min(collaborator_has_courses.certification_date) as min_certification FROM collaborator
+    left outer join collaborator_has_courses on collaborator_has_courses.collaborator_id = collaborator.id
+    where collaborator_has_courses.courses_id = '${req.params.id}' and collaborator.removed = 0
+    group by id)
+    union
+    (SELECT collaborator.id, collaborator.name, null as min_certification FROM collaborator
+    left outer join collaborator_has_courses on collaborator_has_courses.collaborator_id = collaborator.id
+    where collaborator.removed = 0
+    group by id) ) as t
+    order by id`,
+    (err, rows, fields) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
+    }
+  );
 });
 
 module.exports = Router;
