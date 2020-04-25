@@ -75,7 +75,7 @@ export default class Tbl extends Component {
 
   render() {
     return (
-      <div id="SummaryTable">
+      <div id="SummaryTable" className="ml-5 mt-5 w-75">
         <table
           onClick={this.removeColumn}
           className="display"

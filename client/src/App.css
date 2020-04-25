@@ -108,9 +108,10 @@
   min-width: 4rem;
 }
 
-#summaryTable {
+/* #summaryTable {
   margin: 4rem 2rem 2rem 4rem;
-}
+  width: 50%;
+} */
 
 #tableItem {
   min-width: 15rem;
