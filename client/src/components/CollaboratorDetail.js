@@ -182,6 +182,7 @@ class CollaboratorDetail extends Component {
     axios.get(`/courses/${this.props.match.params.id}`).then((res) => {
       this.setState({ courses: res.data });
     });
+
     axios.get(`/coursesHistory/${this.props.match.params.id}`).then((res) => {
       this.setState({ corsiPassati: res.data });
     });
@@ -280,6 +281,7 @@ class CollaboratorDetail extends Component {
       }
     });
   }
+
   filterArray = (courses) => {
     console.log(courses);
     var currentdate = new Date();

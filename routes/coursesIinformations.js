@@ -13,6 +13,7 @@ Router.get("/", (req, res) => {
     LEFT OUTER JOIN collaborator ON collaborator.id = collaborator_has_courses.collaborator_id
     LEFT OUTER JOIN courses_has_qualification ON courses_has_qualification.courses_id = courses.id
     LEFT OUTER JOIN qualification ON qualification.id = courses_has_qualification.qualification_id
+    where courses.removed='0'
     group by courses.id`,
     (err, rows, fields) => {
       if (!err) {

@@ -14,12 +14,12 @@ Router.post("/", (req, res) => {
     ((SELECT collaborator.id, collaborator.name, min(collaborator_has_courses.certification_date) as min_certification FROM collaborator
     left outer join collaborator_has_courses on collaborator_has_courses.collaborator_id = collaborator.id
     where collaborator_has_courses.courses_id = '${value.id}' and collaborator.removed = 0
-    group by id)
+    group by collaborator.id)
     union
     (SELECT collaborator.id, collaborator.name, null as min_certification FROM collaborator
     left outer join collaborator_has_courses on collaborator_has_courses.collaborator_id = collaborator.id
     where collaborator.removed = 0
-    group by id) ) as t
+    group by collaborator.id) ) as t
     order by id);`;
   }
 

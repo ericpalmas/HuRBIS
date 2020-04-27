@@ -75,7 +75,8 @@ Router.get("/:id", (req, res) => {
 // Delete a collaborator from the dabase
 Router.delete("/:id", (req, res) => {
   mysqlConnection.query(
-    `DELETE FROM courses WHERE id = '${req.params.id}'`,
+    `UPDATE courses SET removed='1' WHERE id='${req.params.id}'`,
+    // `DELETE FROM courses WHERE id = '${req.params.id}'`,
     (err, rows, fields) => {
       if (!err) {
         res.send(rows);
