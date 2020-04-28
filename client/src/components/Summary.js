@@ -54,14 +54,15 @@ class Summary extends Component {
   }
 
   filterArray = (certifications, infos, historyCertifications) => {
-    console.log("numero certificatzioni: " + certifications.length);
-    console.log(
-      "numero certificatzioni storiche: " + historyCertifications.length
-    );
-    console.log(certifications);
-    console.log(historyCertifications);
-
     if (certifications.length != 0 && historyCertifications.length != 0) {
+      console.log("numero certificatzioni: " + certifications.length);
+      console.log(certifications);
+
+      console.log(
+        "numero certificatzioni storiche: " + historyCertifications.length
+      );
+      console.log(historyCertifications);
+
       var firstStep = [];
       for (let i = 0; i < certifications.length; i++) {
         firstStep["" + i] = [];
@@ -74,29 +75,52 @@ class Summary extends Component {
             firstStep[i].push(current[j]);
             prevId = current[j].id;
           } else {
-            firstStep[i][firstStep[i].length - 1] = current[j];
+            if (current[j].min_certification != null)
+              firstStep[i][firstStep[i].length - 1] = current[j];
           }
         }
       }
+      console.log("certifications after firststep");
       console.log(firstStep);
 
-      var secondStep = [];
+      var step = [];
       for (let i = 0; i < historyCertifications.length; i++) {
-        secondStep["" + i] = [];
+        step["" + i] = [];
       }
       for (let i = 0; i < historyCertifications.length; i++) {
-        var prevId = -1;
+        var oldId = -1;
         var current = historyCertifications[i];
+
         for (let j = 0; j < current.length; j++) {
-          if (current[j].id != prevId) {
-            secondStep[i].push(current[j]);
-            prevId = current[j].id;
+          if (current[j].collaborator_id != oldId) {
+            step[i].push(current[j]);
+            oldId = current[j].collaborator_id;
           } else {
-            secondStep[i][secondStep[i].length - 1] = current[j];
+            if (current[j].certification_date != null)
+              step[i][step[i].length - 1] = current[j];
           }
         }
       }
-      console.log(secondStep);
+      console.log("history after step");
+      console.log(step);
+
+      // var secondStep = [];
+      // for (let i = 0; i < historyCertifications.length; i++) {
+      //   secondStep["" + i] = [];
+      // }
+      // for (let i = 0; i < historyCertifications.length; i++) {
+      //   var prevId = -1;
+      //   var current = historyCertifications[i];
+      //   for (let j = 0; j < current.length; j++) {
+      //     if (current[j].id != prevId) {
+      //       secondStep[i].push(current[j]);
+      //       prevId = current[j].id;
+      //     } else {
+      //       secondStep[i][secondStep[i].length - 1] = current[j];
+      //     }
+      //   }
+      // }
+      //console.log(secondStep);
 
       for (let k = 0; k < infos.length; k++) {
         datii["" + k] = [];
@@ -114,15 +138,16 @@ class Summary extends Component {
 
         for (let i = 0; i < firstStep.length; i++) {
           var current = firstStep[i];
+          var currentHistory = step[i];
 
           if (current[k].min_certification == null) {
-            // if (currentHistory[k].certification_date == null) {
-            //   datii[k].push("");
-            // } else {
-            //   datii[k].push(currentHistory[k].certification_date.substr(0, 10));
-            // }
+            if (currentHistory[k].certification_date == null) {
+              datii[k].push("");
+            } else {
+              datii[k].push(currentHistory[k].certification_date.substr(0, 10));
+            }
 
-            datii[k].push("");
+            //datii[k].push("");
           } else {
             datii[k].push(current[k].min_certification.substr(0, 10));
           }
@@ -134,7 +159,7 @@ class Summary extends Component {
   };
 
   render() {
-    console.log(this.state.certificationsHistory);
+    //console.log(this.state.certificationsHistory);
     this.filterArray(
       this.state.minCertifications,
       this.state.collaboratorInfos,
@@ -146,7 +171,7 @@ class Summary extends Component {
         {(datii.length != 0) & (columns.length != 0) ? (
           <Tbl header={columns} data={datii}></Tbl>
         ) : (
-          "      //"
+          " "
         )}
       </div>
     );
