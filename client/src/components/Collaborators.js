@@ -22,6 +22,51 @@ import { addCourseToHistory } from "../actions/coursesActions";
 import { renewCourse } from "../actions/coursesActions";
 import { deleteCourse } from "../actions/coursesActions";
 
+import { BsCircleFill, BsPersonFill } from "react-icons/bs";
+
+import {
+  AiFillCheckSquare,
+  AiFillCheckCircle,
+  AiFillExclamationCircle,
+  AiOutlineExclamationCircle,
+  AiFillInfoCircle,
+} from "react-icons/ai";
+
+function checkDate(exp_date) {
+  if (!exp_date) {
+    return (
+      <BsCircleFill
+        className="ml-1 mr-2 mt-1 float-left"
+        color="green"
+      ></BsCircleFill>
+    );
+  }
+
+  var currentdate = new Date();
+  var str1 = exp_date.substr(0, 10);
+  var expiration_date = Date.parse(str1);
+
+  var curYear = currentdate.getFullYear();
+  var expYear = new Date(expiration_date).getFullYear();
+  var differenceBetweenDates = expYear - curYear;
+
+  if (differenceBetweenDates < 1) {
+    return (
+      <BsCircleFill
+        className="ml-1 mr-2 mt-1 float-left border-black"
+        color="orange"
+      ></BsCircleFill>
+    );
+  } else {
+    return (
+      <BsCircleFill
+        className="ml-1 mr-2 mt-1 float-left"
+        color="green"
+      ></BsCircleFill>
+    );
+  }
+}
+
 class Collaborators extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +80,7 @@ class Collaborators extends Component {
       collaborators: [],
       qualificationCourses: [],
       collaboratorInfos: [],
+      scadenze: [],
     };
 
     axios.get(`/collaborators`).then((res) => {
@@ -60,6 +106,30 @@ class Collaborators extends Component {
       this.setState({
         collaboratorInfos: res.data,
       });
+
+      // for (let i = 0; i < res.data.length; i++) {
+      //   if (res.data[i].min_expiration_date != null) {
+      //     var str1 = res.data[i].min_expiration_date.substr(0, 10);
+      //     var expiration_date = Date.parse(str1);
+
+      //     ///////per le scadenze//////////
+      //     scadenzaCollaboratore = {
+      //       collaborator_id: res.data[i].id,
+      //       scadenza: false,
+      //     };
+
+      //     var curYear = currentdate.getFullYear();
+      //     var expYear = new Date(expiration_date).getFullYear();
+
+      //     var differenceBetweenDates = expYear - curYear;
+
+      //     if (differenceBetweenDates < 1) {
+      //       scadenzaCollaboratore.scadenza = true;
+      //     }
+      //   }
+
+      //   this
+      // }
     });
   }
 
@@ -90,7 +160,9 @@ class Collaborators extends Component {
     var courses = this.state.courses;
     var collaborators = this.state.collaborators;
     var qualificationCourses = this.state.qualificationCourses;
-    //console.log(qualificationCourses);
+    var scadenzaCollaboratore;
+    var scadenze = [];
+
     if (
       courses.length != 0 &&
       collaborators.length != 0 &&
@@ -113,59 +185,52 @@ class Collaborators extends Component {
           corsiObbligatori.push(v.courses_id);
         });
 
-        console.log(collaborator);
-        console.log(corsiObbligatori);
-
         v.forEach(function (i) {
           if (i.expiration_date !== null) {
             var str1 = i.expiration_date.substr(0, 10);
             var expiration_date = Date.parse(str1);
 
+            ///////per le scadenze//////////
+
+            ///////////////////////////
+
             if (now > expiration_date) {
-              console.log("corso storico trovato");
               var newCourse = {
                 course_id: i.id,
                 certificationDate: i.certification_date.substr(0, 10),
                 expirationDate: i.expiration_date.substr(0, 10),
                 collaborator_id: parseInt(collaborator.id),
               };
-              console.log(newCourse);
-              //addCourseToHistory(newCourse);
               axios.post("/coursesHistory/addCourse", newCourse);
 
               if (corsiObbligatori.includes(i.id)) {
-                console.log("obbligatory");
                 const updateCourse = {
                   course_id: i.id,
                   collaborator_id: parseInt(collaborator.id),
                 };
-                console.log(updateCourse);
-                //renewCourse(updateCourse);
-
                 axios.post("/courses/renewCourse", updateCourse);
               } else {
-                console.log("removed");
                 const removedCourse = {
                   course_id: i.id,
                   collaborator_id: parseInt(collaborator.id),
                 };
-                console.log(removedCourse);
-                //deleteCourse(removedCourse);
-
                 axios.post("/courses/", removedCourse);
               }
             }
           }
         });
         i++;
+        scadenze.push(scadenzaCollaboratore);
       });
     }
+    //console.log(scadenze);
   };
 
   render() {
     this.updateDate();
+    console.log(this.state.courses);
     const collaboratorsInfos = this.state.collaboratorInfos;
-    //console.log(collaboratorsInfos);
+    console.log(collaboratorsInfos);
 
     const sorted = collaboratorsInfos.sort((a, b) => {
       if (this.state.sort === "asc") return 1 * a.name.localeCompare(b.name);
@@ -277,11 +342,13 @@ class Collaborators extends Component {
                   qualification,
                   courses,
                   yearOfBirth,
+                  min_expiration_date,
                   removed,
                 }) => (
                   <tr>
                     <td id="tableColumnInfo">
                       <Link to={"/collaborators/" + id}>
+                        {checkDate(min_expiration_date)}
                         {name} {surname}
                       </Link>
                     </td>
