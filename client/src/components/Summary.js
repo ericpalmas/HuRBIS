@@ -143,15 +143,19 @@ class Summary extends Component {
 
     return (
       <div>
-        <Tbl header={columns} data={datii}></Tbl>
+        {(datii.length != 0) & (columns.length != 0) ? (
+          <Tbl header={columns} data={datii}></Tbl>
+        ) : (
+          "      //"
+        )}
       </div>
     );
   }
 }
 
-var datii = [{}];
+var datii = [];
 
-var columns = [{}];
+var columns = [];
 
 Summary.propTypes = {
   fetchMinCertifications: PropTypes.func.isRequired,
