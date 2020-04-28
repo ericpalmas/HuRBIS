@@ -5,13 +5,16 @@ const risnovaConnection = require("../config/risnovaConnection");
 
 // Get all collaborators
 Router.get("/", (req, res) => {
-  mysqlConnection.query("SELECT * from collaborator", (err, rows, fields) => {
-    if (!err) {
-      res.send(rows);
-    } else {
-      console.log(err);
+  mysqlConnection.query(
+    "SELECT * from collaborator where collaborator.removed = '0'",
+    (err, rows, fields) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
     }
-  });
+  );
 });
 
 // // Get single collaborator
@@ -31,14 +34,14 @@ Router.get("/", (req, res) => {
 // Add a collaborator to the database
 Router.post("/", (req, res) => {
   const newCollaborator = req.body;
-  console.log(newCollaborator);
+  //console.log(newCollaborator);
   const sql =
     `INSERT INTO collaborator(name, surname, yearOfBirth) VALUES` +
     `('${newCollaborator.name}', '${newCollaborator.surname}', '${newCollaborator.yearOfBirth}')`;
 
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
-    console.log(result);
+    //console.log(result);
   });
 });
 

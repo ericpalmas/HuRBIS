@@ -30,7 +30,7 @@ export const addCourse = (course) => (dispatch) => {
 };
 
 export const addCourseToHistory = (course) => (dispatch) => {
-  console.log(course);
+  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
   axios.post("/coursesHistory/addCourse", course).then((res) =>
     dispatch({
       type: ADD_COURSE_TO_HISTORY,
@@ -40,6 +40,7 @@ export const addCourseToHistory = (course) => (dispatch) => {
 };
 
 export const deleteCourse = (removedCourse) => (dispatch) => {
+  console.log("deleeeeeeeeeeeeeeeeeeeeteeeeeeeeeeeeeeeeeeeeeeeeee");
   axios.post(`/courses/`, removedCourse).then((res) =>
     dispatch({
       type: DELETE_COURSE,
@@ -77,6 +78,7 @@ export const modifyCourse = (course) => (dispatch) => {
 };
 
 export const renewCourse = (course) => (dispatch) => {
+  console.log("renewCourseeeeeeeeeeeeeeeeeeeeeee");
   axios.post(`/courses/renewCourse`, course).then((res) =>
     dispatch({
       type: RENEW_CURRENT_COURSE,

@@ -24,14 +24,14 @@ Router.post("/", (req, res) => {
   var sql = "";
   item.listOfCoursesId.forEach(myFunction);
   function myFunction(value, index, array) {
-    console.log(value.corso);
+    //console.log(value.corso);
     sql += `insert into collaborator_has_courses (collaborator_id, courses_id) values ('${item.collaborator_id}','${value}');`;
   }
 
-  console.log(sql);
+  //console.log(sql);
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
-    console.log(result);
+    //console.log(result);
     console.log(err);
   });
 });

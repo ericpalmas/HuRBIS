@@ -13,12 +13,18 @@ class Summary extends Component {
       collaboratorInfos: [],
       courses: [],
       minCertifications: [],
+      certificationsHistory: [],
     };
 
     axios.get(`/courses`).then((res) => {
       axios.post("/collaboratorCertifications", res.data).then((result) => {
         this.setState({
           minCertifications: result.data,
+        });
+      });
+      axios.post("/coursesHistory", res.data).then((result) => {
+        this.setState({
+          certificationsHistory: result.data,
         });
       });
     });
@@ -47,48 +53,79 @@ class Summary extends Component {
     });
   }
 
-  filterArray = (certifications, infos) => {
-    var firstStep = [];
-    for (let i = 0; i < certifications.length; i++) {
-      firstStep["" + i] = [];
-    }
+  filterArray = (certifications, infos, historyCertifications) => {
+    console.log("numero certificatzioni: " + certifications.length);
+    console.log(
+      "numero certificatzioni storiche: " + historyCertifications.length
+    );
+    console.log(certifications);
+    console.log(historyCertifications);
 
-    var size;
-    for (let i = 0; i < certifications.length; i++) {
-      var prevId = -1;
-      var current = certifications[i];
-      size = 0;
-      for (let j = 0; j < current.length; j++) {
-        if (current[j].id != prevId) {
-          firstStep[i].push(current[j]);
-          prevId = current[j].id;
-          size++;
-        } else {
-          firstStep[i][firstStep[i].length - 1] = current[j];
+    if (certifications.length != 0 && historyCertifications.length != 0) {
+      var firstStep = [];
+      for (let i = 0; i < certifications.length; i++) {
+        firstStep["" + i] = [];
+      }
+      for (let i = 0; i < certifications.length; i++) {
+        var prevId = -1;
+        var current = certifications[i];
+        for (let j = 0; j < current.length; j++) {
+          if (current[j].id != prevId) {
+            firstStep[i].push(current[j]);
+            prevId = current[j].id;
+          } else {
+            firstStep[i][firstStep[i].length - 1] = current[j];
+          }
         }
       }
-    }
-    //console.log(firstStep);
+      console.log(firstStep);
 
-    for (let k = 0; k < infos.length; k++) {
-      datii["" + k] = [];
-      if (infos[k].qualification == null) datii[k].push("");
-      else datii[k].push(infos[k].qualification);
+      var secondStep = [];
+      for (let i = 0; i < historyCertifications.length; i++) {
+        secondStep["" + i] = [];
+      }
+      for (let i = 0; i < historyCertifications.length; i++) {
+        var prevId = -1;
+        var current = historyCertifications[i];
+        for (let j = 0; j < current.length; j++) {
+          if (current[j].id != prevId) {
+            secondStep[i].push(current[j]);
+            prevId = current[j].id;
+          } else {
+            secondStep[i][secondStep[i].length - 1] = current[j];
+          }
+        }
+      }
+      console.log(secondStep);
 
-      if (infos[k].surname == null) datii[k].push("");
-      else datii[k].push(infos[k].surname);
+      for (let k = 0; k < infos.length; k++) {
+        datii["" + k] = [];
+        if (infos[k].qualification == null) datii[k].push("");
+        else datii[k].push(infos[k].qualification);
 
-      if (infos[k].name == null) datii[k].push("");
-      else datii[k].push(infos[k].name);
+        if (infos[k].surname == null) datii[k].push("");
+        else datii[k].push(infos[k].surname);
 
-      if (infos[k].yearOfBirth == null) datii[k].push("");
-      else datii[k].push(infos[k].yearOfBirth);
+        if (infos[k].name == null) datii[k].push("");
+        else datii[k].push(infos[k].name);
 
-      for (let i = 0; i < firstStep.length; i++) {
-        var current = firstStep[i];
-        if (current[k].min_certification == null) datii[k].push("");
-        else {
-          datii[k].push(current[k].min_certification.substr(0, 10));
+        if (infos[k].yearOfBirth == null) datii[k].push("");
+        else datii[k].push(infos[k].yearOfBirth);
+
+        for (let i = 0; i < firstStep.length; i++) {
+          var current = firstStep[i];
+
+          if (current[k].min_certification == null) {
+            // if (currentHistory[k].certification_date == null) {
+            //   datii[k].push("");
+            // } else {
+            //   datii[k].push(currentHistory[k].certification_date.substr(0, 10));
+            // }
+
+            datii[k].push("");
+          } else {
+            datii[k].push(current[k].min_certification.substr(0, 10));
+          }
         }
       }
     }
@@ -97,9 +134,11 @@ class Summary extends Component {
   };
 
   render() {
+    console.log(this.state.certificationsHistory);
     this.filterArray(
       this.state.minCertifications,
-      this.state.collaboratorInfos
+      this.state.collaboratorInfos,
+      this.state.certificationsHistory
     );
 
     return (

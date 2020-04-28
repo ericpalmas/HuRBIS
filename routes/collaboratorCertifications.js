@@ -9,15 +9,17 @@ Router.post("/", (req, res) => {
   var sql = "";
   list.forEach(myFunction);
   function myFunction(value, index, array) {
-    console.log(value.id);
-    sql += `(select DISTINCT (t.id), t.name, t.min_certification from
-    ((SELECT collaborator.id, collaborator.name, min(collaborator_has_courses.certification_date) as min_certification FROM collaborator
+    //console.log(value.id);
+    sql += `(select DISTINCT (t.id), t.name, t.course_name, t.min_certification from
+    ((SELECT collaborator.id, collaborator.name, courses.name as course_name, min(collaborator_has_courses.certification_date) as min_certification FROM collaborator
     left outer join collaborator_has_courses on collaborator_has_courses.collaborator_id = collaborator.id
+    left outer join courses on courses.id = collaborator_has_courses.courses_id
     where collaborator_has_courses.courses_id = '${value.id}' and collaborator.removed = 0
     group by collaborator.id)
     union
-    (SELECT collaborator.id, collaborator.name, null as min_certification FROM collaborator
+    (SELECT collaborator.id, collaborator.name, courses.name as course_name, null as min_certification FROM collaborator
     left outer join collaborator_has_courses on collaborator_has_courses.collaborator_id = collaborator.id
+	  left outer join courses on courses.id = collaborator_has_courses.courses_id
     where collaborator.removed = 0
     group by collaborator.id) ) as t
     order by id);`;

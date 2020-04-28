@@ -72,7 +72,7 @@ Router.post("/addQualificationToCollaborator", (req, res) => {
 
 Router.post("/removeQualifications", (req, res) => {
   const listOfId = req.body;
-  console.log(listOfId);
+  //console.log(listOfId);
   var sql = ``;
   listOfId.qualifications_id.forEach(myFunction);
   function myFunction(value, index, array) {

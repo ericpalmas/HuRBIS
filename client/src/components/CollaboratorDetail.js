@@ -10,10 +10,10 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { fetchCoursesOfCollaborator } from "../actions/coursesActions";
 import { fetchCollaboratorInfos } from "../actions/collaboratosActions";
-import { addCourseToHistory } from "../actions/coursesActions";
 import CollaboratorDetailPDF from "./CollaboratorDetailPDF";
-import { renewCourse } from "../actions/coursesActions";
-import { deleteCourse } from "../actions/coursesActions";
+// import { addCourseToHistory } from "../actions/coursesActions";
+// import { renewCourse } from "../actions/coursesActions";
+// import { deleteCourse } from "../actions/coursesActions";
 import { FiX, FiCheck, FiCircle } from "react-icons/fi";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { BsCircleFill, BsPersonFill } from "react-icons/bs";
@@ -221,66 +221,66 @@ class CollaboratorDetail extends Component {
     this.setState({ numPages });
   }
 
-  componentWillReceiveProps() {
-    console.log(this.state);
-    console.log(this.props);
+  // componentWillReceiveProps() {
+  //   console.log(this.state);
+  //   console.log(this.props);
 
-    const collaborator = this.state.collaborator;
-    var qualificationCourses = this.state.qualificationCourses;
-    const courses = this.state.courses;
-    const addCourseToHistory = this.props.addCourseToHistory;
-    const deleteCourse = this.props.deleteCourse;
-    const renewCourse = this.props.renewCourse;
+  //   const collaborator = this.state.collaborator;
+  //   var qualificationCourses = this.state.qualificationCourses;
+  //   const courses = this.state.courses;
+  //   const addCourseToHistory = this.props.addCourseToHistory;
+  //   const deleteCourse = this.props.deleteCourse;
+  //   const renewCourse = this.props.renewCourse;
 
-    console.log(qualificationCourses);
-    var currentdate = new Date();
-    var now = Date.parse(
-      currentdate.getFullYear() +
-        "-" +
-        (currentdate.getMonth() + 1) +
-        "-" +
-        currentdate.getDate()
-    );
-    var corsiObbligatori = [];
-    qualificationCourses.forEach(function (v) {
-      corsiObbligatori.push(v.courses_id);
-    });
+  //   console.log(qualificationCourses);
+  //   var currentdate = new Date();
+  //   var now = Date.parse(
+  //     currentdate.getFullYear() +
+  //       "-" +
+  //       (currentdate.getMonth() + 1) +
+  //       "-" +
+  //       currentdate.getDate()
+  //   );
+  //   var corsiObbligatori = [];
+  //   qualificationCourses.forEach(function (v) {
+  //     corsiObbligatori.push(v.courses_id);
+  //   });
 
-    courses.forEach(function (v) {
-      if (v.expiration_date !== null) {
-        var str1 = v.expiration_date.substr(0, 10);
-        var expiration_date = Date.parse(str1);
-        if (now > expiration_date) {
-          console.log("corso storico trovato");
-          var newCourse = {
-            course_id: v.id,
-            certificationDate: v.certification_date.substr(0, 10),
-            expirationDate: v.expiration_date.substr(0, 10),
-            collaborator_id: parseInt(collaborator.id),
-          };
-          console.log(newCourse);
-          addCourseToHistory(newCourse);
-          if (corsiObbligatori.includes(v.id)) {
-            console.log("obbligatory");
-            const updateCourse = {
-              course_id: v.id,
-              collaborator_id: parseInt(collaborator.id),
-            };
-            console.log(updateCourse);
-            renewCourse(updateCourse);
-          } else {
-            console.log("removed");
-            const removedCourse = {
-              course_id: v.id,
-              collaborator_id: parseInt(collaborator.id),
-            };
-            console.log(removedCourse);
-            deleteCourse(removedCourse);
-          }
-        }
-      }
-    });
-  }
+  //   courses.forEach(function (v) {
+  //     if (v.expiration_date !== null) {
+  //       var str1 = v.expiration_date.substr(0, 10);
+  //       var expiration_date = Date.parse(str1);
+  //       if (now > expiration_date) {
+  //         console.log("corso storico trovato");
+  //         var newCourse = {
+  //           course_id: v.id,
+  //           certificationDate: v.certification_date.substr(0, 10),
+  //           expirationDate: v.expiration_date.substr(0, 10),
+  //           collaborator_id: parseInt(collaborator.id),
+  //         };
+  //         console.log(newCourse);
+  //         addCourseToHistory(newCourse);
+  //         if (corsiObbligatori.includes(v.id)) {
+  //           console.log("obbligatory");
+  //           const updateCourse = {
+  //             course_id: v.id,
+  //             collaborator_id: parseInt(collaborator.id),
+  //           };
+  //           console.log(updateCourse);
+  //           renewCourse(updateCourse);
+  //         } else {
+  //           console.log("removed");
+  //           const removedCourse = {
+  //             course_id: v.id,
+  //             collaborator_id: parseInt(collaborator.id),
+  //           };
+  //           console.log(removedCourse);
+  //           deleteCourse(removedCourse);
+  //         }
+  //       }
+  //     }
+  //   });
+  // }
 
   filterArray = (courses) => {
     console.log(courses);
@@ -476,7 +476,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   fetchCollaboratorInfos,
   fetchCoursesOfCollaborator,
-  addCourseToHistory,
-  deleteCourse,
-  renewCourse,
+  // addCourseToHistory,
+  // deleteCourse,
+  // renewCourse,
 })(CollaboratorDetail);
