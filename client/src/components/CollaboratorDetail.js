@@ -99,6 +99,19 @@ function checkDate(corso) {
   }
 }
 
+function printDate(date) {
+  var d = new Date(date);
+  //d.setDate(d.getDate() + 1);
+
+  // var data = Date.parse(
+  //   d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
+  // );
+
+  // var dat = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  // console.log(dat);
+
+  return d.toISOString().substr(0, 10);
+}
 const Corso = ({ corsi, elem, collaborator_id }) => (
   <Table>
     <thead>
@@ -117,7 +130,8 @@ const Corso = ({ corsi, elem, collaborator_id }) => (
           </td>
           <td>
             {!!corso.certification_date
-              ? corso.certification_date.substr(0, 10)
+              ? //? corso.certification_date.substr(0, 10)
+                printDate(corso.certification_date)
               : "      //"}
           </td>
 
@@ -156,8 +170,6 @@ const Corso = ({ corsi, elem, collaborator_id }) => (
 class CollaboratorDetail extends Component {
   constructor(props) {
     super(props);
-    // this.filterArray = this.filterArray.bind(this);
-    // this.updateHistory = this.updateHistory.bind(this);
 
     this.state = {
       collaborator_id: props.match.params.id,
@@ -180,6 +192,21 @@ class CollaboratorDetail extends Component {
         this.setState({ collaborator: res.data[0] });
       });
     axios.get(`/courses/${this.props.match.params.id}`).then((res) => {
+      console.log(res);
+      for (let i = 0; i < res.data.length; i++) {
+        if (
+          (res.data[i].expiration_date != null) &
+          (res.data[i].certification_date != null)
+        ) {
+          var certificationDate = new Date(res.data[i].certification_date);
+          certificationDate.setDate(certificationDate.getDate() + 1);
+          res.data[i].certification_date = certificationDate.toISOString();
+
+          var expirationDate = new Date(res.data[i].expiration_date);
+          expirationDate.setDate(expirationDate.getDate() + 1);
+          res.data[i].expiration_date = expirationDate.toISOString();
+        }
+      }
       this.setState({ courses: res.data });
     });
 
@@ -221,67 +248,6 @@ class CollaboratorDetail extends Component {
     this.setState({ numPages });
   }
 
-  // componentWillReceiveProps() {
-  //   console.log(this.state);
-  //   console.log(this.props);
-
-  //   const collaborator = this.state.collaborator;
-  //   var qualificationCourses = this.state.qualificationCourses;
-  //   const courses = this.state.courses;
-  //   const addCourseToHistory = this.props.addCourseToHistory;
-  //   const deleteCourse = this.props.deleteCourse;
-  //   const renewCourse = this.props.renewCourse;
-
-  //   console.log(qualificationCourses);
-  //   var currentdate = new Date();
-  //   var now = Date.parse(
-  //     currentdate.getFullYear() +
-  //       "-" +
-  //       (currentdate.getMonth() + 1) +
-  //       "-" +
-  //       currentdate.getDate()
-  //   );
-  //   var corsiObbligatori = [];
-  //   qualificationCourses.forEach(function (v) {
-  //     corsiObbligatori.push(v.courses_id);
-  //   });
-
-  //   courses.forEach(function (v) {
-  //     if (v.expiration_date !== null) {
-  //       var str1 = v.expiration_date.substr(0, 10);
-  //       var expiration_date = Date.parse(str1);
-  //       if (now > expiration_date) {
-  //         console.log("corso storico trovato");
-  //         var newCourse = {
-  //           course_id: v.id,
-  //           certificationDate: v.certification_date.substr(0, 10),
-  //           expirationDate: v.expiration_date.substr(0, 10),
-  //           collaborator_id: parseInt(collaborator.id),
-  //         };
-  //         console.log(newCourse);
-  //         addCourseToHistory(newCourse);
-  //         if (corsiObbligatori.includes(v.id)) {
-  //           console.log("obbligatory");
-  //           const updateCourse = {
-  //             course_id: v.id,
-  //             collaborator_id: parseInt(collaborator.id),
-  //           };
-  //           console.log(updateCourse);
-  //           renewCourse(updateCourse);
-  //         } else {
-  //           console.log("removed");
-  //           const removedCourse = {
-  //             course_id: v.id,
-  //             collaborator_id: parseInt(collaborator.id),
-  //           };
-  //           console.log(removedCourse);
-  //           deleteCourse(removedCourse);
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
-
   filterArray = (courses) => {
     console.log(courses);
     var currentdate = new Date();
@@ -319,57 +285,9 @@ class CollaboratorDetail extends Component {
     return courses;
   };
 
-  updateHistory = (props, state) => {
-    // console.log(props);
-    // console.log("ciaoooooooooooooooooo");
-    // console.log(state);
-    // var currentdate = new Date();
-    // var now = Date.parse(
-    //   currentdate.getFullYear() +
-    //     "-" +
-    //     (currentdate.getMonth() + 1) +
-    //     "-" +
-    //     currentdate.getDate()
-    // );
-    // var corsiObbligatori = [];
-    // this.state.qualificationCourses.forEach(function (v) {
-    //   corsiObbligatori.push(v.id);
-    // });
-    // this.state.courses.forEach(function (v) {
-    //   if (v.expiration_date !== null) {
-    //     var str1 = v.expiration_date.substr(0, 10);
-    //     var expiration_date = Date.parse(str1);
-    //     if (now > expiration_date) {
-    //       console.log("corso storico trovato");
-    //       var newCourse = {
-    //         course_id: v.id,
-    //         certificationDate: v.certification_date,
-    //         expirationDate: v.expiration_date,
-    //         collaborator_id: v.collaborator_id,
-    //       };
-    //       console.log(newCourse);
-    //       //props.addCourseToHistory(newCourse);
-    //       if (corsiObbligatori.includes(v.id)) {
-    //         v.certification_date = null;
-    //         v.expiration_date = null;
-    //       } else {
-    //         const removedCourse = {
-    //           course_id: v.id,
-    //           collaborator_id: props.match.params.id,
-    //         };
-    //         //props.deleteCourse(removedCourse);
-    //       }
-    //     }
-    //   }
-    // });
-  };
-
   render = () => {
+    console.log(this.state.courses);
     this.filterArray(this.state.courses);
-    // console.log(this.state.corsiInCorso);
-    // console.log(this.state.corsiDaSvolgere);
-    // console.log(this.state.corsiPassati);
-    // console.log(this.state.corsiSvolti);
 
     return (
       <div className="ml-5">

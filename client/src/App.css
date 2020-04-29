@@ -120,3 +120,114 @@
 #exampleSearch {
   margin-left: 4rem;
 }
+
+#example {
+  /* color: #212529; */
+  color: #212529;
+  border-collapse: collapse;
+  border-spacing: 2px;
+  border-color: grey;
+  box-sizing: border-box;
+}
+
+#example body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+#example thead {
+  display: table-header-group;
+  vertical-align: middle;
+  border-color: inherit;
+  box-sizing: border-box;
+}
+
+#example tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
+  box-sizing: border-box;
+}
+
+#example thead tr {
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+  box-sizing: border-box;
+}
+
+#example thead tr th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+  padding: 0.75rem;
+  border-top: 1px solid #dee2e6;
+}
+
+#example thead tr td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+  box-sizing: border-box;
+  color: #007bff;
+  background-color: transparent;
+}
+
+#example thead tr td a {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.dt-buttons {
+  margin-left: 1rem !important;
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.dt-buttons .dt-button {
+  color: #fff;
+  background: #6c757d;
+  border-color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+/* .dt-buttons .dt-button :hover {
+  color: #fff;
+  background: #8d959c;
+  border-color: #6c757d;
+} */
+
+#calendar {
+  width: 30rem;
+  height: 35rem;
+  margin-top: 6rem;
+  margin-left: 7rem;
+}
+.DayPicker {
+  width: 30rem;
+  height: 38rem;
+}
+.DayPicker-wrapper {
+  width: 30rem;
+  height: 38rem;
+}
+
+.DayPicker-Months {
+  width: 30rem;
+  height: 38rem;
+}
+
+.DayPicker-Month {
+  width: 35rem;
+  height: 27rem;
+}
+
+.DayPicker-Weekdays {
+  width: 30rem;
+  height: 30rem;
+}

@@ -4,6 +4,8 @@ import "react-day-picker/lib/style.css";
 import { fetchDates } from "../actions/coursesActions";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 class SummaryCalendar extends React.Component {
   constructor(props) {
@@ -16,12 +18,26 @@ class SummaryCalendar extends React.Component {
   }
 
   handleDayClick(day) {
-    this.setState({ selectedDay: new Date(day) });
+    var d = new Date(day);
+
+    for (let i = 0; i < this.props.coursesInfos.length; i++) {
+      if (this.props.coursesInfos[i].expiration_date != null) {
+        var checkDate = new Date(this.props.coursesInfos[i].expiration_date);
+
+        if (
+          checkDate.getFullYear() === d.getFullYear() &&
+          checkDate.getMonth() === d.getMonth() &&
+          checkDate.getDate() === d.getDate()
+        ) {
+          window.location.href =
+            "/collaborators/" + this.props.coursesInfos[i].collaborator_id;
+        }
+      }
+    }
   }
 
   componentWillMount() {
     this.props.fetchDates();
-    this.updateCalendar();
   }
 
   updateCalendar() {
@@ -41,11 +57,6 @@ class SummaryCalendar extends React.Component {
           onDayClick={this.handleDayClick}
           selectedDays={this.state.selectedDays}
         />
-        {this.state.selectedDay ? (
-          <p>You clicked {this.state.selectedDay.toLocaleDateString()}</p>
-        ) : (
-          <p>Please select a day.</p>
-        )}
       </div>
     );
   }
