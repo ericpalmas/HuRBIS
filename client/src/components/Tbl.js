@@ -50,8 +50,15 @@ export default class Tbl extends Component {
 
       buttons: [
         {
+          extend: "excel",
+          text: "Esporta excel",
+          exportOptions: {
+            columns: ":visible",
+          },
+        },
+        {
           extend: "pdfHtml5",
-          text: "Salva documento",
+          text: "Esporta pdf",
           // messageTop: "Riepilogo corsi di formazione",
           title: "Riepilogo corsi di formazione",
           customize: function (doc) {
@@ -79,8 +86,12 @@ export default class Tbl extends Component {
           },
           footer: true,
         },
+        {
+          extend: "colvis",
+          text: "Nascondi colonne",
+        },
 
-        "colvis",
+        //"colvis",
       ],
     });
   }

@@ -349,7 +349,7 @@ class Collaborators extends Component {
                     <td id="tableColumnInfo">
                       <Link to={"/collaborators/" + id}>
                         {checkDate(min_expiration_date)}
-                        {name} {surname}
+                        {surname} {name}
                       </Link>
                     </td>
                     <td id="tableColumnBirthDate">
