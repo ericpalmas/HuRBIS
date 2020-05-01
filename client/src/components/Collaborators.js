@@ -72,6 +72,7 @@ class Collaborators extends Component {
     super(props);
 
     this.state = {
+      scadenza: false,
       sort: "",
       search: "",
       dropdownButton: false,
@@ -143,7 +144,7 @@ class Collaborators extends Component {
     this.setState({
       remove: !this.state.remove,
     });
-    console.log(this.state.remove);
+    //console.log(this.state.remove);
   };
 
   updateSearch(event) {
@@ -166,7 +167,8 @@ class Collaborators extends Component {
     if (
       courses.length != 0 &&
       collaborators.length != 0 &&
-      qualificationCourses.length != 0
+      qualificationCourses.length != 0 &&
+      !this.state.scadenza
     ) {
       var currentdate = new Date();
       var now = Date.parse(
@@ -176,6 +178,8 @@ class Collaborators extends Component {
           "-" +
           currentdate.getDate()
       );
+
+      console.log("ciaooooooooooooooooo");
 
       let i = 0;
       courses.forEach(function (v) {
@@ -191,8 +195,6 @@ class Collaborators extends Component {
             var expiration_date = Date.parse(str1);
 
             ///////per le scadenze//////////
-
-            ///////////////////////////
 
             if (now > expiration_date) {
               var newCourse = {
@@ -222,15 +224,19 @@ class Collaborators extends Component {
         i++;
         scadenze.push(scadenzaCollaboratore);
       });
+
+      this.setState({
+        scadenza: true,
+      });
     }
     //console.log(scadenze);
   };
 
   render() {
     this.updateDate();
-    console.log(this.state.courses);
+    //console.log(this.state.courses);
     const collaboratorsInfos = this.state.collaboratorInfos;
-    console.log(collaboratorsInfos);
+    //console.log(collaboratorsInfos);
 
     const sorted = collaboratorsInfos.sort((a, b) => {
       if (this.state.sort === "asc") return 1 * a.name.localeCompare(b.name);

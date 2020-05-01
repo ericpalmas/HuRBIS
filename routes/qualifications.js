@@ -79,6 +79,7 @@ Router.post("/removeQualifications", (req, res) => {
     sql += `DELETE FROM qualification_has_collaborator WHERE qualification_id='${value}' and collaborator_id='${listOfId.collaborator_id}';`;
   }
 
+  console.log(sql);
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
     console.log(result);

@@ -47,7 +47,6 @@ export default function (state = initialState, action) {
         ),
       };
     case FETCH_COLLABORATOR_INFOS:
-      console.log("FETCH_COLLABORATOR_INFOS");
       return {
         ...state,
         collaboratorInfos: action.payload,

@@ -7,7 +7,6 @@ import {
   FETCH_COLLABORATOR_INFOS,
 } from "./types";
 
-// Facciamo un dispatch al reducers delle informazioni
 export const fetchCollaborators = () => (dispatch) => {
   axios.get("/collaborators").then((res) =>
     dispatch({
