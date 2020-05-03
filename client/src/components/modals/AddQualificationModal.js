@@ -1,22 +1,16 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { addCourse } from "../../actions/coursesActions";
 import { fetchCourses } from "../../actions/coursesActions";
 
 import PropTypes from "prop-types";
 
 import {
-  Alert,
   Button,
   ModalHeader,
   ModalBody,
   FormGroup,
-  Label,
   Modal,
-  Input,
   Form,
-  ListGroup,
-  ListGroupItem,
 } from "reactstrap";
 import ArrayFormData from "../ArrayFormData";
 
@@ -51,6 +45,7 @@ class AddQualificationModal extends Component {
   };
 
   render() {
+    console.log(this.state.courses);
     return (
       <div>
         <Button className="ml-5 mt-5 mb-5 mr-2" onClick={this.toggle}>
@@ -65,9 +60,13 @@ class AddQualificationModal extends Component {
           <ModalBody>
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-                <ArrayFormData
-                  courses={this.props.coursesInfos}
-                ></ArrayFormData>
+                {this.props.coursesInfos.length !== 0 ? (
+                  <ArrayFormData
+                    courses={this.props.coursesInfos}
+                  ></ArrayFormData>
+                ) : (
+                  ""
+                )}
               </FormGroup>
             </Form>
           </ModalBody>

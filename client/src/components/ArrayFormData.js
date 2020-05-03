@@ -1,23 +1,17 @@
 import React, { useState, Fragment } from "react";
 import { connect } from "react-redux";
-import { addCourse } from "../actions/coursesActions";
 import { addNewQualification } from "../actions/qualificationsActions";
 
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 
 import {
   Alert,
   Button,
-  ModalHeader,
-  ModalBody,
   FormGroup,
   Label,
-  Modal,
   Input,
   Form,
   CustomInput,
-  ListGroup,
-  ListGroupItem,
 } from "reactstrap";
 
 const ArrayFormData = (props) => {
@@ -138,40 +132,15 @@ const ArrayFormData = (props) => {
                 id="exampleCustomSelect"
                 name="customSelect"
                 placeholder="Nome del corso"
-                //onChange={this.onQualificationSelect}
                 onChange={(event) => handleInputChange(index, event)}
-                //value={this.state.value}
               >
                 {props.courses.map(({ id, name }) => (
                   <option value={id}>{name}</option>
                 ))}
               </CustomInput>
-              {/* <Input
-                type="text"
-                name="name"
-                id="ArrayField"
-                className="box box--small mb-2"
-                placeholder="Nome del corso"
-                onChange={(event) => handleInputChange(index, event)}
-                inline
-              ></Input> */}
             </Fragment>
           ))}
         </FormGroup>
-
-        {/* <CustomInput
-          type="select"
-          id="exampleCustomSelect"
-          name="customSelect"
-          placeholder="Nome del corso"
-          //onChange={this.onQualificationSelect}
-          //onChange={(event) => handleInputChange(this.value, event)}
-          //value={this.state.value}
-        >
-          {props.courses.map(({ id, name }) => (
-            <option value={id}>{name}</option>
-          ))}
-        </CustomInput> */}
 
         <Button onSubmit={handleSubmit} style={{ marginTop: "2rem" }} block>
           {" "}

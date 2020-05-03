@@ -6,7 +6,6 @@ import {
   REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
   ADD_QUALIFICATION,
   DELETE_QUALIFICATION,
-  FETCH_COLLABORATORID_BY_QUALIFICATIONID,
 } from "./types";
 
 export const fetchQualificationsInfos = () => (dispatch) => {

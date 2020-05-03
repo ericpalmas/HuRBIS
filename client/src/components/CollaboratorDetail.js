@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from "react";
-import { Label, Table, Button, Container } from "reactstrap";
+import React, { Component } from "react";
+import { Label, Table, Button } from "reactstrap";
 import axios from "axios";
 import AddCourseModal from "./modals/AddCourseModal";
 import RemoveCourseModal from "./modals/RemoveCourseModal";
@@ -11,21 +11,8 @@ import PropTypes from "prop-types";
 import { fetchCoursesOfCollaborator } from "../actions/coursesActions";
 import { fetchCollaboratorInfos } from "../actions/collaboratosActions";
 import CollaboratorDetailPDF from "./CollaboratorDetailPDF";
-// import { addCourseToHistory } from "../actions/coursesActions";
-// import { renewCourse } from "../actions/coursesActions";
-// import { deleteCourse } from "../actions/coursesActions";
-import { FiX, FiCheck, FiCircle } from "react-icons/fi";
-import { FaCheck, FaTimes } from "react-icons/fa";
 import { BsCircleFill, BsPersonFill } from "react-icons/bs";
-
-import {
-  AiFillCheckSquare,
-  AiFillCheckCircle,
-  AiFillExclamationCircle,
-  AiOutlineExclamationCircle,
-  AiFillInfoCircle,
-} from "react-icons/ai";
-
+import { AiFillCheckCircle } from "react-icons/ai";
 import "jspdf-autotable";
 
 function checkDate(corso) {
@@ -101,14 +88,6 @@ function checkDate(corso) {
 
 function printDate(date) {
   var d = new Date(date);
-  //d.setDate(d.getDate() + 1);
-
-  // var data = Date.parse(
-  //   d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate()
-  // );
-
-  // var dat = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-  // console.log(dat);
 
   return d.toISOString().substr(0, 10);
 }
@@ -382,19 +361,14 @@ class CollaboratorDetail extends Component {
 CollaboratorDetail.propTypes = {
   fetchCollaboratorInfos: PropTypes.func.isRequired,
   fetchCoursesOfCollaborator: PropTypes.func.isRequired,
-  //addCourseToHistory: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   collaboratorInfos: state.collaborators.collaboratorInfos,
   coursesOfCollaborator: state.courses.coursesOfCollaborator,
-  //addCourseToHistory: state.courses.historyCourses,
 });
 
 export default connect(mapStateToProps, {
   fetchCollaboratorInfos,
   fetchCoursesOfCollaborator,
-  // addCourseToHistory,
-  // deleteCourse,
-  // renewCourse,
 })(CollaboratorDetail);

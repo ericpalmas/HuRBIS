@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState } from "react";
+import React, { Component } from "react";
 import {
   Button,
   Form,
@@ -15,22 +15,13 @@ import axios from "axios";
 import { fetchCollaboratorsInfos } from "../actions/collaboratosInfosActions";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import AddCollaboratorModal from "./modals/AddCollaboratorModal";
 import RemoveCollaboratorModal from "./modals/RemoveCollaboratorModal";
 import { addCourseToHistory } from "../actions/coursesActions";
 import { renewCourse } from "../actions/coursesActions";
 import { deleteCourse } from "../actions/coursesActions";
-
-import { BsCircleFill, BsPersonFill } from "react-icons/bs";
-
-import {
-  AiFillCheckSquare,
-  AiFillCheckCircle,
-  AiFillExclamationCircle,
-  AiOutlineExclamationCircle,
-  AiFillInfoCircle,
-} from "react-icons/ai";
+import { BsCircleFill } from "react-icons/bs";
 
 function checkDate(exp_date) {
   if (!exp_date) {
@@ -107,30 +98,6 @@ class Collaborators extends Component {
       this.setState({
         collaboratorInfos: res.data,
       });
-
-      // for (let i = 0; i < res.data.length; i++) {
-      //   if (res.data[i].min_expiration_date != null) {
-      //     var str1 = res.data[i].min_expiration_date.substr(0, 10);
-      //     var expiration_date = Date.parse(str1);
-
-      //     ///////per le scadenze//////////
-      //     scadenzaCollaboratore = {
-      //       collaborator_id: res.data[i].id,
-      //       scadenza: false,
-      //     };
-
-      //     var curYear = currentdate.getFullYear();
-      //     var expYear = new Date(expiration_date).getFullYear();
-
-      //     var differenceBetweenDates = expYear - curYear;
-
-      //     if (differenceBetweenDates < 1) {
-      //       scadenzaCollaboratore.scadenza = true;
-      //     }
-      //   }
-
-      //   this
-      // }
     });
   }
 
@@ -165,9 +132,9 @@ class Collaborators extends Component {
     var scadenze = [];
 
     if (
-      courses.length != 0 &&
-      collaborators.length != 0 &&
-      qualificationCourses.length != 0 &&
+      courses.length !== 0 &&
+      collaborators.length !== 0 &&
+      qualificationCourses.length !== 0 &&
       !this.state.scadenza
     ) {
       var currentdate = new Date();
@@ -234,9 +201,7 @@ class Collaborators extends Component {
 
   render() {
     this.updateDate();
-    //console.log(this.state.courses);
     const collaboratorsInfos = this.state.collaboratorInfos;
-    //console.log(collaboratorsInfos);
 
     const sorted = collaboratorsInfos.sort((a, b) => {
       if (this.state.sort === "asc") return 1 * a.name.localeCompare(b.name);
@@ -339,7 +304,7 @@ class Collaborators extends Component {
                       .toLowerCase()
                       .includes(this.state.search.toLowerCase()))
               )
-              .filter((collaborator) => collaborator.removed == "0")
+              .filter((collaborator) => collaborator.removed === "0")
               .map(
                 ({
                   id,

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_COLLABORATORS_INFOS, FETCH_COLLABORATORS_DATA } from "./types";
+import { FETCH_COLLABORATORS_INFOS } from "./types";
 
 export const fetchCollaboratorsInfos = () => (dispatch) => {
   console.log("fetchCollaboratorsInfos");

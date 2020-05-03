@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Tbl from "./Tbl";
@@ -17,16 +17,18 @@ class Summary extends Component {
     };
 
     axios.get(`/courses`).then((res) => {
-      axios.post("/collaboratorCertifications", res.data).then((result) => {
-        this.setState({
-          minCertifications: result.data,
+      if (res.data.length !== 0) {
+        axios.post("/collaboratorCertifications", res.data).then((result) => {
+          this.setState({
+            minCertifications: result.data,
+          });
         });
-      });
-      axios.post("/coursesHistory", res.data).then((result) => {
-        this.setState({
-          certificationsHistory: result.data,
+        axios.post("/coursesHistory", res.data).then((result) => {
+          this.setState({
+            certificationsHistory: result.data,
+          });
         });
-      });
+      }
     });
 
     axios.get(`/courses`).then((res) => {
@@ -54,15 +56,7 @@ class Summary extends Component {
   }
 
   filterArray = (certifications, infos, historyCertifications) => {
-    if (certifications.length != 0 && historyCertifications.length != 0) {
-      console.log("numero certificatzioni: " + certifications.length);
-      console.log(certifications);
-
-      console.log(
-        "numero certificatzioni storiche: " + historyCertifications.length
-      );
-      console.log(historyCertifications);
-
+    if (certifications.length !== 0 && historyCertifications.length !== 0) {
       var firstStep = [];
       for (let i = 0; i < certifications.length; i++) {
         firstStep["" + i] = [];
@@ -71,17 +65,15 @@ class Summary extends Component {
         var prevId = -1;
         var current = certifications[i];
         for (let j = 0; j < current.length; j++) {
-          if (current[j].id != prevId) {
+          if (current[j].id !== prevId) {
             firstStep[i].push(current[j]);
             prevId = current[j].id;
           } else {
-            if (current[j].min_certification != null)
+            if (current[j].min_certification !== null)
               firstStep[i][firstStep[i].length - 1] = current[j];
           }
         }
       }
-      console.log("certifications after firststep");
-      console.log(firstStep);
 
       var step = [];
       for (let i = 0; i < historyCertifications.length; i++) {
@@ -89,38 +81,18 @@ class Summary extends Component {
       }
       for (let i = 0; i < historyCertifications.length; i++) {
         var oldId = -1;
-        var current = historyCertifications[i];
+        current = historyCertifications[i];
 
         for (let j = 0; j < current.length; j++) {
-          if (current[j].collaborator_id != oldId) {
+          if (current[j].collaborator_id !== oldId) {
             step[i].push(current[j]);
             oldId = current[j].collaborator_id;
           } else {
-            if (current[j].certification_date != null)
+            if (current[j].certification_date !== null)
               step[i][step[i].length - 1] = current[j];
           }
         }
       }
-      console.log("history after step");
-      console.log(step);
-
-      // var secondStep = [];
-      // for (let i = 0; i < historyCertifications.length; i++) {
-      //   secondStep["" + i] = [];
-      // }
-      // for (let i = 0; i < historyCertifications.length; i++) {
-      //   var prevId = -1;
-      //   var current = historyCertifications[i];
-      //   for (let j = 0; j < current.length; j++) {
-      //     if (current[j].id != prevId) {
-      //       secondStep[i].push(current[j]);
-      //       prevId = current[j].id;
-      //     } else {
-      //       secondStep[i][secondStep[i].length - 1] = current[j];
-      //     }
-      //   }
-      // }
-      //console.log(secondStep);
 
       for (let k = 0; k < infos.length; k++) {
         datii["" + k] = [];
@@ -137,7 +109,7 @@ class Summary extends Component {
         else datii[k].push(infos[k].yearOfBirth);
 
         for (let i = 0; i < firstStep.length; i++) {
-          var current = firstStep[i];
+          current = firstStep[i];
           var currentHistory = step[i];
 
           if (current[k].min_certification == null) {
@@ -146,20 +118,15 @@ class Summary extends Component {
             } else {
               datii[k].push(currentHistory[k].certification_date.substr(0, 10));
             }
-
-            //datii[k].push("");
           } else {
             datii[k].push(current[k].min_certification.substr(0, 10));
           }
         }
       }
     }
-
-    //console.log(datii);
   };
 
   render() {
-    //console.log(this.state.certificationsHistory);
     this.filterArray(
       this.state.minCertifications,
       this.state.collaboratorInfos,
@@ -168,7 +135,7 @@ class Summary extends Component {
 
     return (
       <div>
-        {(datii.length != 0) & (columns.length != 0) ? (
+        {(datii.length !== 0) & (columns.length !== 0) ? (
           <Tbl header={columns} data={datii}></Tbl>
         ) : (
           " "

@@ -1,22 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addCollaborator } from "../../actions/collaboratosActions";
-import PropTypes from "prop-types";
 
 import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText,
-  Container,
   Alert,
   Button,
   ModalHeader,
@@ -78,7 +64,7 @@ class AddCollaboratorModal extends Component {
     console.log("nuovo collaboratore");
     console.log(newCollaborator);
 
-    if (newCollaborator.name == "") {
+    if (newCollaborator.name === "") {
       this.setState({
         insertName: true,
       });
@@ -86,7 +72,7 @@ class AddCollaboratorModal extends Component {
       this.setState({
         insertName: false,
       });
-      if (newCollaborator.surname == "") {
+      if (newCollaborator.surname === "") {
         this.setState({
           insertSurname: true,
         });
@@ -94,7 +80,7 @@ class AddCollaboratorModal extends Component {
         this.setState({
           insertSurname: false,
         });
-        if (newCollaborator.yearOfBirth == "") {
+        if (newCollaborator.yearOfBirth === "") {
           this.setState({
             insertYearOfBirth: true,
           });

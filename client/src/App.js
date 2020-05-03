@@ -6,7 +6,7 @@ import store from "./store";
 import "./App.css";
 import Collaborators from "./components/Collaborators";
 import CollaboratorDetail from "./components/CollaboratorDetail";
-import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import Qualifications from "./components/Qualifications";
 import Courses from "./components/Courses";
 import Summary from "./components/Summary";

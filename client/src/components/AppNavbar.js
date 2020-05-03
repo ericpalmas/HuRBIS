@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import {
   Collapse,
   Navbar,
@@ -6,24 +6,21 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  Container
+  Container,
 } from "reactstrap";
-import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
-
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import { BrowserRouter as Router, NavLink } from "react-router-dom";
 
 class AppNavbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false
+      isOpen: false,
     };
   }
 
   toggle = () => {
     this.setState({
-      isOpen: !this.state.isOpen
+      isOpen: !this.state.isOpen,
     });
   };
 

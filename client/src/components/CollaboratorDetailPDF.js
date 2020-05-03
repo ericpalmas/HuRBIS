@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from "react";
-import { Label, Table, Button, Container } from "reactstrap";
+import React, { Component } from "react";
+import { Button } from "reactstrap";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 

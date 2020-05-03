@@ -7,7 +7,6 @@ import { removeQualificationsFromCollaborator } from "../../actions/qualificatio
 import PropTypes from "prop-types";
 
 import {
-  CustomInput,
   Alert,
   Button,
   ModalHeader,
@@ -18,7 +17,6 @@ import {
   Form,
   Input,
 } from "reactstrap";
-// import Qualifications from "../Qualifications";
 
 class RemoveQualificationFromCollaborator extends Component {
   state = {
@@ -28,14 +26,6 @@ class RemoveQualificationFromCollaborator extends Component {
     msg: null,
     listOfId: [],
   };
-
-  // componentDidMount() {
-  //   this.props.fetchQualificationsInfos();
-  //   // console.log(this.props.qualificationsInfos);
-  //   this.setState({
-  //     qualificationsInformations: this.props.qualificationsInfos,
-  //   });
-  // }
 
   toggle = () => {
     this.setState({

@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchQualificationsInfos } from "../../actions/qualificationsActions";
-import { fetchQualificationsOfCollaborator } from "../../actions/qualificationsActions";
-import { removeQualificationsFromCollaborator } from "../../actions/qualificationsActions";
 import { removeQualification } from "../../actions/qualificationsActions";
 
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 
 import {
-  CustomInput,
   Alert,
   Button,
   ModalHeader,

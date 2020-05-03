@@ -4,12 +4,10 @@ const mysqlConnection = require("../config/connection");
 
 Router.post("/", (req, res) => {
   var list = req.body;
-  //   console.log(list);
 
   var sql = "";
   list.forEach(myFunction);
   function myFunction(value, index, array) {
-    //console.log(value.id);
     sql += `(select DISTINCT (t.id), t.name, t.course_name, t.min_certification from
     ((SELECT collaborator.id, collaborator.name, courses.name as course_name, min(collaborator_has_courses.certification_date) as min_certification FROM collaborator
     left outer join collaborator_has_courses on collaborator_has_courses.collaborator_id = collaborator.id
@@ -27,8 +25,6 @@ Router.post("/", (req, res) => {
 
   mysqlConnection.query(sql, function (error, results, fields) {
     if (error) throw error;
-    // `results` is an array with one element for every statement in the query:
-    // console.log(results);
     res.send(results);
   });
 });

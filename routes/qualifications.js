@@ -2,17 +2,28 @@ const express = require("express");
 const Router = express.Router();
 const mysqlConnection = require("../config/connection");
 
+// SELECT qualification.id, qualification.name,
+// group_concat(distinct collaborator.name  , " ",collaborator.surname separator ', ') AS collaborator,
+// group_concat(distinct courses.name separator ', ') AS courses
+// FROM qualification
+// LEFT OUTER JOIN qualification_has_collaborator ON qualification_has_collaborator.qualification_id = qualification.id
+// LEFT OUTER JOIN collaborator ON collaborator.id = qualification_has_collaborator.collaborator_id
+// LEFT OUTER JOIN courses_has_qualification ON courses_has_qualification.qualification_id = qualification.id
+// LEFT OUTER JOIN courses ON courses.id = courses_has_qualification.courses_id
+// group by qualification.id
+
 // Get all qualifications
 Router.get("/", (req, res) => {
   mysqlConnection.query(
     `SELECT qualification.id, qualification.name,
     group_concat(distinct collaborator.name  , " ",collaborator.surname separator ', ') AS collaborator,
-    group_concat(distinct courses.name separator ', ') AS courses
+    GROUP_CONCAT(distinct IF(courses.removed=0 ,  courses.name, null) SEPARATOR ', ')  as courses
     FROM qualification
     LEFT OUTER JOIN qualification_has_collaborator ON qualification_has_collaborator.qualification_id = qualification.id
     LEFT OUTER JOIN collaborator ON collaborator.id = qualification_has_collaborator.collaborator_id
     LEFT OUTER JOIN courses_has_qualification ON courses_has_qualification.qualification_id = qualification.id
     LEFT OUTER JOIN courses ON courses.id = courses_has_qualification.courses_id
+    LEFT OUTER JOIN collaborator_has_courses ON collaborator_has_courses.collaborator_id = collaborator.id
     group by qualification.id`,
 
     (err, rows, fields) => {

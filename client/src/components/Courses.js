@@ -9,11 +9,11 @@ import {
   DropdownItem,
   DropdownToggle,
 } from "reactstrap";
-import React, { Component, Fragment, useState } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { fetchCoursesInformations } from "../actions/coursesActions";
-import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import AddNewCourseModal from "./modals/AddNewCourseModal";
 import RemoveCourseModalDue from "./modals/RemoveCourseModalDue";
 
@@ -127,7 +127,6 @@ class Courses extends Component {
           <thead>
             <tr>
               <th>Nome</th>
-              <th>Costo unitario</th>
               <th>Collaboratori</th>
               <th>Qualifiche</th>
               <th></th>
@@ -141,11 +140,11 @@ class Courses extends Component {
                     course.name
                       .toLowerCase()
                       .includes(this.state.search.toLowerCase())) ||
-                  (course.cost !== null &&
-                    course.cost
-                      .toString()
-                      .toLowerCase()
-                      .includes(this.state.search.toLowerCase())) ||
+                  // (course.cost !== null &&
+                  //   course.cost
+                  //     .toString()
+                  //     .toLowerCase()
+                  //     .includes(this.state.search.toLowerCase())) ||
                   (course.collaborator !== null &&
                     course.collaborator
                       .toLowerCase()
@@ -155,14 +154,14 @@ class Courses extends Component {
                       .toLowerCase()
                       .includes(this.state.search.toLowerCase()))
               )
-              .map(({ id, name, cost, collaborator, qualification }) => (
+              .map(({ id, name, collaborator, qualification }) => (
                 <tr>
                   <td>
                     <Link>{name}</Link>
                   </td>
-                  <td>
+                  {/* <td>
                     <Link>{cost}</Link>
-                  </td>
+                  </td> */}
                   <td>
                     <Link>{collaborator}</Link>
                   </td>

@@ -1,11 +1,9 @@
 import React from "react";
-import DayPicker, { DateUtils } from "react-day-picker";
+import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
 import { fetchDates } from "../actions/coursesActions";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
-import { useHistory } from "react-router-dom";
 
 class SummaryCalendar extends React.Component {
   constructor(props) {

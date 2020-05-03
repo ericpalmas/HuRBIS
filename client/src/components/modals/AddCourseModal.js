@@ -26,7 +26,6 @@ class AddCourseModal extends Component {
     super(props);
 
     this.state = {
-      instructor: false,
       modal: false,
       courseIsPresent: false,
       dateError: false,
@@ -44,27 +43,15 @@ class AddCourseModal extends Component {
     };
 
     axios.get(`/courses`).then((res) => {
-      console.log(res.data[0]);
-      this.setState({ course_id: res.data[0].id });
+      console.log(res);
+
+      if (res.data.length !== 0) this.setState({ course_id: res.data[0].id });
     });
   }
 
   componentDidMount() {
     this.props.fetchCourses();
     this.props.fetchCoursesOfCollaborator(this.props.collaborator_id);
-    // this.setState({
-    //   course_id: this.state.corsi[0].id,
-    // });
-    // if (this.props.corsi.length !== 0) {
-    //   this.setState({
-    //     course_id: this.props.id,
-    //   });
-    // }
-
-    // this.setState({
-    //   corsi: this.props.corsi,
-    // });
-    // console.log(this.state.corsi);
   }
 
   toggle = () => {

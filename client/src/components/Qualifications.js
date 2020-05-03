@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState } from "react";
+import React, { Component } from "react";
 import {
   Form,
   FormGroup,
@@ -13,9 +13,10 @@ import {
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { fetchQualificationsInfos } from "../actions/qualificationsActions";
-import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import AddQualificationModal from "./modals/AddQualificationModal";
 import RemoveQualificationModal from "./modals/RemoveQualificationModal";
+
 class Qualifications extends Component {
   constructor(props) {
     super(props);

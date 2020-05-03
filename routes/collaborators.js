@@ -1,7 +1,6 @@
 const express = require("express");
 const Router = express.Router();
 const mysqlConnection = require("../config/connection");
-const risnovaConnection = require("../config/risnovaConnection");
 
 // Get all collaborators
 Router.get("/", (req, res) => {
@@ -17,35 +16,19 @@ Router.get("/", (req, res) => {
   );
 });
 
-// // Get single collaborator
-// Router.get("/:id", (req, res) => {
-//   mysqlConnection.query(
-//     `SELECT * FROM collaborator WHERE id = ${req.params.id}`,
-//     (err, rows, fields) => {
-//       if (!err) {
-//         res.send(rows);
-//       } else {
-//         console.log(err);
-//       }
-//     }
-//   );
-// });
-
-// Add a collaborator to the database
+// add a collaborator to the database
 Router.post("/", (req, res) => {
   const newCollaborator = req.body;
-  //console.log(newCollaborator);
   const sql =
     `INSERT INTO collaborator(name, surname, yearOfBirth) VALUES` +
     `('${newCollaborator.name}', '${newCollaborator.surname}', '${newCollaborator.yearOfBirth}')`;
 
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
-    //console.log(result);
   });
 });
 
-// Delete a collaborator from the dabase
+// Delete a collaborator from the database
 Router.delete("/:id", (req, res) => {
   mysqlConnection.query(
     `UPDATE collaborator SET removed='1' WHERE id = ${req.params.id}`,

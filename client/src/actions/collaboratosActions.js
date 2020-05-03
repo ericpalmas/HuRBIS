@@ -1,7 +1,6 @@
 import axios from "axios";
 import {
   FETCH_COLLABORATORS,
-  FETCH_SINGLE_COLLABORATOR,
   ADD_COLLABORATOR,
   DELETE_COLLABORATOR,
   FETCH_COLLABORATOR_INFOS,
@@ -16,16 +15,6 @@ export const fetchCollaborators = () => (dispatch) => {
   );
 };
 
-// export const fetchSingleCollaborator = (id) => (dispatch) => {
-//   axios.get(`/collaborators/infos/${id}`).then((res) =>
-//     dispatch({
-//       type: FETCH_SINGLE_COLLABORATOR,
-//       payload: id,
-//     })
-//   );
-// };
-
-// add new collaborator
 export const addCollaborator = (newCollaborator) => (dispatch) => {
   axios.post("/collaborators/", newCollaborator).then((res) =>
     dispatch({

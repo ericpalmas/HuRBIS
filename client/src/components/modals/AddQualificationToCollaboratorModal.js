@@ -4,7 +4,6 @@ import axios from "axios";
 import { fetchQualificationsInfos } from "../../actions/qualificationsActions";
 import { addQualificationToCollaborator } from "../../actions/qualificationsActions";
 import { addCoursesToCollaborator } from "../../actions/coursesActions";
-import { BrowserRouter as Router, Link, NavLink } from "react-router-dom";
 
 import PropTypes from "prop-types";
 
@@ -73,7 +72,6 @@ class AddQualificationToCollaboratorModal extends Component {
   };
 
   onQualificationSelect = (event) => {
-    // console.log(event.target.value);
     this.setState({
       qualification_id: event.target.value,
     });
@@ -139,11 +137,13 @@ class AddQualificationToCollaboratorModal extends Component {
 
   componentDidMount() {
     axios.get(`/qualifications`).then((res) => {
-      this.setState({
-        qualifications: res.data,
-        defaultValue: res.data[0].id,
-        qualification_id: res.data[0].id,
-      });
+      if (res.data.length !== 0) {
+        this.setState({
+          qualifications: res.data,
+          defaultValue: res.data[0].id,
+          qualification_id: res.data[0].id,
+        });
+      }
     });
   }
 
@@ -170,7 +170,6 @@ class AddQualificationToCollaboratorModal extends Component {
                   name="customSelect"
                   onChange={this.onQualificationSelect}
                   defaultValue={this.state.value}
-                  // value={this.state.value}
                 >
                   {this.state.qualifications.map(({ id, name }) => (
                     <option value={id}>{name}</option>
@@ -178,9 +177,7 @@ class AddQualificationToCollaboratorModal extends Component {
                 </CustomInput>
 
                 <Button color="primary" className="mt-4 mr-2 float-left">
-                  {/* <Link to={"/collaborators/" + this.props.collaborator_id}> */}
                   Continua
-                  {/* </Link> */}
                 </Button>
                 <Button
                   color="secondary"

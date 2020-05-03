@@ -2,47 +2,40 @@ const express = require("express");
 const Router = express.Router();
 const mysqlConnection = require("../config/connection");
 
-// // Get all courses
 Router.get("/", (req, res) => {
-  mysqlConnection.query("SELECT * FROM courses;", (err, rows, fields) => {
-    if (!err) {
-      res.send(rows);
-    } else {
-      console.log(err);
+  mysqlConnection.query(
+    "SELECT * FROM courses where courses.removed = 0;",
+    (err, rows, fields) => {
+      if (!err) {
+        res.send(rows);
+      } else {
+        console.log(err);
+      }
     }
-  });
+  );
 });
 
-// //aggiungi un corso ad un collaboratore
 Router.post("/addCourse", (req, res) => {
   const newCourse = req.body;
-  //console.log(newCourse);
 
   const sql = ` INSERT INTO collaborator_has_courses(collaborator_id, courses_id, certification_date, expiration_date, instructor) 
   VALUES ('${newCourse.collaborator_id}', '${newCourse.course_id}', '${newCourse.certificationDate}', '${newCourse.expirationDate}', ${newCourse.instructor});`;
   mysqlConnection.query(sql, newCourse, (err, result) => {
     if (err) throw err;
-    //console.log(result);
   });
 });
 
 // //aggiungi un corso ad un collaboratore
 Router.post("/addNewCourse", (req, res) => {
   const newCourse = req.body;
-  //console.log(newCourse);
-
   const sql = `INSERT INTO courses (name) VALUES ('${newCourse.name}');`;
-
   mysqlConnection.query(sql, newCourse, (err, result) => {
     if (err) throw err;
-    //console.log(result);
   });
 });
 
 Router.post("/", (req, res) => {
-  console.log(req.body);
   const removedCourse = req.body;
-
   mysqlConnection.query(
     `DELETE FROM collaborator_has_courses WHERE collaborator_id='${removedCourse.collaborator_id}' and courses_id='${removedCourse.course_id}';`,
     (err, rows, fields) => {
@@ -55,13 +48,18 @@ Router.post("/", (req, res) => {
   );
 });
 
+// SELECT courses.id, courses.name, courses.name,collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
+//     FROM collaborator_has_courses
+//     LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
+//     where collaborator_id = 5 and courses.removed = 0
+
 // Corsi di un collaboratore
 Router.get("/:id", (req, res) => {
   mysqlConnection.query(
     `SELECT courses.id, courses.name, courses.name,collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
     FROM collaborator_has_courses 
     LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
-    where collaborator_id = ${req.params.id}`,
+    where collaborator_id = ${req.params.id} and courses.removed = 0`,
     (err, rows, fields) => {
       if (!err) {
         res.send(rows);
@@ -75,8 +73,8 @@ Router.get("/:id", (req, res) => {
 // Delete a collaborator from the dabase
 Router.delete("/:id", (req, res) => {
   mysqlConnection.query(
-    // `UPDATE courses SET removed='1' WHERE id='${req.params.id}'`,
-    `DELETE FROM courses WHERE id = '${req.params.id}'`,
+    `UPDATE courses SET removed='1' WHERE id='${req.params.id}'`,
+    // `DELETE FROM courses WHERE id = '${req.params.id}'`,
     (err, rows, fields) => {
       if (!err) {
         res.send(rows);
@@ -87,62 +85,50 @@ Router.delete("/:id", (req, res) => {
   );
 });
 
-// modifica un corso in corso
 Router.post("/modifyCourse", (req, res) => {
   const newCourse = req.body;
-
-  //console.log(newCourse);
   const sql = `UPDATE collaborator_has_courses SET certification_date='${newCourse.certificationDate}', expiration_date='${newCourse.expirationDate}', instructor=${newCourse.instructor} WHERE collaborator_id='${newCourse.collaborator_id}' and courses_id='${newCourse.course_id}';`;
-  //console.log(sql);
 
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
-    console.log(result);
   });
 });
 
 // modifica un corso in corso
 Router.post("/renewCourse", (req, res) => {
-  console.log("RENEEWWWW");
   const course = req.body;
-  console.log(course);
-
-  //console.log(course);
   const sql = `UPDATE collaborator_has_courses SET certification_date=null, expiration_date=null WHERE collaborator_id='${course.collaborator_id}' and courses_id='${course.course_id}';`;
 
-  console.log(sql);
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
-    console.log(result);
   });
 });
 
+// SELECT courses.id, courses.name, courses.name, collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
+// FROM collaborator_has_courses
+// LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
+// where collaborator_id = 4 and courses.removed = 0 and CURDATE() > collaborator_has_courses.certification_date and CURDATE() < collaborator_has_courses.expiration_date
+
+//${value.id}
+
 Router.post("/collaboratorCourses", (req, res) => {
   var list = req.body;
-  //console.log(list);
-
   var sql = "";
   list.forEach(myFunction);
   function myFunction(value, index, array) {
-    //console.log(value.id);
     sql += `SELECT courses.id, courses.name, courses.name,collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
     FROM collaborator_has_courses 
     LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
     where collaborator_id = '${value.id}';`;
   }
 
-  //console.log(sql);
-
   mysqlConnection.query(sql, function (error, results, fields) {
     if (error) throw error;
-
     res.send(results);
   });
 });
 
-// Corsi di un collaboratore
 Router.get("/minCertificationDate/:id", (req, res) => {
-  //console.log(req.body);
   mysqlConnection.query(
     `select DISTINCT (t.id), t.name, t.min_certification from
     ((SELECT collaborator.id, collaborator.name, min(collaborator_has_courses.certification_date) as min_certification FROM collaborator

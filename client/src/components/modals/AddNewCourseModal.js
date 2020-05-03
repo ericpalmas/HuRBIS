@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 import { addNewCourse } from "../../actions/coursesActions";
 import {
   Alert,
@@ -46,7 +46,7 @@ class AddNewCourseModal extends Component {
     console.log("nuovo corso");
     console.log(newCourse);
 
-    if (newCourse.name == "") {
+    if (newCourse.name === "") {
       this.setState({
         insertName: true,
       });

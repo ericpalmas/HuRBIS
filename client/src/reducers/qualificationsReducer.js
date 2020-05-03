@@ -5,7 +5,6 @@ import {
   REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
   ADD_QUALIFICATION,
   DELETE_QUALIFICATION,
-  FETCH_COLLABORATORID_BY_QUALIFICATIONID,
 } from "../actions/types";
 
 const initialState = {
@@ -19,7 +18,6 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
-  const { type, payload } = action;
   switch (action.type) {
     case FETCH_QUALIFICATIONS:
       return {
