@@ -30,7 +30,6 @@ class AppNavbar extends Component {
         <Navbar light expand="sm" className="mb-5" id="navbar">
           <Container className="ml-1">
             <NavbarBrand href="/collaborators">
-              {/* <NavbarBrand href="/"> */}
               <img style={{ width: 90 }} src={require("../Logo.PNG")} />
             </NavbarBrand>
             <NavbarToggler onClick={this.toggle}></NavbarToggler>

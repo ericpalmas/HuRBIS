@@ -17,7 +17,6 @@ export const fetchQualificationsInfos = () => (dispatch) => {
   );
 };
 
-// Get qualification
 export const fetchQualificationsOfCollaborator = (id) => async (dispatch) => {
   const res = await axios.get(`/qualifications/${id}`);
   dispatch({
@@ -40,7 +39,6 @@ export const addQualificationToCollaborator = (qualification) => (dispatch) => {
 export const removeQualificationsFromCollaborator = (listOfId) => (
   dispatch
 ) => {
-  console.log("removeQualificationsFromCollaborator");
   axios.post("/qualifications/removeQualifications", listOfId).then((res) =>
     dispatch({
       type: REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
@@ -50,8 +48,6 @@ export const removeQualificationsFromCollaborator = (listOfId) => (
 };
 
 export const addNewQualification = (qualification) => (dispatch) => {
-  console.log("addNewQualification");
-  console.log(qualification);
   axios.post("/qualifications/addQualification", qualification).then((res) =>
     dispatch({
       type: ADD_QUALIFICATION,
@@ -61,7 +57,6 @@ export const addNewQualification = (qualification) => (dispatch) => {
 };
 
 export const removeQualification = (listOfQualifications) => (dispatch) => {
-  console.log("removeQualificationsAndCourses");
   axios
     .post(
       `/qualifications/removeQualificationsAndCourses`,

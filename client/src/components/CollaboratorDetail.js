@@ -109,8 +109,7 @@ const Corso = ({ corsi, elem, collaborator_id }) => (
           </td>
           <td>
             {!!corso.certification_date
-              ? //? corso.certification_date.substr(0, 10)
-                printDate(corso.certification_date)
+              ? printDate(corso.certification_date)
               : "      //"}
           </td>
 
@@ -304,7 +303,6 @@ class CollaboratorDetail extends Component {
           <br></br>
           <Corso
             corsi={this.state.corsiPassati}
-            // corsi={this.state.corsiSvolti}
             elem={this}
             collaborator_id={this.props.match.params.id}
           />

@@ -48,11 +48,6 @@ Router.post("/", (req, res) => {
   );
 });
 
-// SELECT courses.id, courses.name, courses.name,collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
-//     FROM collaborator_has_courses
-//     LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
-//     where collaborator_id = 5 and courses.removed = 0
-
 // Corsi di un collaboratore
 Router.get("/:id", (req, res) => {
   mysqlConnection.query(
@@ -103,13 +98,6 @@ Router.post("/renewCourse", (req, res) => {
     if (err) throw err;
   });
 });
-
-// SELECT courses.id, courses.name, courses.name, collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
-// FROM collaborator_has_courses
-// LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
-// where collaborator_id = 4 and courses.removed = 0 and CURDATE() > collaborator_has_courses.certification_date and CURDATE() < collaborator_has_courses.expiration_date
-
-//${value.id}
 
 Router.post("/collaboratorCourses", (req, res) => {
   var list = req.body;

@@ -34,9 +34,7 @@ export const deleteCollaborator = (id) => (dispatch) => {
 };
 
 export const fetchCollaboratorInfos = (id) => async (dispatch) => {
-  // console.log("fetchCollaboratorInfos");
   const res = await axios.get(`/collaborators/infos/${id}`);
-  // console.log(res);
   dispatch({
     type: FETCH_COLLABORATOR_INFOS,
     payload: res.data,

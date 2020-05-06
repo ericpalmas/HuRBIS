@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-//import PropTypes from "prop-types";
 import { addNewCourse } from "../../actions/coursesActions";
 import {
   Alert,
@@ -70,7 +69,6 @@ class AddNewCourseModal extends Component {
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}> Aggiungi nuovo corso </ModalHeader>
           <ModalBody>
-            {/* abilitare alerte quando premendo il bottone aggiungi ho il campo vuoto o un collaboratore con quel nome esiste già */}
             {this.state.insertName ? (
               <Alert color="danger">{this.state.msg}</Alert>
             ) : null}

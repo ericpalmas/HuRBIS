@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { removeQualification } from "../../actions/qualificationsActions";
 
-//import PropTypes from "prop-types";
-
 import {
   Alert,
   Button,

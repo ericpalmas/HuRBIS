@@ -47,23 +47,17 @@ const ArrayFormDataQualification = (props) => {
     <>
       <Form onSubmit={handleSubmit}>
         <FormGroup>
-          {/* {inputFields.map((inputField, index) => (
-            <Fragment key={`${inputField}~${index}`}> */}
           <CustomInput
             type="select"
             id="exampleCustomSelect"
             name="customSelect"
             placeholder="Nome del corso"
-            //onChange={this.onQualificationSelect}
             onChange={(event) => handleInputChange(event)}
-            //value={this.state.value}
           >
             {props.qualifications.map(({ id, name }) => (
               <option value={id}>{name}</option>
             ))}
           </CustomInput>
-          {/* </Fragment>
-          ))} */}
         </FormGroup>
 
         <Button onSubmit={handleSubmit} style={{ marginTop: "2rem" }} block>

@@ -2,26 +2,6 @@ const express = require("express");
 const Router = express.Router();
 const mysqlConnection = require("../config/connection");
 
-// SELECT collaborator.id, collaborator.name, collaborator.surname, collaborator.yearOfBirth, collaborator.removed, min(expiration_date) as min_expiration_date,
-//     group_concat(distinct qualification.name separator ', ') AS qualification,
-//     group_concat(distinct courses.name separator ', ') AS courses
-//     from collaborator
-//     LEFT OUTER JOIN collaborator_has_courses ON collaborator_has_courses.collaborator_id = collaborator.id
-//     LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
-//     LEFT OUTER JOIN qualification_has_collaborator ON qualification_has_collaborator.collaborator_id = collaborator.id
-//     LEFT OUTER JOIN qualification ON qualification.id = qualification_has_collaborator.qualification_id
-//     group by collaborator.id
-
-// SELECT collaborator.id, collaborator.name, collaborator.surname, collaborator.yearOfBirth, collaborator.removed, min(expiration_date) as min_expiration_date,
-//     group_concat(distinct qualification.name separator ', ') AS qualification,
-//     GROUP_CONCAT(distinct IF(courses.removed=0 and CURDATE() > collaborator_has_courses.certification_date and CURDATE() < collaborator_has_courses.expiration_date,  courses.name, null) SEPARATOR ', ')  as courses
-//     from collaborator
-//     LEFT OUTER JOIN collaborator_has_courses ON collaborator_has_courses.collaborator_id = collaborator.id
-//     LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
-//     LEFT OUTER JOIN qualification_has_collaborator ON qualification_has_collaborator.collaborator_id = collaborator.id
-//     LEFT OUTER JOIN qualification ON qualification.id = qualification_has_collaborator.qualification_id
-//     group by collaborator.id
-
 // Get all collaborators infos
 Router.get("/", (req, res) => {
   mysqlConnection.query(
@@ -44,12 +24,6 @@ Router.get("/", (req, res) => {
     }
   );
 });
-
-// SELECT collaborator.name, collaborator.surname, collaborator_has_courses.collaborator_id, collaborator_has_courses.courses_id ,
-//     courses.name as courseName, collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date
-//     FROM collaborator_has_courses
-//     LEFT OUTER JOIN collaborator ON collaborator.id = collaborator_has_courses.collaborator_id
-//     LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
 
 // Get all courses
 Router.get("/allDates", (req, res) => {

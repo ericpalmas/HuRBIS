@@ -13,7 +13,6 @@ class CollaboratorDetailPDF extends Component {
   generatePDF = () => {
     console.log(this.props.collaborator);
 
-    // new document in jspdfS
     var doc = new jsPDF("p", "pt");
 
     var imgData =

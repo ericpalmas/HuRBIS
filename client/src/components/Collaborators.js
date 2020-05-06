@@ -111,7 +111,6 @@ class Collaborators extends Component {
     this.setState({
       remove: !this.state.remove,
     });
-    //console.log(this.state.remove);
   };
 
   updateSearch(event) {
@@ -161,8 +160,6 @@ class Collaborators extends Component {
             var str1 = i.expiration_date.substr(0, 10);
             var expiration_date = Date.parse(str1);
 
-            ///////per le scadenze//////////
-
             if (now > expiration_date) {
               var newCourse = {
                 course_id: i.id,
@@ -196,7 +193,6 @@ class Collaborators extends Component {
         scadenza: true,
       });
     }
-    //console.log(scadenze);
   };
 
   render() {

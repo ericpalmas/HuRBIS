@@ -15,11 +15,10 @@ import {
 } from "reactstrap";
 
 const ArrayFormData = (props) => {
-  //const [inputFields, setInputFields] = useState([{ corso: "" }]);
   const [inputFields, setInputFields] = useState([
     { corso: props.courses[0].id },
   ]);
-  //const [qualificationName, setQualificationName] = useState({ name: "" });
+
   const [inputVal, setInputVal] = useState("");
 
   const [toggleState, setToggleState] = useState(false);

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-//import PropTypes from "prop-types";
 import { deleteCollaborator } from "../../actions/collaboratosActions";
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
@@ -62,9 +61,7 @@ class RemoveCollaboratorModal extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  //   courses: state.courses,
-});
+const mapStateToProps = (state) => ({});
 
 export default connect(mapStateToProps, {
   deleteCollaborator,

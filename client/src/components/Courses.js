@@ -140,11 +140,6 @@ class Courses extends Component {
                     course.name
                       .toLowerCase()
                       .includes(this.state.search.toLowerCase())) ||
-                  // (course.cost !== null &&
-                  //   course.cost
-                  //     .toString()
-                  //     .toLowerCase()
-                  //     .includes(this.state.search.toLowerCase())) ||
                   (course.collaborator !== null &&
                     course.collaborator
                       .toLowerCase()
@@ -159,9 +154,6 @@ class Courses extends Component {
                   <td>
                     <Link>{name}</Link>
                   </td>
-                  {/* <td>
-                    <Link>{cost}</Link>
-                  </td> */}
                   <td>
                     <Link>{collaborator}</Link>
                   </td>
