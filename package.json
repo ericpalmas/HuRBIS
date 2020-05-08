@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Human Resources Business Intelligence System",
   "main": "index.js",
+  "engines": {
+    "node": "12.16.x"
+  },
   "scripts": {
     "client-install": "cd client && npm install",
     "start": "node server.js",
