@@ -4,7 +4,8 @@
   "description": "Human Resources Business Intelligence System",
   "main": "index.js",
   "engines": {
-    "node": "12.16.x"
+    "node": "12.16.x",
+    "npm": "6.x"
   },
   "scripts": {
     "client-install": "cd client && npm install",
