@@ -41,7 +41,7 @@
     "express": "^4.17.1",
     "final-form": "^4.19.1",
     "final-form-arrays": "^3.0.2",
-    "jquery": "^1.12.4",
+    "jquery": ">=3.5.0",
     "mssql": "^6.2.0",
     "mysql": "github:mysqljs/mysql",
     "react-final-form": "^6.4.0",
