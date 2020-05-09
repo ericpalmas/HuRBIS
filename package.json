@@ -2,7 +2,7 @@
   "name": "hurbis",
   "version": "1.0.0",
   "description": "Human Resources Business Intelligence System",
-  "main": "index.js",
+  "main": "server.js",
   "engines": {
     "node": "12.16.x",
     "npm": "6.x"
