@@ -10,6 +10,7 @@ const necessaryCoursesRoutes = require("./routes/necessaryCourses");
 const datesRoutes = require("./routes/calendarDates");
 const collaboratorCoursesRoutes = require("./routes/collaboratorCourses");
 const collaboratorCertificationsRoutes = require("./routes/collaboratorCertifications");
+
 const app = express();
 
 app.use(bodyparser.json());
