@@ -62,10 +62,6 @@ class Courses extends Component {
       if (this.state.sort === "asc") return 1 * a.name.localeCompare(b.name);
       else if (this.state.sort === "desc")
         return -1 * a.name.localeCompare(b.name);
-      else if (this.state.sort === "ascCost")
-        return 1 * a.name.localeCompare(b.cost);
-      else if (this.state.sort === "descCost")
-        return -1 * a.name.localeCompare(b.cost);
     });
     console.log(courses);
     console.log(this.state.search);
@@ -101,22 +97,6 @@ class Courses extends Component {
                   onClick={this.handleChange.bind(this)}
                 >
                   Ordine alfabetico: decrescente
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem
-                  value="ascCost"
-                  onClick={this.handleChange.bind(this)}
-                >
-                  {" "}
-                  Ordine di costo: ascendente{" "}
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem
-                  value="descCost"
-                  onClick={this.handleChange.bind(this)}
-                >
-                  {" "}
-                  Ordine di costo: decrescente{" "}
                 </DropdownItem>
               </DropdownMenu>
             </ButtonDropdown>
