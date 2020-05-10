@@ -3,23 +3,20 @@ const Router = express.Router();
 const mysqlConnection = require("../config/connection");
 
 Router.get("/", (req, res) => {
-  mysqlConnection.query(
-    "SELECT * FROM courses where courses.removed = 0;",
-    (err, rows, fields) => {
-      if (!err) {
-        res.send(rows);
-      } else {
-        console.log(err);
-      }
-    }
-  );
+  var sql = "SELECT * FROM courses where courses.removed = 0;";
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    else res.send(result);
+  });
 });
 
+// aggiungi nuovo corso
 Router.post("/addCourse", (req, res) => {
   const newCourse = req.body;
-
   const sql = ` INSERT INTO collaborator_has_courses(collaborator_id, courses_id, certification_date, expiration_date, instructor) 
   VALUES ('${newCourse.collaborator_id}', '${newCourse.course_id}', '${newCourse.certificationDate}', '${newCourse.expirationDate}', ${newCourse.instructor});`;
+
   mysqlConnection.query(sql, newCourse, (err, result) => {
     if (err) throw err;
   });
@@ -29,6 +26,7 @@ Router.post("/addCourse", (req, res) => {
 Router.post("/addNewCourse", (req, res) => {
   const newCourse = req.body;
   const sql = `INSERT INTO courses (name) VALUES ('${newCourse.name}');`;
+
   mysqlConnection.query(sql, newCourse, (err, result) => {
     if (err) throw err;
   });
@@ -36,48 +34,34 @@ Router.post("/addNewCourse", (req, res) => {
 
 Router.post("/", (req, res) => {
   const removedCourse = req.body;
-  mysqlConnection.query(
-    `DELETE FROM collaborator_has_courses WHERE collaborator_id='${removedCourse.collaborator_id}' and courses_id='${removedCourse.course_id}';`,
-    (err, rows, fields) => {
-      if (!err) {
-        res.send(rows);
-      } else {
-        console.log(err);
-      }
-    }
-  );
+
+  var sql = `DELETE FROM collaborator_has_courses WHERE collaborator_id='${removedCourse.collaborator_id}' and courses_id='${removedCourse.course_id}';`;
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+  });
 });
 
 // Corsi di un collaboratore
 Router.get("/:id", (req, res) => {
-  mysqlConnection.query(
-    `SELECT courses.id, courses.name, courses.name,collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
-    FROM collaborator_has_courses 
-    LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
-    where collaborator_id = ${req.params.id} and courses.removed = 0`,
-    (err, rows, fields) => {
-      if (!err) {
-        res.send(rows);
-      } else {
-        console.log(err);
-      }
-    }
-  );
+  var sql = `SELECT courses.id, courses.name, courses.name,collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
+  FROM collaborator_has_courses 
+  LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
+  where collaborator_id = ${req.params.id} and courses.removed = 0`;
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    else res.send(result);
+  });
 });
 
 // Delete a collaborator from the dabase
 Router.delete("/:id", (req, res) => {
-  mysqlConnection.query(
-    `UPDATE courses SET removed='1' WHERE id='${req.params.id}'`,
-    // `DELETE FROM courses WHERE id = '${req.params.id}'`,
-    (err, rows, fields) => {
-      if (!err) {
-        res.send(rows);
-      } else {
-        console.log(err);
-      }
-    }
-  );
+  var sql = `UPDATE courses SET removed='1' WHERE id='${req.params.id}'`;
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(err);
+  });
 });
 
 Router.post("/modifyCourse", (req, res) => {
@@ -86,6 +70,7 @@ Router.post("/modifyCourse", (req, res) => {
 
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
+    console.log(err);
   });
 });
 
@@ -96,6 +81,7 @@ Router.post("/renewCourse", (req, res) => {
 
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
+    console.log(err);
   });
 });
 
@@ -112,31 +98,27 @@ Router.post("/collaboratorCourses", (req, res) => {
 
   mysqlConnection.query(sql, function (error, results, fields) {
     if (error) throw error;
-    res.send(results);
+    else res.send(results);
   });
 });
 
 Router.get("/minCertificationDate/:id", (req, res) => {
-  mysqlConnection.query(
-    `select DISTINCT (t.id), t.name, t.min_certification from
-    ((SELECT collaborator.id, collaborator.name, min(collaborator_has_courses.certification_date) as min_certification FROM collaborator
-    left outer join collaborator_has_courses on collaborator_has_courses.collaborator_id = collaborator.id
-    where collaborator_has_courses.courses_id = '${req.params.id}' and collaborator.removed = 0
-    group by id)
-    union
-    (SELECT collaborator.id, collaborator.name, null as min_certification FROM collaborator
-    left outer join collaborator_has_courses on collaborator_has_courses.collaborator_id = collaborator.id
-    where collaborator.removed = 0
-    group by id) ) as t
-    order by id`,
-    (err, rows, fields) => {
-      if (!err) {
-        res.send(rows);
-      } else {
-        console.log(err);
-      }
-    }
-  );
+  var sql = `select DISTINCT (t.id), t.name, t.min_certification from
+  ((SELECT collaborator.id, collaborator.name, min(collaborator_has_courses.certification_date) as min_certification FROM collaborator
+  left outer join collaborator_has_courses on collaborator_has_courses.collaborator_id = collaborator.id
+  where collaborator_has_courses.courses_id = '${req.params.id}' and collaborator.removed = 0
+  group by id)
+  union
+  (SELECT collaborator.id, collaborator.name, null as min_certification FROM collaborator
+  left outer join collaborator_has_courses on collaborator_has_courses.collaborator_id = collaborator.id
+  where collaborator.removed = 0
+  group by id) ) as t
+  order by id`;
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    else res.send(result);
+  });
 });
 
 module.exports = Router;

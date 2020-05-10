@@ -3,17 +3,13 @@ const Router = express.Router();
 const mysqlConnection = require("../config/connection");
 
 Router.get("/:id", (req, res) => {
-  mysqlConnection.query(
-    `select collaborator_has_courses.courses_id from collaborator_has_courses
-    where collaborator_id = ${req.params.id}`,
-    (err, rows, fields) => {
-      if (!err) {
-        res.send(rows);
-      } else {
-        console.log(err);
-      }
-    }
-  );
+  var sql = `select collaborator_has_courses.courses_id from collaborator_has_courses
+  where collaborator_id = ${req.params.id}`;
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    else res.send(result);
+  });
 });
 
 Router.post("/", (req, res) => {

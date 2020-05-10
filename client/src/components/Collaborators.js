@@ -145,8 +145,6 @@ class Collaborators extends Component {
           currentdate.getDate()
       );
 
-      console.log("ciaooooooooooooooooo");
-
       let i = 0;
       courses.forEach(function (v) {
         var collaborator = collaborators[i];
@@ -200,9 +198,10 @@ class Collaborators extends Component {
     const collaboratorsInfos = this.state.collaboratorInfos;
 
     const sorted = collaboratorsInfos.sort((a, b) => {
-      if (this.state.sort === "asc") return 1 * a.name.localeCompare(b.name);
+      if (this.state.sort === "asc")
+        return 1 * a.surname.localeCompare(b.surname);
       else if (this.state.sort === "desc")
-        return -1 * a.name.localeCompare(b.name);
+        return -1 * a.surname.localeCompare(b.surname);
       else if (this.state.sort === "ascDate")
         return 1 * a.name.localeCompare(b.min_expiration_date);
       else if (this.state.sort === "descDate")

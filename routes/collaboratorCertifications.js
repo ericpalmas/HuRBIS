@@ -25,28 +25,24 @@ Router.post("/", (req, res) => {
 
   mysqlConnection.query(sql, function (error, results, fields) {
     if (error) throw error;
-    res.send(results);
+    else res.send(results);
   });
 });
 
 // Get infos of one collaborator
 Router.get("/infos", (req, res) => {
-  mysqlConnection.query(
-    `SELECT  group_concat(distinct qualification.name separator ',') AS qualification,
-      collaborator.surname, collaborator.name, collaborator.yearOfBirth
-      from collaborator
-      LEFT OUTER JOIN qualification_has_collaborator ON qualification_has_collaborator.collaborator_id = collaborator.id
-      LEFT OUTER JOIN qualification ON qualification_has_collaborator.qualification_id = qualification.id
-      where collaborator.removed = 0
-      GROUP BY collaborator.id`,
-    (err, rows, fields) => {
-      if (!err) {
-        res.send(rows);
-      } else {
-        console.log(err);
-      }
-    }
-  );
+  var sql = `SELECT  group_concat(distinct qualification.name separator ',') AS qualification,
+  collaborator.surname, collaborator.name, collaborator.yearOfBirth
+  from collaborator
+  LEFT OUTER JOIN qualification_has_collaborator ON qualification_has_collaborator.collaborator_id = collaborator.id
+  LEFT OUTER JOIN qualification ON qualification_has_collaborator.qualification_id = qualification.id
+  where collaborator.removed = 0
+  GROUP BY collaborator.id`;
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    else res.send(result);
+  });
 });
 
 module.exports = Router;

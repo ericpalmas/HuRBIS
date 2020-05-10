@@ -9,20 +9,37 @@ import {
 } from "./types";
 
 export const fetchQualificationsInfos = () => (dispatch) => {
-  axios.get("/qualifications").then((res) =>
-    dispatch({
-      type: FETCH_QUALIFICATIONS,
-      payload: res.data,
-    })
-  );
+  axios
+    .get("/qualifications")
+    .then((res) =>
+      dispatch({
+        type: FETCH_QUALIFICATIONS,
+        payload: res.data,
+      })
+    )
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const fetchQualificationsOfCollaborator = (id) => async (dispatch) => {
-  const res = await axios.get(`/qualifications/${id}`);
-  dispatch({
-    type: FETCH_QUALIFICATIONS_OF_COLLABORATOR,
-    payload: res.data,
-  });
+  // const res = await axios.get(`/qualifications/${id}`);
+  // dispatch({
+  //   type: FETCH_QUALIFICATIONS_OF_COLLABORATOR,
+  //   payload: res.data,
+  // });
+
+  await axios
+    .get(`/qualifications/${id}`)
+    .then((res) =>
+      dispatch({
+        type: FETCH_QUALIFICATIONS_OF_COLLABORATOR,
+        payload: res.data,
+      })
+    )
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const addQualificationToCollaborator = (qualification) => (dispatch) => {
@@ -33,27 +50,40 @@ export const addQualificationToCollaborator = (qualification) => (dispatch) => {
         type: ADD_QUALIFICATION_TO_COLLABORATOR,
         payload: res.data,
       })
-    );
+    )
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const removeQualificationsFromCollaborator = (listOfId) => (
   dispatch
 ) => {
-  axios.post("/qualifications/removeQualifications", listOfId).then((res) =>
-    dispatch({
-      type: REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
-      payload: res.data,
-    })
-  );
+  axios
+    .post("/qualifications/removeQualifications", listOfId)
+    .then((res) =>
+      dispatch({
+        type: REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
+        payload: res.data,
+      })
+    )
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const addNewQualification = (qualification) => (dispatch) => {
-  axios.post("/qualifications/addQualification", qualification).then((res) =>
-    dispatch({
-      type: ADD_QUALIFICATION,
-      payload: res.data,
-    })
-  );
+  axios
+    .post("/qualifications/addQualification", qualification)
+    .then((res) =>
+      dispatch({
+        type: ADD_QUALIFICATION,
+        payload: res.data,
+      })
+    )
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const removeQualification = (listOfQualifications) => (dispatch) => {
@@ -67,5 +97,8 @@ export const removeQualification = (listOfQualifications) => (dispatch) => {
         type: DELETE_QUALIFICATION,
         payload: res.data,
       })
-    );
+    )
+    .catch((err) => {
+      console.log(err);
+    });
 };

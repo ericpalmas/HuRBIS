@@ -7,30 +7,45 @@ import {
 } from "./types";
 
 export const fetchCollaborators = () => (dispatch) => {
-  axios.get("/collaborators").then((res) =>
-    dispatch({
-      type: FETCH_COLLABORATORS,
-      payload: res.data,
-    })
-  );
+  axios
+    .get("/collaborators")
+    .then((res) =>
+      dispatch({
+        type: FETCH_COLLABORATORS,
+        payload: res.data,
+      })
+    )
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const addCollaborator = (newCollaborator) => (dispatch) => {
-  axios.post("/collaborators/", newCollaborator).then((res) =>
-    dispatch({
-      type: ADD_COLLABORATOR,
-      payload: res.data,
-    })
-  );
+  axios
+    .post("/collaborators/", newCollaborator)
+    .then((res) =>
+      dispatch({
+        type: ADD_COLLABORATOR,
+        payload: res.data,
+      })
+    )
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const deleteCollaborator = (id) => (dispatch) => {
-  axios.delete(`/collaborators/${id}`).then((res) =>
-    dispatch({
-      type: DELETE_COLLABORATOR,
-      payload: id,
-    })
-  );
+  axios
+    .delete(`/collaborators/${id}`)
+    .then((res) =>
+      dispatch({
+        type: DELETE_COLLABORATOR,
+        payload: id,
+      })
+    )
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const fetchCollaboratorInfos = (id) => async (dispatch) => {
@@ -38,5 +53,7 @@ export const fetchCollaboratorInfos = (id) => async (dispatch) => {
   dispatch({
     type: FETCH_COLLABORATOR_INFOS,
     payload: res.data,
+  }).catch((err) => {
+    console.log(err);
   });
 };

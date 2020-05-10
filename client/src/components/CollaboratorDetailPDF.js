@@ -43,7 +43,8 @@ class CollaboratorDetailPDF extends Component {
     doc.text(260, y, "Formazione: ");
 
     doc.setFontType("normal");
-    doc.text(340, y, this.props.collaborator.qualification);
+    if (this.props.collaborator.qualification)
+      doc.text(340, y, this.props.collaborator.qualification);
 
     y += 60;
     doc.setFontSize(11);
