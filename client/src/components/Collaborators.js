@@ -75,30 +75,37 @@ class Collaborators extends Component {
       scadenze: [],
     };
 
-    axios.get(`/collaborators`).then((res) => {
-      this.setState({
-        collaborators: res.data,
-      });
-      axios.post("/courses/collaboratorCourses", res.data).then((result) => {
+    axios
+      .get(`/collaborators`)
+      .then((res) => {
         this.setState({
-          courses: result.data,
+          collaborators: res.data,
         });
-      });
-
-      axios
-        .post("/necessaryCourses/qualificationCourses", res.data)
-        .then((result) => {
+        axios.post("/courses/collaboratorCourses", res.data).then((result) => {
           this.setState({
-            qualificationCourses: result.data,
+            courses: result.data,
           });
         });
-    });
-
-    axios.get(`/collaboratorsInfos`).then((res) => {
-      this.setState({
-        collaboratorInfos: res.data,
+        axios
+          .post("/necessaryCourses/qualificationCourses", res.data)
+          .then((result) => {
+            this.setState({
+              qualificationCourses: result.data,
+            });
+          });
+      })
+      .then(() => {
+        axios
+          .get(`/collaboratorsInfos`)
+          .then((result) => {
+            this.setState({
+              collaboratorInfos: result.data,
+            });
+          })
+          .then(() => {
+            this.updateDate();
+          });
       });
-    });
   }
 
   toggle = () => {
@@ -194,7 +201,6 @@ class Collaborators extends Component {
   };
 
   render() {
-    this.updateDate();
     const collaboratorsInfos = this.state.collaboratorInfos;
 
     const sorted = collaboratorsInfos.sort((a, b) => {
