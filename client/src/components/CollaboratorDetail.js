@@ -168,35 +168,52 @@ class CollaboratorDetail extends Component {
       .get(`/collaborators/infos/${this.props.match.params.id}`)
       .then((res) => {
         this.setState({ collaborator: res.data[0] });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    axios.get(`/courses/${this.props.match.params.id}`).then((res) => {
-      console.log(res);
-      for (let i = 0; i < res.data.length; i++) {
-        if (
-          (res.data[i].expiration_date != null) &
-          (res.data[i].certification_date != null)
-        ) {
-          var certificationDate = new Date(res.data[i].certification_date);
-          certificationDate.setDate(certificationDate.getDate() + 1);
-          res.data[i].certification_date = certificationDate.toISOString();
+    axios
+      .get(`/courses/${this.props.match.params.id}`)
+      .then((res) => {
+        console.log(res);
+        for (let i = 0; i < res.data.length; i++) {
+          if (
+            (res.data[i].expiration_date != null) &
+            (res.data[i].certification_date != null)
+          ) {
+            var certificationDate = new Date(res.data[i].certification_date);
+            certificationDate.setDate(certificationDate.getDate() + 1);
+            res.data[i].certification_date = certificationDate.toISOString();
 
-          var expirationDate = new Date(res.data[i].expiration_date);
-          expirationDate.setDate(expirationDate.getDate() + 1);
-          res.data[i].expiration_date = expirationDate.toISOString();
+            var expirationDate = new Date(res.data[i].expiration_date);
+            expirationDate.setDate(expirationDate.getDate() + 1);
+            res.data[i].expiration_date = expirationDate.toISOString();
+          }
         }
-      }
-      this.setState({ courses: res.data });
-    });
+        this.setState({ courses: res.data });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-    axios.get(`/coursesHistory/${this.props.match.params.id}`).then((res) => {
-      this.setState({ corsiPassati: res.data });
-    });
+    axios
+      .get(`/coursesHistory/${this.props.match.params.id}`)
+      .then((res) => {
+        this.setState({ corsiPassati: res.data });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     axios
       .get(
         `/necessaryCourses/qualificationCourses/${this.props.match.params.id}`
       )
       .then((res) => {
         this.setState({ qualificationCourses: res.data });
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }
 

@@ -81,17 +81,27 @@ class Collaborators extends Component {
         this.setState({
           collaborators: res.data,
         });
-        axios.post("/courses/collaboratorCourses", res.data).then((result) => {
-          this.setState({
-            courses: result.data,
+
+        axios
+          .post("/courses/collaboratorCourses", res.data)
+          .then((result) => {
+            this.setState({
+              courses: result.data,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
           });
-        });
+
         axios
           .post("/necessaryCourses/qualificationCourses", res.data)
           .then((result) => {
             this.setState({
               qualificationCourses: result.data,
             });
+          })
+          .catch((error) => {
+            console.log(error);
           });
       })
       .then(() => {
@@ -104,7 +114,13 @@ class Collaborators extends Component {
           })
           .then(() => {
             this.updateDate();
+          })
+          .catch((error) => {
+            console.log(error);
           });
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }
 
@@ -172,20 +188,35 @@ class Collaborators extends Component {
                 expirationDate: i.expiration_date.substr(0, 10),
                 collaborator_id: parseInt(collaborator.id),
               };
-              axios.post("/coursesHistory/addCourse", newCourse);
+              axios
+                .post("/coursesHistory/addCourse", newCourse)
+                .catch((error) => {
+                  console.log(error);
+                });
 
               if (corsiObbligatori.includes(i.id)) {
                 const updateCourse = {
                   course_id: i.id,
                   collaborator_id: parseInt(collaborator.id),
                 };
-                axios.post("/courses/renewCourse", updateCourse);
+                axios
+                  .post("/courses/renewCourse", updateCourse)
+                  .catch((error) => {
+                    console.log(error);
+                  });
               } else {
                 const removedCourse = {
                   course_id: i.id,
                   collaborator_id: parseInt(collaborator.id),
                 };
-                axios.post("/courses/", removedCourse);
+                axios
+                  .post("/courses/", removedCourse)
+                  .catch((error) => {
+                    console.log(error);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
               }
             }
           }

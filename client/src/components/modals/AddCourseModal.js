@@ -42,11 +42,16 @@ class AddCourseModal extends Component {
       msg3: "Inserire le date",
     };
 
-    axios.get(`/courses`).then((res) => {
-      console.log(res);
+    axios
+      .get(`/courses`)
+      .then((res) => {
+        console.log(res);
 
-      if (res.data.length !== 0) this.setState({ course_id: res.data[0].id });
-    });
+        if (res.data.length !== 0) this.setState({ course_id: res.data[0].id });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   componentDidMount() {

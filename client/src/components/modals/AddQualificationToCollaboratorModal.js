@@ -53,17 +53,30 @@ class AddQualificationToCollaboratorModal extends Component {
         this.setState({
           courses: res.data,
         });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    axios.get("/necessaryCourses").then((res) => {
-      this.setState({
-        coursesAndQualifications: res.data,
+    axios
+      .get("/necessaryCourses")
+      .then((res) => {
+        this.setState({
+          coursesAndQualifications: res.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    });
-    axios.get("/qualifications/" + this.props.collaborator_id).then((res) => {
-      this.setState({
-        qualificationOfCollaborator: res.data,
+    axios
+      .get("/qualifications/" + this.props.collaborator_id)
+      .then((res) => {
+        this.setState({
+          qualificationOfCollaborator: res.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    });
     this.setState({
       qualification_id: this.state.defaultValue,
     });
@@ -136,15 +149,20 @@ class AddQualificationToCollaboratorModal extends Component {
   };
 
   componentDidMount() {
-    axios.get(`/qualifications`).then((res) => {
-      if (res.data.length !== 0) {
-        this.setState({
-          qualifications: res.data,
-          defaultValue: res.data[0].id,
-          qualification_id: res.data[0].id,
-        });
-      }
-    });
+    axios
+      .get(`/qualifications`)
+      .then((res) => {
+        if (res.data.length !== 0) {
+          this.setState({
+            qualifications: res.data,
+            defaultValue: res.data[0].id,
+            qualification_id: res.data[0].id,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   render() {

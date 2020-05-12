@@ -16,43 +16,68 @@ class Summary extends Component {
       certificationsHistory: [],
     };
 
-    axios.get(`/courses`).then((res) => {
-      if (res.data.length !== 0) {
-        axios.post("/collaboratorCertifications", res.data).then((result) => {
-          this.setState({
-            minCertifications: result.data,
-          });
-        });
-        axios.post("/coursesHistory", res.data).then((result) => {
-          this.setState({
-            certificationsHistory: result.data,
-          });
-        });
-      }
-    });
-
-    axios.get(`/courses`).then((res) => {
-      this.setState({
-        courses: res.data,
+    axios
+      .get(`/courses`)
+      .then((res) => {
+        if (res.data.length !== 0) {
+          axios
+            .post("/collaboratorCertifications", res.data)
+            .then((result) => {
+              this.setState({
+                minCertifications: result.data,
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+          axios
+            .post("/coursesHistory", res.data)
+            .then((result) => {
+              this.setState({
+                certificationsHistory: result.data,
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
       });
 
-      columns = [];
+    axios
+      .get(`/courses`)
+      .then((res) => {
+        this.setState({
+          courses: res.data,
+        });
 
-      columns.push({ title: "Qualifica" });
-      columns.push({ title: "Cognome" });
-      columns.push({ title: "Nome" });
-      columns.push({ title: "Anno nascita." });
+        columns = [];
 
-      for (let i = 0; i < res.data.length; i++) {
-        columns.push({ title: res.data[i].name });
-      }
-    });
+        columns.push({ title: "Qualifica" });
+        columns.push({ title: "Cognome" });
+        columns.push({ title: "Nome" });
+        columns.push({ title: "Anno nascita." });
 
-    axios.get(`/collaboratorCertifications/infos`).then((res) => {
-      this.setState({
-        collaboratorInfos: res.data,
+        for (let i = 0; i < res.data.length; i++) {
+          columns.push({ title: res.data[i].name });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    });
+
+    axios
+      .get(`/collaboratorCertifications/infos`)
+      .then((res) => {
+        this.setState({
+          collaboratorInfos: res.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   filterArray = (certifications, infos, historyCertifications) => {
