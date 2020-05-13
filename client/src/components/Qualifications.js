@@ -49,7 +49,6 @@ class Qualifications extends Component {
   };
 
   render() {
-    console.log("Qualifiche");
     const qualifications = this.props.qualificationsInfos;
 
     const sorted = qualifications.sort((a, b) => {
@@ -57,8 +56,7 @@ class Qualifications extends Component {
       else if (this.state.sort === "desc")
         return -1 * a.name.localeCompare(b.name);
     });
-    console.log(qualifications);
-    console.log(this.state.search);
+
     return (
       <div>
         <Form inline>

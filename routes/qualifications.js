@@ -47,7 +47,7 @@ Router.post("/addQualification", (req, res) => {
   const newQualification = req.body;
   newQualification.listOfId.forEach(myFunction);
   function myFunction(value, index, array) {
-    checkID.push(value.corso.toString());
+    checkID.push(parseInt(value.corso));
   }
   console.log(checkID);
 

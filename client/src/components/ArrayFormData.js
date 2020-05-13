@@ -29,23 +29,21 @@ const ArrayFormData = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("inputFields", inputFields);
-    console.log("qualificationName", inputVal);
+    // console.log("inputFields", inputFields);
+    // console.log("qualificationName", inputVal);
 
     var newQualification = {
       name: inputVal,
       listOfId: inputFields,
     };
 
-    console.log(newQualification);
-    console.log(hasDuplicates(inputFields));
     if (inputVal === "") {
       setToggleState(true);
     } else {
       setToggleState(false);
       var checkArray = [];
       newQualification.listOfId.forEach(function (v) {
-        checkArray.push(v.corso);
+        checkArray.push(parseInt(v.corso));
       });
       if (hasDuplicates(checkArray)) {
         setMultipleId(true);
@@ -58,7 +56,6 @@ const ArrayFormData = (props) => {
   };
 
   const hasDuplicates = (array) => {
-    console.log(array);
     return new Set(array).size !== array.length;
   };
 
