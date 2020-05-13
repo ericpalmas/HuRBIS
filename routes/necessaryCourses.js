@@ -48,6 +48,22 @@ Router.post("/qualificationCourses", (req, res) => {
   });
 });
 
+Router.get("/qualificationCourses/:id", (req, res) => {
+  // list.forEach(myFunction);
+  // function myFunction(value, index, array) {
+  var sql = `SELECT courses_has_qualification.courses_id FROM qualification_has_collaborator
+    inner  join qualification on qualification.id = qualification_has_collaborator.qualification_id
+    inner join courses_has_qualification on courses_has_qualification.qualification_id = qualification.id
+    where qualification_has_collaborator.collaborator_id = '${req.params.id}';`;
+  // }
+
+  mysqlConnection.query(sql, function (error, results, fields) {
+    if (error) throw error;
+
+    res.send(results);
+  });
+});
+
 Router.get("/", (req, res) => {
   mysqlConnection.query(
     `SELECT * from courses_has_qualification`,

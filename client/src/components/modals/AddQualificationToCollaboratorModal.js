@@ -134,17 +134,24 @@ class AddQualificationToCollaboratorModal extends Component {
       this.setState({
         qualificationAlreadyExist: false,
       });
-      this.props.addQualificationToCollaborator(newItem);
+
+      console.log(difference.length);
       if (difference.length !== 0) {
+        this.props.addQualificationToCollaborator(newItem);
         var item = {
           collaborator_id: newItem.collaborator_id,
           listOfCoursesId: difference,
         };
-        this.props.addCoursesToCollaborator(item);
+
+        //this.props.addCoursesToCollaborator(item);
+
+        axios.post("/collaboratorCourses", item).catch((error) => {
+          console.log(error);
+        });
       }
 
       this.toggle();
-      window.location.reload();
+      //window.location.reload();
     }
   };
 

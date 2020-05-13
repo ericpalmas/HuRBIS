@@ -164,6 +164,19 @@ class CollaboratorDetail extends Component {
       show: false,
     };
 
+    // axios
+    //   .get(
+    //     `/necessaryCourses/qualificationCourses/${this.props.match.params.id}`
+    //   )
+    //   .then((res) => {
+    //     console.log("ciao");
+    //     console.log(res);
+    //     this.setState({ qualificationCourses: res.data });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+
     axios
       .get(`/collaborators/infos/${this.props.match.params.id}`)
       .then((res) => {
@@ -172,6 +185,7 @@ class CollaboratorDetail extends Component {
       .catch((error) => {
         console.log(error);
       });
+
     axios
       .get(`/courses/${this.props.match.params.id}`)
       .then((res) => {
@@ -200,17 +214,6 @@ class CollaboratorDetail extends Component {
       .get(`/coursesHistory/${this.props.match.params.id}`)
       .then((res) => {
         this.setState({ corsiPassati: res.data });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    axios
-      .get(
-        `/necessaryCourses/qualificationCourses/${this.props.match.params.id}`
-      )
-      .then((res) => {
-        this.setState({ qualificationCourses: res.data });
       })
       .catch((error) => {
         console.log(error);
@@ -281,7 +284,8 @@ class CollaboratorDetail extends Component {
   };
 
   render = () => {
-    console.log(this.state.courses);
+    // console.log(this.state.courses);
+
     this.filterArray(this.state.courses);
 
     return (
