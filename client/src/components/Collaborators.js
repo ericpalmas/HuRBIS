@@ -233,16 +233,30 @@ class Collaborators extends Component {
 
   render() {
     const collaboratorsInfos = this.state.collaboratorInfos;
-
     const sorted = collaboratorsInfos.sort((a, b) => {
       if (this.state.sort === "asc")
         return 1 * a.surname.localeCompare(b.surname);
       else if (this.state.sort === "desc")
         return -1 * a.surname.localeCompare(b.surname);
-      else if (this.state.sort === "ascDate")
-        return 1 * a.name.localeCompare(b.min_expiration_date);
-      else if (this.state.sort === "descDate")
-        return -1 * a.name.localeCompare(b.min_expiration_date);
+
+      // equal items sort equally
+      if (a.min_expiration_date === b.min_expiration_date) {
+        return 0;
+      }
+      // nulls sort after anything else
+      else if (a.min_expiration_date === null) {
+        return 1;
+      } else if (b.min_expiration_date === null) {
+        return -1;
+      }
+      // otherwise, if we're ascending, lowest sorts first
+      else if (this.state.sort === "ascDate") {
+        return a.min_expiration_date < b.min_expiration_date ? -1 : 1;
+      }
+      // if descending, highest sorts first
+      else if (this.state.sort === "descDate") {
+        return a.min_expiration_date < b.min_expiration_date ? 1 : -1;
+      }
     });
 
     return (
