@@ -142,7 +142,8 @@ class AddCourseModal extends Component {
         this.setState({
           dateError: false,
         });
-        if (listOfId.includes(parseInt(newItem.course_id))) {
+        if (now > expiration_date) this.props.addCourseToHistory(newItem);
+        else if (listOfId.includes(parseInt(newItem.course_id))) {
           console.log("il corso è già presente");
           this.setState({
             courseIsPresent: true,
@@ -152,8 +153,7 @@ class AddCourseModal extends Component {
           this.setState({
             courseIsPresent: false,
           });
-          if (now > expiration_date) this.props.addCourseToHistory(newItem);
-          else this.props.addCourse(newItem);
+          this.props.addCourse(newItem);
           this.toggle();
         }
       }

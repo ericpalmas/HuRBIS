@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { FaEdit } from "react-icons/fa";
 import { modifyCourse } from "../../actions/coursesActions";
+import { deleteCourse } from "../../actions/coursesActions";
+import { addCourseToHistory } from "../../actions/coursesActions";
 import {
   Button,
   ModalHeader,
@@ -77,7 +79,37 @@ class EditCourseModal extends Component {
       instructor: this.state.instructor,
     };
 
-    this.props.modifyCourse(newCourse);
+    const newItem = {
+      instructor: this.state.instructor,
+      course_id: this.state.course_id,
+      collaborator_id: this.state.collaborator_id,
+      certificationDate: this.state.certificationDate.substr(0, 10),
+      expirationDate: this.state.expirationDate.substr(0, 10),
+    };
+
+    const removedCourse = {
+      course_id: this.state.course_id,
+      collaborator_id: this.state.collaborator_id,
+    };
+
+    if (newCourse.certificationDate || newCourse.expirationDate) {
+      var currentdate = new Date();
+      var now = Date.parse(
+        currentdate.getFullYear() +
+          "-" +
+          (currentdate.getMonth() + 1) +
+          "-" +
+          currentdate.getDate()
+      );
+      var expiration_date = Date.parse(newItem.expirationDate);
+
+      if (now > expiration_date) {
+        this.props.deleteCourse(removedCourse);
+        this.props.addCourseToHistory(newItem);
+      } else {
+        this.props.modifyCourse(newCourse);
+      }
+    }
 
     this.toggle();
   };
@@ -86,11 +118,9 @@ class EditCourseModal extends Component {
     this.setState({
       instructor: !this.state.instructor,
     });
-    console.log(this.state.instructor);
   };
 
   render() {
-    console.log(this.props.course);
     return (
       <div>
         <Button
@@ -172,4 +202,6 @@ const mapStateToProps = (state) => ({});
 
 export default connect(mapStateToProps, {
   modifyCourse,
+  addCourseToHistory,
+  deleteCourse,
 })(EditCourseModal);
