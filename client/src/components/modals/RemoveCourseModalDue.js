@@ -28,13 +28,10 @@ class RemoveCourseModalDue extends Component {
     if (id !== undefined) {
       this.props.deleteCourseFromDatabase(id);
     }
-
     this.toggle();
-    window.location.reload();
   };
 
   render() {
-    console.log(this.props.course_id);
     return (
       <div>
         <Button

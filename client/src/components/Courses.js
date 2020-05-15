@@ -63,8 +63,7 @@ class Courses extends Component {
       else if (this.state.sort === "desc")
         return -1 * a.name.localeCompare(b.name);
     });
-    console.log(courses);
-    console.log(this.state.search);
+
     return (
       <div>
         <Form inline>

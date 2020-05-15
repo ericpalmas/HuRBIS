@@ -56,9 +56,7 @@ class RemoveQualificationFromCollaborator extends Component {
       collaborator_id: this.props.collaborator_id,
     };
     this.props.removeQualificationsFromCollaborator(item);
-
     this.toggle();
-    window.location.reload();
   };
 
   componentWillMount() {

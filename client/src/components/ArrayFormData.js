@@ -29,8 +29,6 @@ const ArrayFormData = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log("inputFields", inputFields);
-    // console.log("qualificationName", inputVal);
 
     var newQualification = {
       name: inputVal,
@@ -50,7 +48,6 @@ const ArrayFormData = (props) => {
       } else {
         setMultipleId(false);
         props.addNewQualification(newQualification);
-        window.location.reload();
       }
     }
   };

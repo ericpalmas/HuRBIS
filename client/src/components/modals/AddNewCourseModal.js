@@ -55,7 +55,6 @@ class AddNewCourseModal extends Component {
       });
       this.props.addNewCourse(newCourse);
       this.toggle();
-      window.location.reload();
     }
   };
 

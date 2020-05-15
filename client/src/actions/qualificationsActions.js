@@ -23,12 +23,6 @@ export const fetchQualificationsInfos = () => (dispatch) => {
 };
 
 export const fetchQualificationsOfCollaborator = (id) => async (dispatch) => {
-  // const res = await axios.get(`/qualifications/${id}`);
-  // dispatch({
-  //   type: FETCH_QUALIFICATIONS_OF_COLLABORATOR,
-  //   payload: res.data,
-  // });
-
   await axios
     .get(`/qualifications/${id}`)
     .then((res) =>
@@ -61,11 +55,13 @@ export const removeQualificationsFromCollaborator = (listOfId) => (
 ) => {
   axios
     .post("/qualifications/removeQualifications", listOfId)
-    .then((res) =>
-      dispatch({
-        type: REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
-        payload: res.data,
-      })
+    .then(
+      (res) =>
+        dispatch({
+          type: REMOVE_QUALIFICATIONS_FROM_COLLABORATOR,
+          payload: res.data,
+        }),
+      window.location.reload()
     )
     .catch((err) => {
       console.log(err);
@@ -75,11 +71,13 @@ export const removeQualificationsFromCollaborator = (listOfId) => (
 export const addNewQualification = (qualification) => (dispatch) => {
   axios
     .post("/qualifications/addQualification", qualification)
-    .then((res) =>
-      dispatch({
-        type: ADD_QUALIFICATION,
-        payload: res.data,
-      })
+    .then(
+      (res) =>
+        dispatch({
+          type: ADD_QUALIFICATION,
+          payload: res.data,
+        }),
+      window.location.reload()
     )
     .catch((err) => {
       console.log(err);
@@ -92,11 +90,13 @@ export const removeQualification = (listOfQualifications) => (dispatch) => {
       `/qualifications/removeQualificationsAndCourses`,
       listOfQualifications
     )
-    .then((res) =>
-      dispatch({
-        type: DELETE_QUALIFICATION,
-        payload: res.data,
-      })
+    .then(
+      (res) =>
+        dispatch({
+          type: DELETE_QUALIFICATION,
+          payload: res.data,
+        }),
+      window.location.reload()
     )
     .catch((err) => {
       console.log(err);

@@ -155,7 +155,6 @@ class AddCourseModal extends Component {
           if (now > expiration_date) this.props.addCourseToHistory(newItem);
           else this.props.addCourse(newItem);
           this.toggle();
-          window.location.reload();
         }
       }
     } else {

@@ -23,11 +23,13 @@ export const fetchCollaborators = () => (dispatch) => {
 export const addCollaborator = (newCollaborator) => (dispatch) => {
   axios
     .post("/collaborators/", newCollaborator)
-    .then((res) =>
-      dispatch({
-        type: ADD_COLLABORATOR,
-        payload: res.data,
-      })
+    .then(
+      (res) =>
+        dispatch({
+          type: ADD_COLLABORATOR,
+          payload: res.data,
+        }),
+      window.location.reload()
     )
     .catch((err) => {
       console.log(err);
@@ -37,11 +39,13 @@ export const addCollaborator = (newCollaborator) => (dispatch) => {
 export const deleteCollaborator = (id) => (dispatch) => {
   axios
     .delete(`/collaborators/${id}`)
-    .then((res) =>
-      dispatch({
-        type: DELETE_COLLABORATOR,
-        payload: id,
-      })
+    .then(
+      (res) =>
+        dispatch({
+          type: DELETE_COLLABORATOR,
+          payload: id,
+        }),
+      window.location.reload()
     )
     .catch((err) => {
       console.log(err);

@@ -75,6 +75,7 @@ Router.post("/addQualificationToCollaborator", (req, res) => {
   mysqlConnection.query(sql, newQualification, (err, result) => {
     if (err) throw err;
     console.log(result);
+    res.send(result);
   });
 });
 

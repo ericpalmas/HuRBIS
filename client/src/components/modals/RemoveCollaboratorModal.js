@@ -22,7 +22,6 @@ class RemoveCollaboratorModal extends Component {
   onDeleteClick = (id) => {
     this.props.deleteCollaborator(id);
     this.toggle();
-    window.location.reload();
   };
 
   render() {

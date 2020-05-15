@@ -90,7 +90,7 @@ class AddCollaboratorModal extends Component {
           });
           this.props.addCollaborator(newCollaborator);
           this.toggle();
-          window.location.reload();
+          //window.location.reload();
         }
       }
     }

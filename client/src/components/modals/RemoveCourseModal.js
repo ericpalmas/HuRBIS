@@ -34,7 +34,6 @@ class RemoveCourseModal extends Component {
     }
 
     this.toggle();
-    window.location.reload();
   };
 
   render() {

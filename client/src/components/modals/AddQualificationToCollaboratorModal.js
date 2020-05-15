@@ -24,6 +24,7 @@ class AddQualificationToCollaboratorModal extends Component {
     super(props);
 
     this.state = {
+      qualificationAdded: false,
       qualificationAlreadyExist: false,
       qualificationOfCollaborator: [],
       coursesAndQualifications: [],
@@ -137,21 +138,41 @@ class AddQualificationToCollaboratorModal extends Component {
 
       console.log(difference.length);
       if (difference.length !== 0) {
-        this.props.addQualificationToCollaborator(newItem);
-        var item = {
-          collaborator_id: newItem.collaborator_id,
-          listOfCoursesId: difference,
-        };
+        // this.props.addQualificationToCollaborator(newItem);
+        // var item = {
+        //   collaborator_id: newItem.collaborator_id,
+        //   listOfCoursesId: difference,
+        // };
+        // axios.post("/collaboratorCourses", item).catch((error) => {
+        //   console.log(error);
+        // });
 
         //this.props.addCoursesToCollaborator(item);
 
-        axios.post("/collaboratorCourses", item).catch((error) => {
-          console.log(error);
-        });
-      }
+        axios
+          .post("/qualifications/addQualificationToCollaborator", newItem)
+          .then((res) => {
+            console.log(res);
+            var item = {
+              collaborator_id: newItem.collaborator_id,
+              listOfCoursesId: difference,
+            };
 
-      this.toggle();
-      //window.location.reload();
+            axios
+              .post("/collaboratorCourses", item)
+              .then((result) => {
+                console.log(result);
+                this.toggle();
+                window.location.reload();
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   };
 
@@ -173,7 +194,6 @@ class AddQualificationToCollaboratorModal extends Component {
   }
 
   render() {
-    // console.log(this.state.qualifications);
     return (
       <div>
         <Button className="ml-5 mt-5 mb-5 mr-2" onClick={this.onClickAndFetch}>

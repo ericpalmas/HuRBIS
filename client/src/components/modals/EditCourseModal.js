@@ -79,9 +79,7 @@ class EditCourseModal extends Component {
 
     this.props.modifyCourse(newCourse);
 
-    //Close modal
     this.toggle();
-    window.location.reload();
   };
 
   handleChange = () => {

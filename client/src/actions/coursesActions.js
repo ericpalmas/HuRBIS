@@ -18,11 +18,13 @@ import {
 export const addCourse = (course) => (dispatch) => {
   axios
     .post("/courses/addCourse", course)
-    .then((res) =>
-      dispatch({
-        type: ADD_COURSE,
-        payload: res.data,
-      })
+    .then(
+      (res) =>
+        dispatch({
+          type: ADD_COURSE,
+          payload: res.data,
+        }),
+      window.location.reload()
     )
     .catch((err) => {
       console.log(err);
@@ -32,11 +34,13 @@ export const addCourse = (course) => (dispatch) => {
 export const addCourseToHistory = (course) => (dispatch) => {
   axios
     .post("/coursesHistory/addCourse", course)
-    .then((res) =>
-      dispatch({
-        type: ADD_COURSE_TO_HISTORY,
-        payload: res.data,
-      })
+    .then(
+      (res) =>
+        dispatch({
+          type: ADD_COURSE_TO_HISTORY,
+          payload: res.data,
+        }),
+      window.location.reload()
     )
     .catch((err) => {
       console.log(err);
@@ -46,11 +50,13 @@ export const addCourseToHistory = (course) => (dispatch) => {
 export const deleteCourse = (removedCourse) => (dispatch) => {
   axios
     .post(`/courses/`, removedCourse)
-    .then((res) =>
-      dispatch({
-        type: DELETE_COURSE,
-        payload: res.data,
-      })
+    .then(
+      (res) =>
+        dispatch({
+          type: DELETE_COURSE,
+          payload: res.data,
+        }),
+      window.location.reload()
     )
     .catch((err) => {
       console.log(err);
@@ -88,11 +94,13 @@ export const fetchCourses = () => (dispatch) => {
 export const modifyCourse = (course) => (dispatch) => {
   axios
     .post(`/courses/modifyCourse`, course)
-    .then((res) =>
-      dispatch({
-        type: MODIFY_CURRENT_COURSE,
-        payload: res.data,
-      })
+    .then(
+      (res) =>
+        dispatch({
+          type: MODIFY_CURRENT_COURSE,
+          payload: res.data,
+        }),
+      window.location.reload()
     )
     .catch((err) => {
       console.log(err);
@@ -114,12 +122,6 @@ export const renewCourse = (course) => (dispatch) => {
 };
 
 export const fetchCoursesOfCollaborator = (id) => async (dispatch) => {
-  // const res = await axios.get(`/courses/${id}`);
-  // dispatch({
-  //   type: FETCH_COURSES_OF_COLLABORATOR,
-  //   payload: res.data,
-  // });
-
   await axios
     .get(`/courses/${id}`)
     .then((res) =>
@@ -136,11 +138,13 @@ export const fetchCoursesOfCollaborator = (id) => async (dispatch) => {
 export const addNewCourse = (course) => (dispatch) => {
   axios
     .post("/courses/addNewCourse", course)
-    .then((res) =>
-      dispatch({
-        type: ADD_NEW_COURSE,
-        payload: res.data,
-      })
+    .then(
+      (res) =>
+        dispatch({
+          type: ADD_NEW_COURSE,
+          payload: res.data,
+        }),
+      window.location.reload()
     )
     .catch((err) => {
       console.log(err);
@@ -150,11 +154,13 @@ export const addNewCourse = (course) => (dispatch) => {
 export const deleteCourseFromDatabase = (id) => (dispatch) => {
   axios
     .delete(`/courses/${id}`)
-    .then((res) =>
-      dispatch({
-        type: DELETE_COURSE_FROM_DATABASE,
-        payload: id,
-      })
+    .then(
+      (res) =>
+        dispatch({
+          type: DELETE_COURSE_FROM_DATABASE,
+          payload: id,
+        }),
+      window.location.reload()
     )
     .catch((err) => {
       console.log(err);

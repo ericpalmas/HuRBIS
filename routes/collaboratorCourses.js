@@ -26,6 +26,7 @@ Router.post("/", (req, res) => {
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
     console.log(err);
+    res.send(result);
   });
 });
 
