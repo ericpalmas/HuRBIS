@@ -81,6 +81,23 @@ class AddNewCourseModal extends Component {
                   placeholder="Nome"
                   onChange={this.onChangeName}
                 ></Input>
+              </FormGroup>
+              <FormGroup>
+                {/* <Label for="item">Costo</Label>
+                <br></br>
+
+                <Label className="float-left mt-2 mr-2" for="item">
+                  fr.
+                </Label>
+                <Input
+                  type="text"
+                  name="name"
+                  id="item"
+                  placeholder="Prezzo"
+                  onChange={this.onChangeName}
+                  className="mt-1 w-50"
+                ></Input> */}
+
                 <Button style={{ marginTop: "2rem" }} block>
                   {" "}
                   Aggiungi corso

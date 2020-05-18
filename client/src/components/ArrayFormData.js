@@ -25,8 +25,6 @@ const ArrayFormData = (props) => {
 
   const [multipleId, setMultipleId] = useState(false);
 
-  console.log(props.courses);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -57,7 +55,6 @@ const ArrayFormData = (props) => {
   };
 
   const handleInputChange = (index, event) => {
-    console.log(index);
     const values = [...inputFields];
     values[index].corso = event.target.value;
     setInputFields(values);

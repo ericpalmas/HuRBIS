@@ -25,19 +25,15 @@ const ArrayFormDataQualification = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("qualificationName", inputVal);
 
     const newQualification = {
       name: inputVal,
     };
 
-    console.log(newQualification);
-
     //props.addNewQualification(newQualification);
   };
 
   const handleInputChange = (event) => {
-    console.log(event.target.value);
     var value = [...inputVal];
     value = event.target.value;
     setInputVal(value);

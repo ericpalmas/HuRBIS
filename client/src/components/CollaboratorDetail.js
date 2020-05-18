@@ -145,6 +145,39 @@ const Corso = ({ corsi, elem, collaborator_id }) => (
   </Table>
 );
 
+const CorsoStorico = ({ corsi, elem, collaborator_id }) => (
+  <Table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Data inizio licenza</th>
+        <th>Data di scadenza della certificazione </th>
+      </tr>
+    </thead>
+    {corsi.map((corso) => (
+      <tbody key={corso.id}>
+        <tr id="collaboratorTableItem">
+          <td>
+            {checkDate(corso)}
+            {corso.name}
+          </td>
+          <td>
+            {!!corso.certification_date
+              ? printDate(corso.certification_date)
+              : "      //"}
+          </td>
+
+          <td>
+            {!!corso.expiration_date
+              ? corso.expiration_date.substr(0, 10)
+              : "      //"}
+          </td>
+        </tr>
+      </tbody>
+    ))}
+  </Table>
+);
+
 class CollaboratorDetail extends Component {
   constructor(props) {
     super(props);
@@ -164,19 +197,6 @@ class CollaboratorDetail extends Component {
       show: false,
     };
 
-    // axios
-    //   .get(
-    //     `/necessaryCourses/qualificationCourses/${this.props.match.params.id}`
-    //   )
-    //   .then((res) => {
-    //     console.log("ciao");
-    //     console.log(res);
-    //     this.setState({ qualificationCourses: res.data });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-
     axios
       .get(`/collaborators/infos/${this.props.match.params.id}`)
       .then((res) => {
@@ -189,7 +209,6 @@ class CollaboratorDetail extends Component {
     axios
       .get(`/courses/${this.props.match.params.id}`)
       .then((res) => {
-        console.log(res);
         for (let i = 0; i < res.data.length; i++) {
           if (
             (res.data[i].expiration_date != null) &
@@ -322,7 +341,7 @@ class CollaboratorDetail extends Component {
         <Label className="ml-5 mr-5 mt-5">
           <h6> Corsi svolti: </h6>
           <br></br>
-          <Corso
+          <CorsoStorico
             corsi={this.state.corsiPassati}
             elem={this}
             collaborator_id={this.props.match.params.id}

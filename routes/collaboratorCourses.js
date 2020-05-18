@@ -13,10 +13,7 @@ Router.get("/:id", (req, res) => {
 });
 
 Router.post("/", (req, res) => {
-  console.log("dentroooooooooooooooooooooooooooo");
-
   const item = req.body;
-  console.log(item);
   var sql = "";
   item.listOfCoursesId.forEach(myFunction);
   function myFunction(value, index, array) {

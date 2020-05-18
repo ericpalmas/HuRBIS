@@ -2,7 +2,6 @@ import axios from "axios";
 import { FETCH_COLLABORATORS_INFOS } from "./types";
 
 export const fetchCollaboratorsInfos = () => (dispatch) => {
-  console.log("fetchCollaboratorsInfos");
   axios
     .get("/collaboratorsInfos")
     .then((res) =>
@@ -17,7 +16,6 @@ export const fetchCollaboratorsInfos = () => (dispatch) => {
 };
 
 export const fetchCollaboratorsData = () => (dispatch) => {
-  console.log("fetchCollaboratorsData");
   axios
     .get("/collaboratorsInfos/collaborators")
     .then((res) =>
