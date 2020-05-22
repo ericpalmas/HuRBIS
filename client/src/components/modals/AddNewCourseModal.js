@@ -17,10 +17,11 @@ class AddNewCourseModal extends Component {
   state = {
     modal: false,
     name: "",
-    surname: "",
-    yearOfBirth: "",
+    cost: "",
     msg: "Inserire il nome del corso",
+    msg2: "Errore nell'inserimento del costo",
     insertName: false,
+    insertCost: false,
   };
 
   toggle = () => {
@@ -35,15 +36,19 @@ class AddNewCourseModal extends Component {
     });
   };
 
+  onChangeCost = (e) => {
+    this.setState({
+      cost: e.target.value,
+    });
+  };
+
   onSubmit = (e) => {
     e.preventDefault();
 
-    const newCourse = {
+    var newCourse = {
       name: this.state.name,
+      cost: this.state.cost.replace(",", "."),
     };
-
-    console.log("nuovo corso");
-    console.log(newCourse);
 
     if (newCourse.name === "") {
       this.setState({
@@ -53,8 +58,21 @@ class AddNewCourseModal extends Component {
       this.setState({
         insertName: false,
       });
-      this.props.addNewCourse(newCourse);
-      this.toggle();
+      if (
+        isNaN(parseFloat(this.state.cost.replace(",", "."))) &&
+        this.state.cost !== ""
+      ) {
+        this.setState({
+          insertCost: true,
+        });
+      } else {
+        if (newCourse.cost === "") newCourse.cost = null;
+        this.setState({
+          insertCost: false,
+        });
+        this.props.addNewCourse(newCourse);
+        this.toggle();
+      }
     }
   };
 
@@ -71,6 +89,11 @@ class AddNewCourseModal extends Component {
             {this.state.insertName ? (
               <Alert color="danger">{this.state.msg}</Alert>
             ) : null}
+
+            {this.state.insertCost ? (
+              <Alert color="danger">{this.state.msg2}</Alert>
+            ) : null}
+
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
                 <Label for="item">Nome</Label>
@@ -81,24 +104,24 @@ class AddNewCourseModal extends Component {
                   placeholder="Nome"
                   onChange={this.onChangeName}
                 ></Input>
-              </FormGroup>
-              <FormGroup>
-                {/* <Label for="item">Costo</Label>
-                <br></br>
 
+                <Label className="mt-3" for="item">
+                  Costo
+                </Label>
+                <br></br>
                 <Label className="float-left mt-2 mr-2" for="item">
-                  fr.
+                  CHF
                 </Label>
                 <Input
                   type="text"
                   name="name"
                   id="item"
-                  placeholder="Prezzo"
-                  onChange={this.onChangeName}
-                  className="mt-1 w-50"
-                ></Input> */}
+                  placeholder="0.00"
+                  onChange={this.onChangeCost}
+                  className="float-left mb-2 mt-1 w-25"
+                ></Input>
 
-                <Button style={{ marginTop: "2rem" }} block>
+                <Button style={{ marginTop: "4rem" }} block>
                   {" "}
                   Aggiungi corso
                 </Button>

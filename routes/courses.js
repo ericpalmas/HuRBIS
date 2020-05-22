@@ -25,7 +25,8 @@ Router.post("/addCourse", (req, res) => {
 // //aggiungi un corso ad un collaboratore
 Router.post("/addNewCourse", (req, res) => {
   const newCourse = req.body;
-  const sql = `INSERT INTO courses (name) VALUES ('${newCourse.name}');`;
+  //const sql = `INSERT INTO courses (name) VALUES ('${newCourse.name}');`;
+  const sql = `INSERT INTO courses (name,cost) VALUES ('${newCourse.name}', ${newCourse.cost});`;
 
   mysqlConnection.query(sql, newCourse, (err, result) => {
     if (err) throw err;
@@ -44,7 +45,7 @@ Router.post("/", (req, res) => {
 
 // Corsi di un collaboratore
 Router.get("/:id", (req, res) => {
-  var sql = `SELECT courses.id, courses.name, courses.name,collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
+  var sql = `SELECT courses.id, courses.name, courses.cost, collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
   FROM collaborator_has_courses 
   LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
   where collaborator_id = ${req.params.id} and courses.removed = 0`;
@@ -115,6 +116,15 @@ Router.get("/minCertificationDate/:id", (req, res) => {
   group by id) ) as t
   order by id`;
 
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    else res.send(result);
+  });
+});
+
+// costo di un corso
+Router.get("/cost/:id", (req, res) => {
+  var sql = `SELECT cost FROM training_courses.courses where id = ${req.params.id}`;
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
     else res.send(result);

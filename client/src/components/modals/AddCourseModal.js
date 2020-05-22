@@ -26,6 +26,7 @@ class AddCourseModal extends Component {
     super(props);
 
     this.state = {
+      cost: "",
       modal: false,
       courseIsPresent: false,
       dateError: false,
@@ -102,12 +103,13 @@ class AddCourseModal extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const newItem = {
+    var newItem = {
       instructor: this.state.instructor,
       course_id: this.state.course_id,
       collaborator_id: this.state.collaborator_id,
       certificationDate: this.state.certificationDate,
       expirationDate: this.state.expirationDate,
+      cost: null,
     };
 
     var listOfId = [];
@@ -142,8 +144,19 @@ class AddCourseModal extends Component {
         this.setState({
           dateError: false,
         });
-        if (now > expiration_date) this.props.addCourseToHistory(newItem);
-        else if (listOfId.includes(parseInt(newItem.course_id))) {
+        if (now > expiration_date) {
+          axios
+            .get(`/courses/cost/${newItem.course_id}`)
+            .then((res) => {
+              console.log(res);
+              if (res.data.length !== 0) newItem.cost = res.data[0];
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+          this.props.addCourseToHistory(newItem);
+        } else if (listOfId.includes(parseInt(newItem.course_id))) {
           console.log("il corso è già presente");
           this.setState({
             courseIsPresent: true,
@@ -153,6 +166,7 @@ class AddCourseModal extends Component {
           this.setState({
             courseIsPresent: false,
           });
+
           this.props.addCourse(newItem);
           this.toggle();
         }
@@ -166,6 +180,7 @@ class AddCourseModal extends Component {
   };
 
   render() {
+    console.log(this.state.cost);
     return (
       <div>
         <Button className="ml-5 mt-5 mb-5 mr-2" onClick={this.toggle}>

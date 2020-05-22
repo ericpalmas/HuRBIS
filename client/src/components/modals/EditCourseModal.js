@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { FaEdit } from "react-icons/fa";
@@ -14,6 +15,7 @@ import {
   Modal,
   Form,
   Input,
+  Alert,
 } from "reactstrap";
 
 class EditCourseModal extends Component {
@@ -24,6 +26,7 @@ class EditCourseModal extends Component {
     super(props);
 
     this.state = {
+      cost: "",
       instructor: this.props.course.instructor,
       modal: false,
       name: this.props.course.name,
@@ -31,6 +34,10 @@ class EditCourseModal extends Component {
       expirationDate: this.props.course.expiration_date,
       collaborator_id: this.props.collaborator_id,
       course_id: this.props.course.id,
+      dateError: false,
+      insertADate: false,
+      msg2: "La data di certificazione deve essere minore della scadenza",
+      msg3: "Inserire le date",
     };
     this.begin = this.begin.bind(this);
   }
@@ -67,6 +74,18 @@ class EditCourseModal extends Component {
     });
   };
 
+  componentDidMount() {
+    axios
+      .get(`/courses/cost/${this.state.course_id}`)
+      .then((res) => {
+        console.log(res);
+        if (res.data.length !== 0) this.setState({ cost: res.data[0] });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   onSubmit = (e) => {
     e.preventDefault();
 
@@ -79,7 +98,8 @@ class EditCourseModal extends Component {
       instructor: this.state.instructor,
     };
 
-    const newItem = {
+    var newItem = {
+      cost: this.state.cost,
       instructor: this.state.instructor,
       course_id: this.state.course_id,
       collaborator_id: this.state.collaborator_id,
@@ -87,31 +107,75 @@ class EditCourseModal extends Component {
       expirationDate: this.state.expirationDate.substr(0, 10),
     };
 
+    console.log(newItem);
+
     const removedCourse = {
       course_id: this.state.course_id,
       collaborator_id: this.state.collaborator_id,
     };
 
-    if (newCourse.certificationDate || newCourse.expirationDate) {
-      var currentdate = new Date();
-      var now = Date.parse(
-        currentdate.getFullYear() +
-          "-" +
-          (currentdate.getMonth() + 1) +
-          "-" +
-          currentdate.getDate()
-      );
+    if (newItem.certificationDate || newItem.expirationDate) {
+      this.setState({
+        insertADate: false,
+      });
+      var certification_date = Date.parse(newItem.certificationDate);
       var expiration_date = Date.parse(newItem.expirationDate);
-
-      if (now > expiration_date) {
-        this.props.deleteCourse(removedCourse);
-        this.props.addCourseToHistory(newItem);
+      if (certification_date > expiration_date) {
+        console.log("la data non va bene");
+        this.setState({
+          dateError: true,
+        });
       } else {
-        this.props.modifyCourse(newCourse);
+        console.log("la data va bene");
+        this.setState({
+          dateError: false,
+        });
+        var currentdate = new Date();
+        var now = Date.parse(
+          currentdate.getFullYear() +
+            "-" +
+            (currentdate.getMonth() + 1) +
+            "-" +
+            currentdate.getDate()
+        );
+        var expiration_date = Date.parse(newItem.expirationDate);
+
+        if (now > expiration_date) {
+          this.props.deleteCourse(removedCourse);
+          this.props.addCourseToHistory(newItem);
+        } else {
+          this.props.modifyCourse(newCourse);
+        }
+
+        this.toggle();
       }
+    } else {
+      console.log("specificare un periodo");
+      this.setState({
+        insertADate: true,
+      });
     }
 
-    this.toggle();
+    // if (newCourse.certificationDate || newCourse.expirationDate) {
+    //   var currentdate = new Date();
+    //   var now = Date.parse(
+    //     currentdate.getFullYear() +
+    //       "-" +
+    //       (currentdate.getMonth() + 1) +
+    //       "-" +
+    //       currentdate.getDate()
+    //   );
+    //   var expiration_date = Date.parse(newItem.expirationDate);
+
+    //   if (now > expiration_date) {
+    //     this.props.deleteCourse(removedCourse);
+    //     this.props.addCourseToHistory(newItem);
+    //   } else {
+    //     this.props.modifyCourse(newCourse);
+    //   }
+    // }
+
+    // this.toggle();
   };
 
   handleChange = () => {
@@ -121,6 +185,7 @@ class EditCourseModal extends Component {
   };
 
   render() {
+    console.log(this.state.cost);
     return (
       <div>
         <Button
@@ -138,6 +203,12 @@ class EditCourseModal extends Component {
             Modifica corso di formazione{" "}
           </ModalHeader>
           <ModalBody>
+            {this.state.dateError ? (
+              <Alert color="danger">{this.state.msg2}</Alert>
+            ) : null}
+            {this.state.insertADate ? (
+              <Alert color="danger">{this.state.msg3}</Alert>
+            ) : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
                 <Label for="item">Nome corso: </Label>

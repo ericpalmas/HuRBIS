@@ -96,6 +96,7 @@ const Corso = ({ corsi, elem, collaborator_id }) => (
     <thead>
       <tr>
         <th>Nome</th>
+        <th>Costo</th>
         <th>Data inizio licenza</th>
         <th>Data di scadenza della certificazione </th>
       </tr>
@@ -107,6 +108,11 @@ const Corso = ({ corsi, elem, collaborator_id }) => (
             {checkDate(corso)}
             {corso.name}
           </td>
+
+          <td className="w-25 ml-1 mr-1">
+            {!!corso.cost ? corso.cost + " CHF" : ""}
+          </td>
+
           <td>
             {!!corso.certification_date
               ? printDate(corso.certification_date)
@@ -150,6 +156,7 @@ const CorsoStorico = ({ corsi, elem, collaborator_id }) => (
     <thead>
       <tr>
         <th>Nome</th>
+        <th>Costo</th>
         <th>Data inizio licenza</th>
         <th>Data di scadenza della certificazione </th>
       </tr>
@@ -160,6 +167,9 @@ const CorsoStorico = ({ corsi, elem, collaborator_id }) => (
           <td>
             {checkDate(corso)}
             {corso.name}
+          </td>
+          <td className="w-25 ml-1 mr-1">
+            {!!corso.cost ? corso.cost + " CHF" : ""}
           </td>
           <td>
             {!!corso.certification_date
@@ -303,8 +313,6 @@ class CollaboratorDetail extends Component {
   };
 
   render = () => {
-    // console.log(this.state.courses);
-
     this.filterArray(this.state.courses);
 
     return (
@@ -373,6 +381,7 @@ class CollaboratorDetail extends Component {
         </div>
         <div id="addCourseButton">
           <Button
+            collaborator_id={this.props.match.params.id}
             className="ml-5 mt-5 mb-5 mr-2 float-left"
             onClick={this.modifyElements}
           >

@@ -106,6 +106,7 @@ class Courses extends Component {
           <thead>
             <tr>
               <th>Nome</th>
+              <th>Costo</th>
               <th>Collaboratori</th>
               <th>Qualifiche</th>
               <th></th>
@@ -128,15 +129,19 @@ class Courses extends Component {
                       .toLowerCase()
                       .includes(this.state.search.toLowerCase()))
               )
-              .map(({ id, name, collaborator, qualification }) => (
+              .map(({ id, name, collaborator, qualification, cost }) => (
                 <tr>
-                  <td>
+                  <td id="tableColumnInfo">
                     <Link>{name}</Link>
+                  </td>
+
+                  <td id="tableColumnInfo">
+                    <Link>{!!cost ? cost + " CHF" : ""}</Link>
                   </td>
                   <td>
                     <Link>{collaborator}</Link>
                   </td>
-                  <td>
+                  <td id="tableColumnInfo">
                     <Link>{qualification}</Link>
                   </td>
                   <td>
