@@ -99,7 +99,7 @@ class EditCourseModal extends Component {
     };
 
     var newItem = {
-      cost: this.state.cost,
+      cost: this.state.cost.cost,
       instructor: this.state.instructor,
       course_id: this.state.course_id,
       collaborator_id: this.state.collaborator_id,

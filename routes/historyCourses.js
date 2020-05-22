@@ -5,13 +5,11 @@ const mysqlConnection = require("../config/connection");
 Router.post("/addCourse", (req, res) => {
   const newCourse = req.body;
 
-  // const sql =
-  //   `INSERT INTO history_courses(name, certification_date, expiration_date, collaborator_id, course_id) VALUES` +
-  //   ` ((select courses.name from courses where courses.id=${newCourse.course_id}), '${newCourse.certificationDate}', '${newCourse.expirationDate}', ${newCourse.collaborator_id}, ${newCourse.course_id})`;
+  console.log(newCourse);
 
   const sql =
-    `INSERT INTO history_courses(name, certification_date, expiration_date, collaborator_id, cost, course_id) VALUES` +
-    `((select courses.name from courses where courses.id=${newCourse.course_id}), '${newCourse.certificationDate}', ${newCourse.cost}, '${newCourse.expirationDate}', ${newCourse.collaborator_id}, ${newCourse.course_id})`;
+    `INSERT INTO history_courses(name, certification_date, expiration_date, collaborator_id, course_id, cost) VALUES` +
+    `((select courses.name from courses where courses.id=${newCourse.course_id}), '${newCourse.certificationDate}',  '${newCourse.expirationDate}', ${newCourse.collaborator_id}, ${newCourse.course_id}, ${newCourse.cost})`;
 
   mysqlConnection.query(sql, newCourse, (err, result) => {
     if (err) throw err;

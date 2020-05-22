@@ -118,7 +118,6 @@ class AddCourseModal extends Component {
       listOfId.push(v.id);
     });
 
-    console.log(newItem);
     var currentdate = new Date();
     var now = Date.parse(
       currentdate.getFullYear() +
@@ -149,13 +148,23 @@ class AddCourseModal extends Component {
             .get(`/courses/cost/${newItem.course_id}`)
             .then((res) => {
               console.log(res);
-              if (res.data.length !== 0) newItem.cost = res.data[0];
+              if (res.data.length !== 0) this.state.cost = res.data[0].cost;
+
+              var elem = {
+                instructor: this.state.instructor,
+                course_id: this.state.course_id,
+                collaborator_id: this.state.collaborator_id,
+                certificationDate: this.state.certificationDate,
+                expirationDate: this.state.expirationDate,
+                cost: this.state.cost,
+              };
+
+              console.log(elem);
+              this.props.addCourseToHistory(elem);
             })
             .catch((error) => {
               console.log(error);
             });
-
-          this.props.addCourseToHistory(newItem);
         } else if (listOfId.includes(parseInt(newItem.course_id))) {
           console.log("il corso è già presente");
           this.setState({
