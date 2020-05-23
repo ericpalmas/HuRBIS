@@ -26,6 +26,7 @@ class EditCourseModal extends Component {
     super(props);
 
     this.state = {
+      qualificationCourses: [],
       cost: "",
       instructor: this.props.course.instructor,
       modal: false,
@@ -78,7 +79,6 @@ class EditCourseModal extends Component {
     axios
       .get(`/courses/cost/${this.state.course_id}`)
       .then((res) => {
-        console.log(res);
         if (res.data.length !== 0) this.setState({ cost: res.data[0] });
       })
       .catch((error) => {
@@ -107,8 +107,6 @@ class EditCourseModal extends Component {
       expirationDate: this.state.expirationDate.substr(0, 10),
     };
 
-    console.log(newItem);
-
     const removedCourse = {
       course_id: this.state.course_id,
       collaborator_id: this.state.collaborator_id,
@@ -121,16 +119,15 @@ class EditCourseModal extends Component {
       var certification_date = Date.parse(newItem.certificationDate);
       var expiration_date = Date.parse(newItem.expirationDate);
       if (certification_date > expiration_date) {
-        console.log("la data non va bene");
         this.setState({
           dateError: true,
         });
       } else {
-        console.log("la data va bene");
         this.setState({
           dateError: false,
         });
         var currentdate = new Date();
+
         var now = Date.parse(
           currentdate.getFullYear() +
             "-" +
@@ -140,9 +137,59 @@ class EditCourseModal extends Component {
         );
         var expiration_date = Date.parse(newItem.expirationDate);
 
+        // if (now > expiration_date) {
+        //   this.props.deleteCourse(removedCourse);
+        //   this.props.addCourseToHistory(newItem);
+        // } else {
+        //   this.props.modifyCourse(newCourse);
+        // }
+
+        var necessaryCourses = [];
         if (now > expiration_date) {
-          this.props.deleteCourse(removedCourse);
-          this.props.addCourseToHistory(newItem);
+          axios
+            .post("/coursesHistory/addCourse", newItem)
+            .then(() => {
+              axios
+                .get(
+                  `/necessaryCourses/qualificationCourses/${this.state.collaborator_id}`
+                )
+                .then((res) => {
+                  for (let i = 0; i < res.data.length; i++) {
+                    necessaryCourses.push(res.data[i].courses_id);
+                  }
+
+                  if (necessaryCourses.includes(this.state.course_id)) {
+                    const updateCourse = {
+                      course_id: this.state.course_id,
+                      collaborator_id: parseInt(this.state.collaborator_id),
+                    };
+                    axios
+                      .post("/courses/renewCourse", updateCourse)
+                      .then(() => {
+                        window.location.reload();
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+                  } else {
+                    const removedCourse = {
+                      course_id: this.state.course_id,
+                      collaborator_id: parseInt(this.state.collaborator_id),
+                    };
+                    axios
+                      .post("/courses/", removedCourse)
+                      .then(() => {
+                        window.location.reload();
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+                  }
+                });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         } else {
           this.props.modifyCourse(newCourse);
         }
@@ -150,7 +197,6 @@ class EditCourseModal extends Component {
         this.toggle();
       }
     } else {
-      console.log("specificare un periodo");
       this.setState({
         insertADate: true,
       });
@@ -185,7 +231,6 @@ class EditCourseModal extends Component {
   };
 
   render() {
-    console.log(this.state.cost);
     return (
       <div>
         <Button

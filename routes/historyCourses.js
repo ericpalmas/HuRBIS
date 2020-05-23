@@ -13,6 +13,7 @@ Router.post("/addCourse", (req, res) => {
 
   mysqlConnection.query(sql, newCourse, (err, result) => {
     if (err) throw err;
+    else res.send(result);
   });
 });
 

@@ -40,6 +40,7 @@ Router.post("/", (req, res) => {
 
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
+    else res.send(result);
   });
 });
 
@@ -82,6 +83,7 @@ Router.post("/renewCourse", (req, res) => {
 
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
+    else res.send(result);
     console.log(err);
   });
 });
@@ -91,7 +93,7 @@ Router.post("/collaboratorCourses", (req, res) => {
   var sql = "";
   list.forEach(myFunction);
   function myFunction(value, index, array) {
-    sql += `SELECT courses.id, courses.name, courses.name,collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
+    sql += `SELECT courses.id, courses.name, courses.cost, collaborator_has_courses.certification_date, collaborator_has_courses.expiration_date,  collaborator_has_courses.instructor
     FROM collaborator_has_courses 
     LEFT OUTER JOIN courses ON courses.id = collaborator_has_courses.courses_id
     where collaborator_id = '${value.id}';`;
