@@ -137,13 +137,6 @@ class EditCourseModal extends Component {
         );
         var expiration_date = Date.parse(newItem.expirationDate);
 
-        // if (now > expiration_date) {
-        //   this.props.deleteCourse(removedCourse);
-        //   this.props.addCourseToHistory(newItem);
-        // } else {
-        //   this.props.modifyCourse(newCourse);
-        // }
-
         var necessaryCourses = [];
         if (now > expiration_date) {
           axios
@@ -201,27 +194,6 @@ class EditCourseModal extends Component {
         insertADate: true,
       });
     }
-
-    // if (newCourse.certificationDate || newCourse.expirationDate) {
-    //   var currentdate = new Date();
-    //   var now = Date.parse(
-    //     currentdate.getFullYear() +
-    //       "-" +
-    //       (currentdate.getMonth() + 1) +
-    //       "-" +
-    //       currentdate.getDate()
-    //   );
-    //   var expiration_date = Date.parse(newItem.expirationDate);
-
-    //   if (now > expiration_date) {
-    //     this.props.deleteCourse(removedCourse);
-    //     this.props.addCourseToHistory(newItem);
-    //   } else {
-    //     this.props.modifyCourse(newCourse);
-    //   }
-    // }
-
-    // this.toggle();
   };
 
   handleChange = () => {
