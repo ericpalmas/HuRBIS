@@ -276,7 +276,6 @@ class CollaboratorDetail extends Component {
   }
 
   filterArray = (courses) => {
-    console.log(courses);
     var currentdate = new Date();
     var now = Date.parse(
       currentdate.getFullYear() +

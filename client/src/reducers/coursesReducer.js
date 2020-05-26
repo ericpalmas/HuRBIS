@@ -24,6 +24,7 @@ import {
   RENEW_CURRENT_COURSE,
   GET_MIN_CERTIFICATIONS,
   FETCH_COURSES_OF_COLLABORATOR,
+  MODIFY_COURSE,
 } from "../actions/types";
 
 const initialState = {
@@ -48,6 +49,7 @@ const initialState = {
   coursesOfCollaborator: [],
   renewCourses: [],
   minCertifications: [],
+  modifiedCourses: [],
 };
 
 export default function (state = initialState, action) {
@@ -109,6 +111,11 @@ export default function (state = initialState, action) {
           action.payload,
           ...state.currentModifiedCourses,
         ],
+      };
+    case MODIFY_COURSE:
+      return {
+        ...state,
+        modifiedCourses: [action.payload, ...state.modifiedCourses],
       };
     case RENEW_CURRENT_COURSE:
       return {

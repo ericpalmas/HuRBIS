@@ -11,7 +11,7 @@ class CollaboratorDetailPDF extends Component {
   }
 
   generatePDF = () => {
-    console.log(this.props.collaborator);
+    console.log(this.props);
 
     var doc = new jsPDF("p", "pt");
 
@@ -53,7 +53,9 @@ class CollaboratorDetailPDF extends Component {
 
     var columns = [
       { title: "Name", dataKey: "Name" },
+      { title: "Costo", dataKey: "Costo" },
       { title: "Data inzio licenza", dataKey: "DataInzioLicenza" },
+
       {
         title: "Data scadenza certificazione",
         dataKey: "DataScadenzaCertificazione",
@@ -63,8 +65,9 @@ class CollaboratorDetailPDF extends Component {
     // corsi in corso
     var rowsCorsiInCorso = [];
     for (let i = 0; i < this.props.corsiInCorso.length; i++) {
-      const corso = {
+      var corso = {
         Name: this.props.corsiInCorso[i].name,
+        Costo: this.props.corsiInCorso[i].cost,
         DataInzioLicenza: this.props.corsiInCorso[i].certification_date.substr(
           0,
           10
@@ -73,6 +76,9 @@ class CollaboratorDetailPDF extends Component {
           i
         ].expiration_date.substr(0, 10),
       };
+      if (corso.Costo !== null) {
+        corso.Costo += " CHF";
+      }
       rowsCorsiInCorso.push(corso);
     }
     doc.autoTable(columns, rowsCorsiInCorso, {
@@ -89,12 +95,26 @@ class CollaboratorDetailPDF extends Component {
     // corsi da svolgere
     var rowsCorsiDaSvolgere = [];
     for (let i = 0; i < this.props.corsiDaSvolgere.length; i++) {
-      const corso = {
+      var corso = {
         Name: this.props.corsiDaSvolgere[i].name,
+        Costo: this.props.corsiDaSvolgere[i].cost,
         DataInzioLicenza: this.props.corsiDaSvolgere[i].certification_date,
         DataScadenzaCertificazione: this.props.corsiDaSvolgere[i]
           .expiration_date,
       };
+      if (corso.Costo !== null) {
+        corso.Costo += " CHF";
+      }
+      if (
+        corso.DataInzioLicenza !== null &&
+        corso.DataScadenzaCertificazione !== null
+      ) {
+        corso.DataInzioLicenza = corso.DataInzioLicenza.substr(0, 10);
+        corso.DataScadenzaCertificazione = corso.DataScadenzaCertificazione.substr(
+          0,
+          10
+        );
+      }
       rowsCorsiDaSvolgere.push(corso);
     }
     doc.autoTable(columns, rowsCorsiDaSvolgere, {
@@ -111,8 +131,9 @@ class CollaboratorDetailPDF extends Component {
     // corsi svolti
     var rowsCorsiSvolti = [];
     for (let i = 0; i < this.props.corsiSvolti.length; i++) {
-      const corso = {
+      var corso = {
         Name: this.props.corsiSvolti[i].name,
+        Costo: this.props.corsiSvolti[i].cost,
         DataInzioLicenza: this.props.corsiSvolti[i].certification_date.substr(
           0,
           10
@@ -121,6 +142,9 @@ class CollaboratorDetailPDF extends Component {
           i
         ].expiration_date.substr(0, 10),
       };
+      if (corso.Costo !== null) {
+        corso.Costo += " CHF";
+      }
       rowsCorsiSvolti.push(corso);
     }
     doc.autoTable(columns, rowsCorsiSvolti, {

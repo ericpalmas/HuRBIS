@@ -16,6 +16,7 @@ import { fetchCoursesInformations } from "../actions/coursesActions";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import AddNewCourseModal from "./modals/AddNewCourseModal";
 import RemoveCourseModalDue from "./modals/RemoveCourseModalDue";
+import EditCourseModalDue from "./modals/EditCourseModalDue";
 
 class Courses extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class Courses extends Component {
     this.state = {
       search: "",
       remove: false,
+      modify: false,
       coursesInformations: [],
       dropdownButton: false,
     };
@@ -42,6 +44,12 @@ class Courses extends Component {
   removeElements = () => {
     this.setState({
       remove: !this.state.remove,
+    });
+  };
+
+  modifyElements = () => {
+    this.setState({
+      modify: !this.state.modify,
     });
   };
 
@@ -154,6 +162,17 @@ class Courses extends Component {
                         size="sm"
                       ></RemoveCourseModalDue>
                     ) : null}
+
+                    {this.state.modify ? (
+                      <EditCourseModalDue
+                        course_id={id}
+                        course_name={name}
+                        course_cost={cost}
+                        className="remove-btn ml-1 mr-1 mt-1"
+                        color="danger"
+                        size="sm"
+                      ></EditCourseModalDue>
+                    ) : null}
                   </td>
                 </tr>
               ))}
@@ -169,6 +188,13 @@ class Courses extends Component {
           onClick={this.removeElements}
         >
           Rimuovi corso
+        </Button>
+        <Button
+          className="ml-5 mt-5 mb-5 mr-2"
+          id="removeModal"
+          onClick={this.modifyElements}
+        >
+          Modifica corso
         </Button>
       </div>
     );

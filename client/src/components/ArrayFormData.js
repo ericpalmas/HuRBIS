@@ -88,8 +88,6 @@ const ArrayFormData = (props) => {
           id="item"
           className="mb-2"
           placeholder="Nome del corso"
-          // onChange={(event) => changeName(event)}
-
           value={inputVal}
           onChange={(event) => setInputVal(event.target.value)}
         ></Input>

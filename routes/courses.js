@@ -76,6 +76,17 @@ Router.post("/modifyCourse", (req, res) => {
   });
 });
 
+Router.post("/modify", (req, res) => {
+  const course = req.body;
+
+  const sql = `UPDATE courses SET name ='${course.name}', cost = ${course.cost} WHERE id='${course.id}';`;
+
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(err);
+  });
+});
+
 // modifica un corso in corso
 Router.post("/renewCourse", (req, res) => {
   const course = req.body;

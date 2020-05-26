@@ -45,7 +45,6 @@ class AddQualificationModal extends Component {
   };
 
   render() {
-    console.log(this.state.courses);
     return (
       <div>
         <Button className="ml-5 mt-5 mb-5 mr-2" onClick={this.toggle}>

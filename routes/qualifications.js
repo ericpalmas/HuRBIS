@@ -88,7 +88,7 @@ Router.post("/removeQualifications", (req, res) => {
 
   mysqlConnection.query(sql, (err, result) => {
     if (err) throw err;
-    console.log(err);
+    else res.send(result);
   });
 });
 

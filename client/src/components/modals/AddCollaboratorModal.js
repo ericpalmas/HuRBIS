@@ -31,6 +31,9 @@ class AddCollaboratorModal extends Component {
   toggle = () => {
     this.setState({
       modal: !this.state.modal,
+      name: "",
+      surname: "",
+      yearOfBirth: "",
     });
   };
 
@@ -60,9 +63,6 @@ class AddCollaboratorModal extends Component {
       surname: this.state.surname,
       yearOfBirth: this.state.yearOfBirth,
     };
-
-    console.log("nuovo collaboratore");
-    console.log(newCollaborator);
 
     if (newCollaborator.name === "") {
       this.setState({

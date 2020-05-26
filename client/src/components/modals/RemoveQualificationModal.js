@@ -37,7 +37,7 @@ class RemoveQualificationModal extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state.listOfId);
+
     this.props.removeQualification(this.state.listOfId);
     this.toggle();
   };

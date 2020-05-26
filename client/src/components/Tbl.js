@@ -31,11 +31,6 @@ export default class Tbl extends Component {
   }
 
   componentDidMount() {
-    console.log(this.state);
-
-    console.log(this.state.dati);
-    console.log(this.state.header);
-
     $("#example").DataTable({
       data: this.state.dati,
       columns: this.state.header,

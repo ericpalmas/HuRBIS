@@ -98,33 +98,25 @@ class AddQualificationToCollaboratorModal extends Component {
       qualification_id: this.state.qualification_id,
       collaborator_id: this.props.collaborator_id,
     };
-    console.log(newItem);
-
-    console.log(this.state.coursesAndQualifications);
-    console.log(this.state.courses);
 
     var corsi = [];
     this.state.coursesAndQualifications.forEach(function (v) {
       if (v.qualification_id.toString() === newItem.qualification_id.toString())
         corsi.push(v.courses_id);
     });
-    //corsi necessari per quella qualifica
-    console.log(corsi);
 
     var collaboratorCourses = [];
     this.state.courses.forEach(function (v) {
       collaboratorCourses.push(v.courses_id);
     });
-    console.log(collaboratorCourses);
 
     let difference = corsi.filter((x) => !collaboratorCourses.includes(x));
-    console.log(difference);
 
     var collaboratorQualifications = [];
     this.state.qualificationOfCollaborator.forEach(function (v) {
       collaboratorQualifications.push(v.id);
     });
-    console.log(collaboratorQualifications);
+
     if (
       collaboratorQualifications.includes(parseInt(newItem.qualification_id))
     ) {
@@ -136,23 +128,10 @@ class AddQualificationToCollaboratorModal extends Component {
         qualificationAlreadyExist: false,
       });
 
-      console.log(difference.length);
       if (difference.length !== 0) {
-        // this.props.addQualificationToCollaborator(newItem);
-        // var item = {
-        //   collaborator_id: newItem.collaborator_id,
-        //   listOfCoursesId: difference,
-        // };
-        // axios.post("/collaboratorCourses", item).catch((error) => {
-        //   console.log(error);
-        // });
-
-        //this.props.addCoursesToCollaborator(item);
-
         axios
           .post("/qualifications/addQualificationToCollaborator", newItem)
           .then((res) => {
-            console.log(res);
             var item = {
               collaborator_id: newItem.collaborator_id,
               listOfCoursesId: difference,
@@ -161,7 +140,6 @@ class AddQualificationToCollaboratorModal extends Component {
             axios
               .post("/collaboratorCourses", item)
               .then((result) => {
-                console.log(result);
                 this.toggle();
                 window.location.reload();
               })

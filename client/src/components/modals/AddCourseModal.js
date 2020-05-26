@@ -46,8 +46,6 @@ class AddCourseModal extends Component {
     axios
       .get(`/courses`)
       .then((res) => {
-        console.log(res);
-
         if (res.data.length !== 0) this.setState({ course_id: res.data[0].id });
       })
       .catch((error) => {
@@ -87,7 +85,6 @@ class AddCourseModal extends Component {
   };
 
   onQualificationSelect = (event) => {
-    console.log(event);
     this.setState({
       course_id: event.target.value,
     });
@@ -97,7 +94,6 @@ class AddCourseModal extends Component {
     this.setState({
       instructor: !this.state.instructor,
     });
-    console.log(this.state.instructor);
   };
 
   onSubmit = (e) => {
@@ -134,12 +130,10 @@ class AddCourseModal extends Component {
       var certification_date = Date.parse(newItem.certificationDate);
       var expiration_date = Date.parse(newItem.expirationDate);
       if (certification_date > expiration_date) {
-        console.log("la data non va bene");
         this.setState({
           dateError: true,
         });
       } else {
-        console.log("la data va bene");
         this.setState({
           dateError: false,
         });
@@ -147,7 +141,6 @@ class AddCourseModal extends Component {
           axios
             .get(`/courses/cost/${newItem.course_id}`)
             .then((res) => {
-              console.log(res);
               if (res.data.length !== 0) this.state.cost = res.data[0].cost;
 
               var elem = {
@@ -159,19 +152,16 @@ class AddCourseModal extends Component {
                 cost: this.state.cost,
               };
 
-              console.log(elem);
               this.props.addCourseToHistory(elem);
             })
             .catch((error) => {
               console.log(error);
             });
         } else if (listOfId.includes(parseInt(newItem.course_id))) {
-          console.log("il corso è già presente");
           this.setState({
             courseIsPresent: true,
           });
         } else {
-          console.log("il corso non è presente");
           this.setState({
             courseIsPresent: false,
           });
@@ -181,7 +171,6 @@ class AddCourseModal extends Component {
         }
       }
     } else {
-      console.log("specificare un periodo");
       this.setState({
         insertADate: true,
       });
@@ -189,7 +178,6 @@ class AddCourseModal extends Component {
   };
 
   render() {
-    console.log(this.state.cost);
     return (
       <div>
         <Button className="ml-5 mt-5 mb-5 mr-2" onClick={this.toggle}>

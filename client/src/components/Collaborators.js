@@ -177,7 +177,6 @@ class Collaborators extends Component {
         });
 
         v.forEach(function (i) {
-          console.log(i);
           if (i.expiration_date !== null) {
             var str1 = i.expiration_date.substr(0, 10);
             var expiration_date = Date.parse(str1);

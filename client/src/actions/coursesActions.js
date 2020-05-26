@@ -13,6 +13,7 @@ import {
   ADD_COURSES_TO_COLLABORATOR_FROM_QUALIFICATION,
   RENEW_CURRENT_COURSE,
   GET_MIN_CERTIFICATIONS,
+  MODIFY_COURSE,
 } from "./types";
 
 export const addCourse = (course) => (dispatch) => {
@@ -98,6 +99,22 @@ export const modifyCourse = (course) => (dispatch) => {
       (res) =>
         dispatch({
           type: MODIFY_CURRENT_COURSE,
+          payload: res.data,
+        }),
+      window.location.reload()
+    )
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const modifyCourseDue = (course) => (dispatch) => {
+  axios
+    .post(`/courses/modify`, course)
+    .then(
+      (res) =>
+        dispatch({
+          type: MODIFY_COURSE,
           payload: res.data,
         }),
       window.location.reload()

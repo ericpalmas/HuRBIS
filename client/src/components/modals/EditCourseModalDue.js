@@ -1,8 +1,11 @@
 import React, { Component } from "react";
+import axios from "axios";
 import { connect } from "react-redux";
-import { addNewCourse } from "../../actions/coursesActions";
+import PropTypes from "prop-types";
+import { FaEdit } from "react-icons/fa";
+import { modifyCourseDue } from "../../actions/coursesActions";
+
 import {
-  Alert,
   Button,
   ModalHeader,
   ModalBody,
@@ -11,48 +14,74 @@ import {
   Modal,
   Form,
   Input,
+  Alert,
 } from "reactstrap";
 
-class AddNewCourseModal extends Component {
-  state = {
-    modal: false,
-    name: "",
-    cost: "",
-    msg: "Inserire il nome del corso",
-    msg2: "Errore nell'inserimento del costo",
-    insertName: false,
-    insertCost: false,
+class EditCourseModalDue extends Component {
+  static propTypes = {
+    courses: PropTypes.object.isRequired,
   };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      course_id: this.props.course_id,
+      course_name: this.props.course_name,
+      course_cost: this.props.course_cost,
+      msg: "Inserire il nome del corso",
+      msg2: "Errore nell'inserimento del costo",
+      insertName: false,
+      insertCost: false,
+    };
+    this.begin = this.begin.bind(this);
+  }
 
   toggle = () => {
     this.setState({
       modal: !this.state.modal,
-      name: "",
-      cost: "",
+      course_name: this.props.course_name,
+      course_cost: this.props.course_cost,
+    });
+  };
+
+  begin() {
+    this.setState({
+      modal: !this.state.modal,
+    });
+  }
+
+  onChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
     });
   };
 
   onChangeName = (e) => {
     this.setState({
-      name: e.target.value,
+      course_name: e.target.value,
     });
   };
 
   onChangeCost = (e) => {
     this.setState({
-      cost: e.target.value,
+      course_cost: e.target.value,
     });
   };
 
   onSubmit = (e) => {
     e.preventDefault();
 
-    var newCourse = {
-      name: this.state.name,
-      cost: this.state.cost.replace(",", "."),
+    var course = {
+      id: this.state.course_id,
+      name: this.state.course_name,
+      cost: this.state.course_cost,
     };
 
-    if (newCourse.name === "") {
+    if (this.state.course_cost !== null) {
+      course.cost = course.cost.toString().replace(",", ".");
+    }
+
+    if (course.name === "") {
       this.setState({
         insertName: true,
       });
@@ -60,17 +89,17 @@ class AddNewCourseModal extends Component {
       this.setState({
         insertName: false,
       });
-      if (isNaN(Number(newCourse.cost)) && this.state.course_cost !== "") {
+
+      if (isNaN(Number(course.cost)) && this.state.course_cost !== "") {
         this.setState({
           insertCost: true,
         });
       } else {
-        if (newCourse.cost === "") newCourse.cost = null;
+        if (course.cost === "") course.cost = null;
         this.setState({
           insertCost: false,
         });
-
-        this.props.addNewCourse(newCourse);
+        this.props.modifyCourseDue(course);
         this.toggle();
       }
     }
@@ -79,12 +108,17 @@ class AddNewCourseModal extends Component {
   render() {
     return (
       <div>
-        <Button className="ml-5 mt-5 mb-5 mr-2" onClick={this.toggle}>
-          Aggiungi corso
+        <Button
+          className="ml-1 mr-1 mt-1"
+          color="info"
+          size="sm"
+          onClick={this.toggle}
+        >
+          <FaEdit />
         </Button>
 
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}> Aggiungi nuovo corso </ModalHeader>
+          <ModalHeader toggle={this.toggle}> Modifica corso </ModalHeader>
           <ModalBody>
             {this.state.insertName ? (
               <Alert color="danger">{this.state.msg}</Alert>
@@ -103,6 +137,7 @@ class AddNewCourseModal extends Component {
                   id="item"
                   placeholder="Nome"
                   onChange={this.onChangeName}
+                  defaultValue={this.state.course_name}
                 ></Input>
 
                 <Label className="mt-3" for="item">
@@ -119,11 +154,12 @@ class AddNewCourseModal extends Component {
                   placeholder="0.00"
                   onChange={this.onChangeCost}
                   className="float-left mb-2 mt-1 w-25"
+                  defaultValue={this.state.course_cost}
                 ></Input>
 
                 <Button style={{ marginTop: "4rem" }} block>
                   {" "}
-                  Aggiungi corso
+                  Modifica corso
                 </Button>
               </FormGroup>
             </Form>
@@ -134,6 +170,10 @@ class AddNewCourseModal extends Component {
   }
 }
 
+EditCourseModalDue.propTypes = {};
+
 const mapStateToProps = (state) => ({});
 
-export default connect(mapStateToProps, { addNewCourse })(AddNewCourseModal);
+export default connect(mapStateToProps, { modifyCourseDue })(
+  EditCourseModalDue
+);

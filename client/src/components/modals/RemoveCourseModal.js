@@ -37,7 +37,6 @@ class RemoveCourseModal extends Component {
   };
 
   render() {
-    console.log(this.props.course.id);
     return (
       <div>
         <Button

@@ -50,11 +50,12 @@ class RemoveQualificationFromCollaborator extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state.listOfId);
+
     const item = {
       qualifications_id: this.state.listOfId,
       collaborator_id: this.props.collaborator_id,
     };
+
     this.props.removeQualificationsFromCollaborator(item);
     this.toggle();
   };
