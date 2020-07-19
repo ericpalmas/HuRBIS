@@ -81,6 +81,7 @@ class CollaboratorDetailPDF extends Component {
       }
       rowsCorsiInCorso.push(corso);
     }
+
     doc.autoTable(columns, rowsCorsiInCorso, {
       startY: doc.autoTableEndPosY() + y + 10,
       margin: { horizontal: 50 },
@@ -157,7 +158,9 @@ class CollaboratorDetailPDF extends Component {
     });
 
     // save the pdf document
-    doc.save("generated.pdf");
+    doc.save(
+      this.props.collaborator.surname + "_" + this.props.collaborator.name
+    );
   };
 
   render() {
